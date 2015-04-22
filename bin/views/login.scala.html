@@ -5,14 +5,228 @@
     <head>
         <title>Login</title>
         <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
+        <link href="@routes.Assets.at("stylesheets/bootstrap-social.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/">Travlr</a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Travlr</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Link1 <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#">Link2</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown1 <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Link3</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown2 <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <!-- The main content of the page -->
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12 col-lg-12"  id="text-line">
+                    <div class="col-md-5 col-lg-5" id="text-login-area">
+                        <h2 class="text-center">
+                            <a href="#login-area">Login</a>
+                        </h2>
+                    </div>
+
+                    <div class="col-md-2 col-lg-2">
+                        <h2>or</h2>
+                    </div>
+
+                    <div class="col-md-5 col-lg-5 register-area" id="text-register-area">
+                        <h2>
+                            <a href="#register-area">Register</a>
+                        </h2>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12"  id="login-register">
+                    <div class="col-md-5 col-lg-5 login-area" id="login-area">
+                        <form class="form-horizontal" action="FirstPage.html" method="post" id="form-login" role="form">
+                            <div class="form-group" id="email-login-div">
+                                <div class="col-md-12 col-lg-12 has-feedback" id="email-login">
+                                    <input class="form-control" type="email" id="email-login-input" name="email-login" placeholder="Email" aria-describedby="email-login-success" oninput="OnInputEmailLogin(event)" onchange="OnChangeEmailLogin(event)" />
+                                    <span class="glyphicon form-control-feedback" id="email-login-glyphicon" aria-hidden="false"></span>
+                                    <span id="email-login-success" class="sr-only">(success)</span>
+                                </div>
+
+                                <!--
+                                <div class="input-group has-error has-feedback" id="email-login">
+                                    <span class="input-group-addon">&#64;</span> <!-- 
+                                    <input class="form-control" type="email" id="email-login-input" name="email" placeholder="Email" aria-describedby="email-login-success" oninput="OnInputEmailLogin(event)" />
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" id="email-login-glyphicon" aria-hidden="false"></span>
+                                    <span id="email-login-success" class="sr-only">(success)</span>
+                                </div>
+                                -->
+                            </div>
+                            <div class="form-group" id="username-login-div">
+                                <div class="col-md-12 col-lg-12">
+                                    <input class="form-control" type="text" id="username-login" name="username-login" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="form-group" id="password-login-div">
+                                <div class="col-md-12 col-lg-12">
+                                    <input class="form-control" type="password" id="password-login" name="password-login" placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="form-group" id="buttons-login">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="col-md-6 col-lg-6"></div>
+                                    <button class="col-xs-12 col-sm-12 col-md-6 col-lg-6 btn btn-default" type="submit" id="button-login">Login</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="or-line">
+                            <div class="message-line text-center">
+                                <h5>
+                                    or <b>Login</b> with
+                                </h5>
+                            </div>
+                            <div class="buttons-social" id="buttons-social">
+                                <!--
+                                <button class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" type="submit" id="button-login-facebook">Facebook</button>
+                                <button class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" type="submit" id="button-login-google">Google</button>
+                                -->
+                                <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" id="button-login-facebook" href="http://facebook.com">
+                                    <i class="fa fa-facebook"></i> Facebook
+                                </a>
+                                <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" id="button-login-google" href="https://plus.google.com">
+                                    <i class="fa fa-google"></i> Google
+                                </a>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+
+
+                    <div class="middle-line">
+                        <div class="col-md-2 col-lg-2 hidden-xs hidden-sm">
+                            <div class="col-md-2 col-lg-2 vertical-line"></div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 hidden-md hidden-lg">
+                            <div class="visible-xs visible-sm horizontal-line">
+                                <br>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 col-lg-5 register-area" id="register-area">
+                        <form class="form-horizontal" action="FirstPage.html" method="post" id="form-register" role="form">
+                            <div class="form-group" id="email-register-div">
+
+                                <div class="col-md-12 col-lg-12 has-feedback" id="email-register">
+                                    <input class="form-control" type="email" id="email-register-input" name="email-register" placeholder="Email" aria-describedby="email-register-success" oninput="OnInputEmailRegister(event)" onchange="OnChangeEmailRegister(event)" />
+                                    <span class="glyphicon form-control-feedback" id="email-register-glyphicon" aria-hidden="false"></span>
+                                    <span id="email-register-success" class="sr-only">(success)</span>
+                                </div>
+
+                                <!--
+                                <div class="input-group has-error has-feedback" id="email-register">
+                                    <span class="input-group-addon">&#64;</span> <!-- 
+                                    <input class="form-control" type="email" id="email-register-input" name="email" placeholder="Email" aria-describedby="email-register-success" oninput="OnInputEmailRegister(event)" />
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" id="email-register-glyphicon" aria-hidden="false"></span>
+                                    <span id="email-register-success" class="sr-only">(success)</span>
+                                </div>
+                                -->
+                            </div>
+                            <div class="form-group" id="username-register-div">
+                                <div class="col-md-12 col-lg-12">
+                                    <input class="form-control" type="text" id="username-register" name="username-register" placeholder="Username" />
+                                </div>
+                            </div>
+                            <div class="form-group" id="password-register-div">
+                                <div class="col-md-12 col-lg-12">
+                                    <input class="form-control" type="password" id="password-register" name="password-register" placeholder="Password" />
+                                </div>
+                            </div>
+                            <div class="form-group" id="buttons-register">
+                                <div class="col-md-12 col-lg-12">
+                                    <div class="col-md-6 col-lg-6"></div>
+                                    <button class="col-xs-12 col-sm-12 col-md-6 col-lg-6 btn btn-default" type="submit" id="button-register">Register</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="or-line">
+                            <div class="message-line text-center">
+                                <h5>
+                                    or <b>Register</b> with
+                                </h5>
+                            </div>
+                            <!--
+                            <button class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" type="submit" id="button-register-facebook">Facebook</button>
+                            <button class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" type="submit" id="button-register-google">Google</button>
+                            -->
+                            <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" id="button-register-facebook" href="http://facebook.com">
+                                <i class="fa fa-facebook"></i> Facebook
+                            </a>
+                            <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" id="button-register-google" href="https://plus.google.com">
+                                <i class="fa fa-google"></i> Google
+                            </a>
+                        </div>
+                        <br>
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
+
+        <br>
+        <br>
+        <br>
+
+        <footer style="text-align: center">
+            <h6>Created by <em>Virgil Barcan</em>
+            </h6>
+        </footer>
+
     </body>
 </html>

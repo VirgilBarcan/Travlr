@@ -6,6 +6,6 @@ import views.html.*;
 
 class Contact extends Controller{
 	public static Result index() {
-        return ok(index.render("Contact"));
+        return ok(login.render("Contact"));
 	}
 }

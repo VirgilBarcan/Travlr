@@ -5,6 +5,7 @@ import play.mvc.*;
 import views.html.*;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,9 @@ import java.util.Arrays;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class Application extends Controller {
+	protected class DB{
+	
+	}
 	//Application is run only once so the values remain the same
 	//private static String controller = "home";
 	//private static String method = "index";
@@ -46,6 +50,7 @@ public class Application extends Controller {
     }
     
     public static Result index(String url) {
+    	//return ok(debug.render(oracle.jdbc.OracleDriver.getDriverVersion()));
     	String controllerName = "controllers.Home";
     	String methodName = "index";
     	ArrayList<String> urlTokens = parseUrl(url);
@@ -70,22 +75,28 @@ public class Application extends Controller {
         	controllerClass = classLoader.loadClass(controllerName);
         }
         catch (ClassNotFoundException e){
-        	return ok(index.render("Method not found"));
+        	return ok(index.render("Class not found"));
         	//render 404 not found
         }
         
         try{
         	method = controllerClass.getMethod(methodName);
-        	
-        	return (Result)method.invoke(null);
+
+        	//return ok(debug.render(methodName));
+        	try{
+        		return (Result)method.invoke(null);
+        	}
+        	catch (InvocationTargetException e){
+                return ok(debug.render("a"));
+        	}
         }
         catch (Exception e){ //NoSuchMethodException or SecurityException
-            return ok(index.render("Method not found"));
+            return ok(debug.render(e.toString()));
             //render 404 not found
         }
 
         //return ok(index.render(controllerName));
-        //return ok(index.render("Your new application is ready."));
+        //return ok(index.render("Your new application is ready."));*/
     }
 
 }
