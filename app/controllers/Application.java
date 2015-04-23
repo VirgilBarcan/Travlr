@@ -49,7 +49,7 @@ public class Application extends Controller {
     public static Result index(String url) {
     	//return ok(debug.render(oracle.jdbc.OracleDriver.getDriverVersion()));
     	String controllerName = defaultControllerName;
-    	String methodName = "index";
+    	String methodName = defaultMethodName;
     	ArrayList<String> urlTokens = parseUrl(url);
         
         

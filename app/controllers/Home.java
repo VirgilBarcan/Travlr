@@ -16,6 +16,6 @@ class Home extends Controller{
 		//Statement stmt = con.createStatement();
 		
     	//return ok(debug.render(db.connectToDatabase("travlrdb", "travlrdb")));
-        return ok(debug.render("ok"));
+		return ok(home.render());
 	}
 }
