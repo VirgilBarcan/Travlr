@@ -13,14 +13,11 @@ import java.util.Arrays;
 import org.apache.commons.lang3.text.WordUtils;
 
 public class Application extends Controller {
-	protected class DB{
-	
-	}
 	//Application is run only once so the values remain the same
 	//private static String controller = "home";
 	//private static String method = "index";
-	private static String defaultController;
-	private static Method defaultMethod;
+	private final static String defaultControllerName = "controllers.Home";
+	private final static String defaultMethodName = "index";
 	
     private static String sanitizeUrl(String url){
         //$-_.+!*'(),{}|\\^~[]`"><#%;/?:@&=
@@ -51,7 +48,7 @@ public class Application extends Controller {
     
     public static Result index(String url) {
     	//return ok(debug.render(oracle.jdbc.OracleDriver.getDriverVersion()));
-    	String controllerName = "controllers.Home";
+    	String controllerName = defaultControllerName;
     	String methodName = "index";
     	ArrayList<String> urlTokens = parseUrl(url);
         
