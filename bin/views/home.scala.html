@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar navbar-default">
-        </nav>
+        @header()
+        
+        <div class="container columns">
+            <div id="profile" class="col-md-2">
+            </div>
+            <div id="news" class="col-md-10">
+                <div>Post1</div>
+                <div>Post2</div>
+                <div>Post3</div>
+            </div>
+        </div>
     </body>
 </html>

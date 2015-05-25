@@ -4,24 +4,7 @@
         <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
     </head>
     <body>
-        <nav class="navbar navbar-default">
-            <div class="container">
-                <div class="navbar-header"><a class="navbar-brand" href="#">Travlr</a></div>
-                <div id="navbar">
-                    <form role="search">
-                        <div class="navbar-form navbar-left">
-                            <input type="text" class="form-control" placeholder="search travlr"/>
-                            <input type="submit" class="form-control"/>
-                        </div>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a>Home</a></li>
-                        <li><a>Trips</a></li>
-                        <li><a>Help</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        @header()
         
         <div class="container columns">
             <div id="profile" class="col-md-2">

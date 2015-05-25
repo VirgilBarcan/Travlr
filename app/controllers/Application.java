@@ -56,13 +56,18 @@ public class Application extends Controller {
         String cwd = System.getProperty("user.dir");
         File appDir = new File(cwd, "app");
         File controllersDir = new File(appDir, "controllers");
+        File viewsDir = new File(appDir, "views");
         
         if (new File(controllersDir.getAbsolutePath(), urlTokens.get(0) + ".java").exists()){
         	//TODO: check if controller was compiled (get name from there - check case)
         	controllerName = "controllers." + WordUtils.capitalize(urlTokens.get(0));
         	urlTokens.remove(0);
         }
-        
+        if (new File(viewsDir.getAbsolutePath(), urlTokens.get(0) + ".scala.html").exists()){
+        	//TODO: check if controller was compiled (get name from there - check case)
+        	methodName = urlTokens.get(0);
+        	//urlTokens.remove(0);
+        }
         ClassLoader classLoader = Application.class.getClassLoader();
         Class controllerClass = null;
         Method method = null;
@@ -79,7 +84,7 @@ public class Application extends Controller {
         try{
         	method = controllerClass.getMethod(methodName);
 
-        	//return ok(debug.render(methodName));
+        	//return ok(debug.render(new File(viewsDir.getAbsolutePath(), urlTokens.get(0) + "scala.html").getAbsolutePath()));/*
         	try{
         		return (Result)method.invoke(null);
         	}

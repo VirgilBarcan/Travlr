@@ -16,3 +16,4 @@ dist
 *.log
 .sbtserver/*
 *.class
+/bin/
