@@ -2,15 +2,31 @@
 <html>
     <head>
         <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <!--link href="@routes.Assets.at("stylesheets/jquery-ui.min.css")" rel="stylesheet"-->
     </head>
     <body>
         @header()
-        
         <div class="container columns">
-            <div id="profile" class="col-md-2">
-            </div>
-            <div id="news" class="col-md-10">
+            <div id="profile" class="col-md-7">
+                <form>
+                    <input type="hidden" id="unk1" value="2" />
+                    @tripView("Source", "From")
+                    <hr />
+                    @tripView("Destination", "To")
+                    <!-- Responsive iFrame -->
+                    <div class="Flexible-container">
+                        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Bern&amp;aq=&amp;sll=46.813187,8.22421&amp;sspn=3.379772,8.453979&amp;ie=UTF8&amp;hq=&amp;hnear=Bern&amp;t=m&amp;z=12&amp;ll=46.947922,7.444608&amp;output=embed&amp;iwloc=near"></iframe>
+                    </div>
+                </form>
+                <div id="news" class="col-md-5">
+                </div>
             </div>
         </div>
+        
+
+        <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")"></script>
     </body>
 </html>
