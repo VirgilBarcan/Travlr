@@ -19,7 +19,11 @@ class Home extends Controller{
     	//return ok(debug.render(db.connectToDatabase("travlrdb", "travlrdb")));
 		return ok(home.render());
 	}
-    
+
+    public static Result loginRegister() {
+        return ok(login.render());
+    }
+
     public static Result trip() {
         return ok(trip.render());
     }

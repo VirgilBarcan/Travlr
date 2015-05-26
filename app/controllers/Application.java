@@ -95,7 +95,7 @@ public class Application extends Controller {
         		return (Result)method.invoke(null);
         	}
         	catch (InvocationTargetException e){
-                return ok(debug.render("a"));
+                return ok(debug.render("InvocationTargetException"));
         	}
         }
         catch (Exception e){ //NoSuchMethodException or SecurityException
