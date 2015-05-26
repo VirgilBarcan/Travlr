@@ -7,6 +7,7 @@ import views.html.*;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -63,11 +64,6 @@ public class Application extends Controller {
         	controllerName = "controllers." + WordUtils.capitalize(urlTokens.get(0));
         	urlTokens.remove(0);
         }
-        if (new File(viewsDir.getAbsolutePath(), urlTokens.get(0) + ".scala.html").exists()){
-        	//TODO: check if controller was compiled (get name from there - check case)
-        	methodName = urlTokens.get(0);
-        	//urlTokens.remove(0);
-        }
         ClassLoader classLoader = Application.class.getClassLoader();
         Class controllerClass = null;
         Method method = null;
@@ -82,6 +78,9 @@ public class Application extends Controller {
         }
         
         try{
+        	if (controllerClass.getMethod(urlTokens.get(0))!=null){
+            	methodName = urlTokens.get(0);
+        	}
         	method = controllerClass.getMethod(methodName);
 
         	//return ok(debug.render(new File(viewsDir.getAbsolutePath(), urlTokens.get(0) + "scala.html").getAbsolutePath()));/*
