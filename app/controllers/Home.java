@@ -23,4 +23,6 @@ class Home extends Controller{
     public static Result trip() {
         return ok(trip.render());
     }
+
+    public static Result map() { return ok(map.render()); }
 }
