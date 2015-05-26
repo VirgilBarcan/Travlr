@@ -46,7 +46,8 @@ public class Application extends Controller {
     	tokens = url.split("/");
     	return new ArrayList<String>(Arrays.asList(tokens));
     }
-    
+
+
     public static Result index(String url) {
     	//return ok(debug.render(oracle.jdbc.OracleDriver.getDriverVersion()));
     	String controllerName = defaultControllerName;
@@ -99,5 +100,4 @@ public class Application extends Controller {
         //return ok(index.render(controllerName));
         //return ok(index.render("Your new application is ready."));*/
     }
-
 }

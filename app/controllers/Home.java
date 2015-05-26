@@ -12,7 +12,8 @@ import views.html.*;
 
 class Home extends Controller{
     public static Result index() {
-		Connection con = DB.getConnection();
+		//Comment the connection for now
+		//Connection con = DB.getConnection();
 		//Statement stmt = con.createStatement();
 		
     	//return ok(debug.render(db.connectToDatabase("travlrdb", "travlrdb")));
