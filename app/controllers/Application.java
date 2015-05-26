@@ -43,8 +43,12 @@ public class Application extends Controller {
     	String tokens[];
     	
     	url = sanitizeUrl(url);
-    	tokens = url.split("/");
-    	return new ArrayList<String>(Arrays.asList(tokens));
+    	if (url.contains("/")){
+	    	tokens = url.split("/");
+	    	return new ArrayList<String>(Arrays.asList(tokens));
+    	}
+    	else
+    		return new ArrayList<String>();
     }
 
 
@@ -60,10 +64,12 @@ public class Application extends Controller {
         File controllersDir = new File(appDir, "controllers");
         File viewsDir = new File(appDir, "views");
         
-        if (new File(controllersDir.getAbsolutePath(), urlTokens.get(0) + ".java").exists()){
-        	//TODO: check if controller was compiled (get name from there - check case)
-        	controllerName = "controllers." + WordUtils.capitalize(urlTokens.get(0));
-        	urlTokens.remove(0);
+        if (urlTokens.size()>0){
+        	if (new File(controllersDir.getAbsolutePath(), urlTokens.get(0) + ".java").exists()){
+	        	//TODO: check if controller was compiled (get name from there - check case)
+	        	controllerName = "controllers." + WordUtils.capitalize(urlTokens.get(0));
+	        	urlTokens.remove(0);
+        	}
         }
         ClassLoader classLoader = Application.class.getClassLoader();
         Class controllerClass = null;
@@ -79,7 +85,7 @@ public class Application extends Controller {
         }
         
         try{
-        	if (controllerClass.getMethod(urlTokens.get(0))!=null){
+        	if (urlTokens.size()>0 && controllerClass.getMethod(urlTokens.get(0))!=null){
             	methodName = urlTokens.get(0);
         	}
         	method = controllerClass.getMethod(methodName);
