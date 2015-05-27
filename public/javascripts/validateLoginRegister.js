@@ -31,6 +31,8 @@ function OnInputEmailLogin (event) {
         $('#email-login').addClass('has-error');
         $('#email-login-glyphicon').addClass('glyphicon-remove');
         $('#username-login').attr("disabled", 'disabled');
+        $('#username-login-div').removeClass('has-error');
+        $('#username-login-div').removeClass('has-success');
         if (isValid === true) {
             document.getElementById('email-login').className += ' has-success';
             document.getElementById('email-login-glyphicon').className += ' glyphicon-ok';
@@ -66,15 +68,14 @@ function OnInputUsernameLogin(event) {
 }
 
 function OnChangeUsernameLogin(event) {
-    window.alert(event.target.value);
     if (event.target.value === '') {
-        $('#username-login').addClass('has-error');
+        document.getElementById('username-login-div').className += ' has-error';
     }
     else {
         var isValid = isValidUsername(event.target.value);
         if (isValid === true) {
-            $('#username-login').removeClass('has-error');
-            document.getElementById('username-login').className += ' has-success';
+            $('#username-login-div').removeClass('has-error');
+            document.getElementById('username-login-div').className += ' has-success';
         }
     }
 }
@@ -110,5 +111,18 @@ function OnChangeEmailRegister(event) {
         document.getElementById('email-register-glyphicon').className += ' glyphicon-ok';
         $('#email-register').removeClass('has-error');
         $('#email-register-glyphicon').removeClass('glyphicon-remove');
+    }
+}
+
+function OnChangeUsernameRegister(event) {
+    if (event.target.value === '') {
+        document.getElementById('username-register-div').className += ' has-error';
+    }
+    else {
+        var isValid = isValidUsername(event.target.value);
+        if (isValid === true) {
+            $('#username-register-div').removeClass('has-error');
+            document.getElementById('username-register-div').className += ' has-success';
+        }
     }
 }

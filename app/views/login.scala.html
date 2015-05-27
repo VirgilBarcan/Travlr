@@ -107,11 +107,11 @@
                     </div>
 
                     <div class="col-md-5 col-lg-5 register-area" id="register-area">
-                        <form class="form-horizontal" action="FirstPage.html" method="post" id="form-register" role="form">
+                        <form class="form-horizontal" action="@routes.Register.register()" method="post" id="form-register" role="form">
                             <div class="form-group" id="email-register-div">
 
                                 <div class="col-md-12 col-lg-12 has-feedback" id="email-register">
-                                    <input class="form-control" type="email" id="email-register-input" name="email-register" placeholder="Email" aria-describedby="email-register-success" oninput="OnInputEmailRegister(event)" onchange="OnChangeEmailRegister(event)" />
+                                    <input class="form-control" type="email" id="email-register-input" name="email-register-input" placeholder="Email" aria-describedby="email-register-success" oninput="OnInputEmailRegister(event)" onchange="OnChangeEmailRegister(event)" />
                                     <span class="glyphicon form-control-feedback" id="email-register-glyphicon" aria-hidden="false"></span>
                                     <span id="email-register-success" class="sr-only">(success)</span>
                                 </div>
@@ -127,7 +127,7 @@
                             </div>
                             <div class="form-group" id="username-register-div">
                                 <div class="col-md-12 col-lg-12">
-                                    <input class="form-control" type="text" id="username-register" name="username-register" placeholder="Username" />
+                                    <input class="form-control" type="text" id="username-register" name="username-register" placeholder="Username" onchange="OnChangeUsernameRegister(event)" />
                                 </div>
                             </div>
                             <div class="form-group" id="password-register-div">
