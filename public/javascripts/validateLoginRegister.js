@@ -1,4 +1,4 @@
-//checking mail validity
+// checking mail validity
 function isValidEmail(email){
 	var re = /\S+@\S+\.\S+/;
     return re.test(email);
@@ -10,6 +10,11 @@ function isValidEmail(email){
 		return false;
 	}
 	*/
+}
+
+// checking if username is not a void string
+function isValidUsername(username){
+    return username.length > 0;
 }
 
 //check email validity while user inserts the email and respond with appropriate style
@@ -39,15 +44,6 @@ function OnInputEmailLogin (event) {
     }
 }
 
-function OnInputUsernameLogin(event) {
-    if (event.target.value === ''){
-        $('#email-login-input').attr("disabled", null);
-    }
-    else{
-        $('#email-login-input').attr("disabled", 'disabled');
-    }
-}
-
 function OnChangeEmailLogin(event) {
     var isValid = isValidEmail(event.target.value);
     if (isValid === true){
@@ -57,6 +53,29 @@ function OnChangeEmailLogin(event) {
         $('#email-login-glyphicon').removeClass('glyphicon-remove');
     }
     else{
+    }
+}
+
+function OnInputUsernameLogin(event) {
+    if (event.target.value === ''){
+        $('#email-login-input').attr("disabled", null);
+    }
+    else{
+        $('#email-login-input').attr("disabled", 'disabled');
+    }
+}
+
+function OnChangeUsernameLogin(event) {
+    window.alert(event.target.value);
+    if (event.target.value === '') {
+        $('#username-login').addClass('has-error');
+    }
+    else {
+        var isValid = isValidUsername(event.target.value);
+        if (isValid === true) {
+            $('#username-login').removeClass('has-error');
+            document.getElementById('username-login').className += ' has-success';
+        }
     }
 }
 

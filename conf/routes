@@ -6,8 +6,15 @@
 GET        /assets/*file        controllers.Assets.at(path="/public", file)
 
 # Home page
-GET        /                    controllers.Application.index(url:String ?= "")
-GET        /*url                controllers.Application.index(url:String)
+# GET        /                    controllers.Application.index(url:String ?= "")
+# GET        /*url                controllers.Application.index(url:String)
 
+# First page to be shown
+GET         /                   controllers.Login.loginRegister()
 
-#GET         /                    controllers.Application.index()
+# Home page
+GET         /home               controllers.Home.index()
+
+# Login Register page
+GET        /login_register_page controllers.Login.loginRegister()
+POST       /login               controllers.Login.login()

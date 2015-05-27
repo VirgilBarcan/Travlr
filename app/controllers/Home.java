@@ -10,18 +10,14 @@ import play.db.*;
 import play.mvc.*;
 import views.html.*;
 
-class Home extends Controller{
-    public static Result index() {
-		//Comment the connection for now
-		//Connection con = DB.getConnection();
-		//Statement stmt = con.createStatement();
-		
-    	//return ok(debug.render(db.connectToDatabase("travlrdb", "travlrdb")));
-		return ok(home.render());
-	}
+public class Home extends Controller{
 
-    public static Result loginRegister() {
-        return ok(login.render());
+    public static Result index() {
+        //Comment the connection for now
+        //Connection con = DB.getConnection();
+        //Statement stmt = con.createStatement();
+
+        return ok(home.render());
     }
 
     public static Result trip() {

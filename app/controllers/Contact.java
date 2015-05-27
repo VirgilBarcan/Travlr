@@ -4,7 +4,7 @@ import play.*;
 import play.mvc.*;
 import views.html.*;
 
-class Contact extends Controller{
+public class Contact extends Controller{
 	public static Result index() {
         return ok(index.render("Contact"));
 	}

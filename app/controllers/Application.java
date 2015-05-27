@@ -17,8 +17,8 @@ public class Application extends Controller {
 	//Application is run only once so the values remain the same
 	//private static String controller = "home";
 	//private static String method = "index";
-	private final static String defaultControllerName = "controllers.Home";
-	private final static String defaultMethodName = "index";
+	private final static String defaultControllerName = "controllers.Login";
+	private final static String defaultMethodName = "loginRegister";
 	
     private static String sanitizeUrl(String url){
         //$-_.+!*'(),{}|\\^~[]`"><#%;/?:@&=
