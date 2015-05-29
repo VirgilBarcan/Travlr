@@ -14,6 +14,8 @@ GET         /                           controllers.Login.loginRegister()
 
 # Home page
 GET         /home                       controllers.Home.index()
+GET         /Home/map                       controllers.Home.map()
+GET         /Home/trip                       controllers.Home.trip()
 
 # Login Register page
 GET         /login_register_page        controllers.Login.loginRegister()

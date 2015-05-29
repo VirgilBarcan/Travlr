@@ -3,30 +3,77 @@
     <head>
         <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
         <!--link href="@routes.Assets.at("stylesheets/jquery-ui.min.css")" rel="stylesheet"-->
+        <style>
+        html, body, #map-canvas {
+            height: 500px;
+            margin: 0px;
+            padding: 0px
+        }
+        #panel {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            margin-left: -180px;
+            z-index: 5;
+            background-color: #fff;
+            padding: 5px;
+            border: 1px solid #999;
+        }
+        </style>
     </head>
     <body>
         @navbar()
         <div class="container columns" style="padding-top: 70px">
-            <div id="profile" class="col-md-7">
+            <div id="profile" class="col-md-6">
                 <form>
                     <input type="hidden" id="unk1" value="2" />
                     @tripView("Source", "From")
                     <hr />
                     @tripView("Destination", "To")
-                    <!-- Responsive iFrame -->
-                    <div class="Flexible-container">
-                        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.ch/maps?f=q&amp;source=s_q&amp;hl=de&amp;geocode=&amp;q=Bern&amp;aq=&amp;sll=46.813187,8.22421&amp;sspn=3.379772,8.453979&amp;ie=UTF8&amp;hq=&amp;hnear=Bern&amp;t=m&amp;z=12&amp;ll=46.947922,7.444608&amp;output=embed&amp;iwloc=near"></iframe>
-                    </div>
+                    
+                    <br />
+                        <!--iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="/Home/map"></iframe-->
                 </form>
-                <div id="news" class="col-md-5">
-                </div>
+            </div>            
+            <div id="news" class="col-md-6">
+                <p>text</p>
+                <div id="map-canvas"></div>
             </div>
         </div>
         
 
-        <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
-        <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
         <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
-        <script src="@routes.Assets.at("javascripts/bootstrap-datepicker.js")"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
+        <script>
+        var geocoder;
+        var map;
+        var infowindow = new google.maps.InfoWindow();
+        var marker;
+        var infowindow = new google.maps.InfoWindow();
+        function initialize() {
+        geocoder = new google.maps.Geocoder();
+        var latlng = new google.maps.LatLng(40.730885,-73.997383);
+        var mapOptions = {
+        zoom: 8,
+        center: latlng,
+        mapTypeId: 'roadmap'
+        }
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        google.maps.event.addListener(map, "click", function(event) {
+        var lat = event.latLng.lat();
+        var lng = event.latLng.lng();
+        var latlng = new google.maps.LatLng(lat, lng);
+        marker = new google.maps.Marker({
+            position : latlng,
+            map : map
+        });
+        infowindow.setContent("text");
+        infowindow.open(map, marker);
+        //alert("Lat=" + lat + "; Lng=" + lng);
+        });
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
     </body>
 </html>
