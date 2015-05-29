@@ -1,0 +1,50 @@
+/* Style the vertical line between the login and register areas */
+.vertical-line {
+    text-align: center;
+    padding-bottom: 150%;
+    margin-bottom: 100%;
+    margin-left: 50%;
+    #margin-right: 50%;
+    border-left: 2px solid #F2F7F9;
+    #border-right: 1px solid #F2F7F9;
+}
+
+/* Style the horizontal line between the login and register areas */
+hr {
+    border-width: 2px;
+    border-color: #F2F7F9;
+}
+
+/* Align text for the social networks buttons */
+.btn-social {
+    text-align: center;
+}
+
+/*
+.login-area {
+    border: 1px solid #F2F7F9;
+}
+
+.register-area {
+    border: 1px solid #F2F7F9;
+}
+*/
+
+.no-right-padding {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Border for user-friend, which is a li element. We want to add the border to make it stand out*/
+.user-friend {
+    border: 1px solid #F2F7F9;
+}
+
+/* For the labels used in views, align their text to the right */
+.view-label {
+    text-align: right;
+}
+
+.view-group {
+    margin-bottom: 15px;
+}

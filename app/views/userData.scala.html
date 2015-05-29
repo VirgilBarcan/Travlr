@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <title>Edit user data</title>
+
+            <!-- Bootstrap core CSS -->
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
+
+            <!-- Font-Awesome default CSS -->
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
+
+            <!-- Bootstrap-social buttons CSS -->
+        <link href="@routes.Assets.at("stylesheets/bootstrap-social.css")" rel="stylesheet">
+
+            <!-- main CSS -->
+        <link href="@routes.Assets.at("stylesheets/userDataCSS.css")" rel="stylesheet">
+
+            <!-- Vertical-tabs CSS -->
+        <link href="@routes.Assets.at("plugins/bootstrap-vertical-tabs-1.2.1/bootstrap.vertical-tabs.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("plugins/bootstrap-vertical-tabs-1.2.1/bootstrap.vertical-tabs.min.css")" rel="stylesheet">
+
+            <!-- Bootstrap countries flags -->
+        <link href="@routes.Assets.at("plugins/bootstrap-form-helper/dist/css/bootstrap-formhelpers.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("plugins/bootstrap-form-helper/dist/css/bootstrap-formhelpers.min.css")" rel="stylesheet">
+    </head>
+    <body>
+
+        @navbar()
+
+        <!-- The main content of the page -->
+        <div class="container" style="padding-top: 70px">
+            <div class="row user-image-name-row">
+                <div class="container user-image-name-container  no-right-padding">
+                        <!-- User image and user name -->
+                    <div class="user-image-name-wrapper col-sm-12 col-md-12 col-lg-12  no-right-padding">
+                        <div class="user-image col-xs-4 col-sm-2" style="text-align: center">
+                            <a href="#" class="thumbnail">
+                                <img src="@routes.Assets.at("images/user-image.svg")" alt="user-image">
+                            </a>
+                            <a href="#">
+                                <h5>User Name</h5>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row user-info-row">
+                <div class="container user-info-container">
+                    <div  class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-sm-2 col-md-2 col-lg-2"> <!-- required for floating -->
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs tabs-left">
+                                <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+                                <li><a href="#places" data-toggle="tab">Places</a></li>
+                                <li><a href="#friends" data-toggle="tab">Friends</a></li>
+                                <li><a href="#preferences" data-toggle="tab">Preferences</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-10 col-md-10 col-lg-10">
+                                <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="info">
+                                    <div class="info-edit-mode visible" id="info-edit-mode">
+                                        <form class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="input-first-name" class="col-sm-2 col-md-2 col-lg-2 control-label">First Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="input-first-name" placeholder="First Name">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="input-last-name" class="col-sm-2 control-label">Last Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="input-last-name" placeholder="Last Name">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="input-email" class="col-sm-2 control-label">Email</label>
+                                                <div class="col-sm-10">
+                                                    <input type="email" class="form-control" id="input-email" placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="input-birthdate" class="col-sm-2 control-label">Birthdate</label>
+                                                <div class="col-sm-10">
+                                                    <input type="date" class="form-control" id="input-birthdate" placeholder="Birthdate">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="radio-gender-group" class="col-sm-2 control-label">Gender</label>
+                                                <div class="col-sm-10 radio-gender-group">
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="radio-gender" id="radio-gender-male" value="male" checked> Male
+                                                    </label>
+                                                    <label class="radio-inline">
+                                                        <input type="radio" name="radio-gender" id="radio-gender-female" value="female"> Female
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-default">Save Changes</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="info-view-mode hidden" id="info-view-mode">
+                                            <!--<form class="form-horizontal">  -->
+                                        <div class="row view-group">
+                                            <label for="view-first-name" class="col-sm-2 col-md-2 col-lg-2 view-label">First Name</label>
+                                            <div class="col-sm-10">
+                                                <span id="view-first-name"> First Name</span>
+                                            </div>
+                                        </div>
+                                        <div class="row view-group">
+                                            <label for="view-last-name" class="col-sm-2 view-label">Last Name</label>
+                                            <div class="col-sm-10">
+                                                <span id="view-last-name"> Last Name</span>
+                                            </div>
+                                        </div>
+                                        <div class="row view-group">
+                                            <label for="view-email" class="col-sm-2 view-label">Email</label>
+                                            <div class="col-sm-10">
+                                                <span id="view-email"> Email</span>
+                                            </div>
+                                        </div>
+                                        <div class="row view-group">
+                                            <label for="view-birthdate" class="col-sm-2 view-label">Birthdate</label>
+                                            <div class="col-sm-10">
+                                                <span id="view-bithdate"> Birthdate</span>
+                                            </div>
+                                        </div>
+                                        <div class="row view-group">
+                                            <label for="view-gender" class="col-sm-2 view-label">Gender</label>
+                                            <div class="col-sm-10">
+                                                <span id="view-gender"> Gender</span>
+                                            </div>
+                                        </div>
+                                            <!--</form> -->
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="places">
+                                    <div class="places-edit-mode visible" id="places-edit-mode">
+                                        <div class="panel-group" id="accordion-places-edit">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-places-edit" href="#collapse-hometown-edit">Hometown</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-hometown-edit" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="hometown">
+                                                            <form class="form-horizontal" id="form-search-hometown">
+                                                                <div class="form-group" style="display:inline;">
+                                                                    <div class="input-group" style="display:table;">
+                                                                        <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
+                                                                        <input type="text" class="form-control" name="search-hometown" placeholder="Search location" autocomplete="off" autofocus="autofocus">
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            <div>
+                                                                <label for="form-hometown">Or introduce it here: </label>
+                                                                <form class="form-horizontal" id="form-hometown">
+                                                                    <div class="form-group">
+                                                                        <label for="input-hometown-country" class="col-sm-2 col-md-2 col-lg-2 control-label">Country</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-hometown-country" placeholder="Country">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-hometown-state" class="col-sm-2 control-label">State</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-hometown-state" placeholder="State">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-hometown-county" class="col-sm-2 control-label">County</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-hometown-county" placeholder="County">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-hometown-locality" class="col-sm-2 control-label">Locality</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-hometown-locality" placeholder="Locality">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-hometown-street-name" class="col-sm-2 control-label">Street Name</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-hometown-street-name" placeholder="Street Name">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-hometown-street-number" class="col-sm-2 control-label">Street No</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-hometown-street-number" placeholder="Street No">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-offset-2 col-sm-10">
+                                                                            <button type="submit" class="btn btn-default">Save Changes</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-places-edit" href="#collapse-current-location-edit">Current Location</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-current-location-edit" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="current-location">
+                                                            <form class="form-horizontal" id="form-search-current-location">
+                                                                <div class="form-group" style="display:inline;">
+                                                                    <div class="input-group" style="display:table;">
+                                                                        <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
+                                                                        <input type="text" class="form-control" name="search-current-location" placeholder="Search location" autocomplete="off" autofocus="autofocus">
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                            <div>
+                                                                <label for="form-current-location">Or introduce it here: </label>
+                                                                <form class="form-horizontal" id="form-current-location">
+                                                                    <div class="form-group">
+                                                                        <label for="input-current-country" class="col-sm-2 col-md-2 col-lg-2 control-label">Country</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-current-country" placeholder="Country">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-current-state" class="col-sm-2 control-label">State</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-current-state" placeholder="State">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-current-county" class="col-sm-2 control-label">County</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-current-county" placeholder="County">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-current-locality" class="col-sm-2 control-label">Locality</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-current-locality" placeholder="Locality">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-current-street-name" class="col-sm-2 control-label">Street Name</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-current-street-name" placeholder="Street Name">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="input-current-street-number" class="col-sm-2 control-label">Street No</label>
+                                                                        <div class="col-sm-10">
+                                                                            <input type="text" class="form-control" id="input-current-street-number" placeholder="Street No">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <div class="col-sm-offset-2 col-sm-10">
+                                                                            <button type="submit" class="btn btn-default">Save Changes</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-places-edit" href="#collapse-places-visited-edit">Places Visited</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-places-visited-edit" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <form class="form-horizontal" id="form-search-current-location">
+                                                            <div class="form-group" style="display:inline;">
+                                                                <div class="input-group" style="display:table;">
+                                                                    <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
+                                                                    <input type="text" class="form-control" name="search-current-location" placeholder="Search and Add new location" autocomplete="off" autofocus="autofocus">
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
+                                                        <div class="visited-places">
+                                                            <label for="visisted-places-list">Visited: </label>
+                                                            <ul class="nav nav-pills nav-stacked visited-places-list" id="visited-places-list">
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true"></span>
+                                                                        <strong> Istanbul</strong>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true"></span>
+                                                                        <strong> Canakkale</strong>
+                                                                    </a>
+
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true">
+                                                              </span>
+                                                                        <strong> Troy</strong>
+                                                                    </a>
+
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="SI" data-flags="true">
+                                                              </span>
+                                                                        <strong> Maribor</strong>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="places-view-mode hidden">
+                                        <div class="panel-group" id="accordion-places-view">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-places-view" href="#collapse-hometown-view">Hometown</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-hometown-view" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="hometown-view">
+                                                            <div class="row view-group">
+                                                                <label for="view-hometown-country" class="col-sm-2 col-md-2 col-lg-2 view-label">Country</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-hometown-country"> Country</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-hometown-state" class="col-sm-2 view-label">State</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-hometown-state"> State</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-hometown-county" class="col-sm-2 view-label">County</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-hometown-county"> County</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-hometown-locality" class="col-sm-2 view-label">Locality</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-hometown-locality"> Locality</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-hometown-street-name" class="col-sm-2 view-label">Street Name</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-hometown-street-name"> Street Name</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-hometown-street-number" class="col-sm-2 view-label">Street No</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-hometown-street-number"> Street Number</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-places-view" href="#collapse-current-location-view">Current Location</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-current-location-view" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="current-location-view">
+                                                            <div class="row view-group">
+                                                                <label for="view-current-location-country" class="col-sm-2 col-md-2 col-lg-2 view-label">Country</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-current-location-country"> Country</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-current-location-state" class="col-sm-2 view-label">State</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-current-location-state"> State</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-current-location-county" class="col-sm-2 view-label">County</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-current-location-county"> County</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-current-location-locality" class="col-sm-2 view-label">Locality</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-current-location-locality"> Locality</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-current-location-street-name" class="col-sm-2 view-label">Street Name</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-current-location-street-name"> Street Name</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="view-current-location-street-number" class="col-sm-2 view-label">Street No</label>
+                                                                <div class="col-sm-10">
+                                                                    <span id="view-current-location-street-number"> Street Number</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-places-view" href="#collapse-places-visited-view">Places Visited</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-places-visited-view" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="visited-places">
+                                                            <label for="visisted-places-list">Visited: </label>
+                                                            <ul class="nav nav-pills nav-stacked visited-places-list" id="visited-places-list-view">
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true"></span>
+                                                                        <strong> Istanbul</strong>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true"></span>
+                                                                        <strong> Canakkale</strong>
+                                                                    </a>
+
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true">
+                                                              </span>
+                                                                        <strong> Troy</strong>
+                                                                    </a>
+
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="SI" data-flags="true">
+                                                              </span>
+                                                                        <strong> Maribor</strong>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="friends">
+                                    <div class="friends-edit-mode visible" id="friends-edit-mode">
+                                        <div class="user-friends">
+                                            <label for="user-friends-list">Friends: </label>
+                                            <ul class="nav nav-pills nav-stacked user-friends-list" id="user-friends-list-edit">
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="friends-view-mode hidden" id="friends-view-mode">
+                                        <div class="user-friends">
+                                            <label for="user-friends-list">Friends: </label>
+                                            <ul class="nav nav-pills nav-stacked user-friends-list" id="user-friends-list-show">
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                                <li class="user-friend">
+                                                    <a href="#" class="user-friend-link">
+                                                        <span><img src="@routes.Assets.at("images/user-image.svg")"></span>
+                                                        <strong> Friend Name</strong>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane fade" id="preferences">
+                                    <div class="preferences-edit-mode visible" id="preferences-edit-mode">
+                                        <div class="panel-group" id="accordion-preferences-edit">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-preferences-edit" href="#collapse-airline-edit">Airline</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-airline-edit" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <form class="form-horizontal" id="form-search-airline">
+                                                            <div class="form-group" style="display:inline;">
+                                                                <div class="input-group" style="display:table;">
+                                                                    <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
+                                                                    <input type="text" class="form-control" name="search-airline" placeholder="Search and Add new Airline" autocomplete="off" autofocus="autofocus">
+                                                                </div>
+                                                            </div>
+                                                        </form>
+
+                                                        <div class="prefered-airlines">
+                                                            <label for="prefered-airlines-list">Prefered Airilines: </label>
+                                                            <ul class="nav nav-pills nav-stacked prefered-airlines-list" id="prefered-airlines-list">
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                                                                        <span class="bfh-countries" data-country="RO" data-flags="true"></span>
+                                                                        <strong> Tarom</strong>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true"></span>
+                                                                        <strong> Turkish Airlines</strong>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                                                                        <span class="bfh-countries" data-country="GB" data-flags="true"></span>
+                                                                        <strong> British Airlines</strong>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-preferences-edit" href="#collapse-flight-edit">Flight</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-flight-edit" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="flight-preferences">
+                                                            <form class="form-horizontal" id="form-flight-preferences">
+                                                                <div class="form-group">
+                                                                    <label for="radio-night-flight-group" class="col-sm-2 control-label">Night Flights</label>
+                                                                    <div class="col-sm-10 radio-night-flight-group">
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-night-flight" id="radio-night-flight-yes" value="yes" checked> Yes
+                                                                        </label>
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-night-flight" id="radio-night-flight-no" value="no"> No
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="radio-stopover-flight-group" class="col-sm-2 control-label">With Stopovers</label>
+                                                                    <div class="col-sm-10 radio-stopover-flight-group">
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-stopover-flight" id="radio-stopover-flight-yes" value="yes" checked> Yes
+                                                                        </label>
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-stopover-flight" id="radio-stopover-flight-no" value="no"> No
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-preferences-edit" href="#collapse-route-edit">Route</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-route-edit" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="route-preferences">
+                                                            <form class="form-horizontal" id="form-route-preferences">
+                                                                <div class="form-group">
+                                                                    <label for="radio-cheapest-route-group" class="col-sm-2 control-label">Cheapest</label>
+                                                                    <div class="col-sm-10 radio-cheapest-route-group">
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-cheapest-route" id="radio-cheapest-route-yes" value="yes" checked> Yes
+                                                                        </label>
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-cheapest-route" id="radio-cheapest-route-no" value="no"> No
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="radio-shortest-route-group" class="col-sm-2 control-label">Shortest</label>
+                                                                    <div class="col-sm-10 radio-shortest-route-group">
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-shortest-route" id="radio-shortest-route-yes" value="yes" checked> Yes
+                                                                        </label>
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-shortest-route" id="radio-shortest-route-no" value="no"> No
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label for="radio-most-friends-route-group" class="col-sm-2 control-label">Most Friends Seen</label>
+                                                                    <div class="col-sm-10 radio-most-friends-route-group">
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-most-friends-route" id="radio-most-friends-route-yes" value="yes" checked> Yes
+                                                                        </label>
+                                                                        <label class="radio-inline">
+                                                                            <input type="radio" name="radio-most-friends-route" id="radio-most-friends-route-no" value="no"> No
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="preferences-view-mode hidden" id="preferences-view-mode">
+                                        <div class="panel-group" id="accordion-preferences-view">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-preferences-view" href="#collapse-airline-view">Airline</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-airline-view" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="prefered-airlines">
+                                                            <label for="prefered-airlines-list-view">Prefered Airilines: </label>
+                                                            <ul class="nav nav-pills nav-stacked prefered-airlines-list" id="prefered-airlines-list-view">
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="RO" data-flags="true"></span>
+                                                                        <strong> Tarom</strong>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="TR" data-flags="true"></span>
+                                                                        <strong> Turkish Airlines</strong>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="#" class="">
+                                                                        <span class="bfh-countries" data-country="GB" data-flags="true"></span>
+                                                                        <strong> British Airlines</strong>
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-preferences-view" href="#collapse-flight-view">Flight</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-flight-view" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="flight-preferences-view">
+                                                            <div class="row view-group">
+                                                                <label for="night-flight-view" class="col-sm-2 view-label">Night Flight</label>
+                                                                <div class="col-sm-10" id="night-flight-view">
+                                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="stopover-flight-view" class="col-sm-2 view-label">With Stopovers</label>
+                                                                <div class="col-sm-10" id="stopover-flight-view">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h4 class="panel-title">
+                                                        <a data-toggle="collapse" data-parent="#accordion-preferences-view" href="#collapse-route-view">Route</a>
+                                                    </h4>
+                                                </div>
+                                                <div id="collapse-route-view" class="panel-collapse collapse">
+                                                    <div class="panel-body">
+                                                        <div class="route-preferences-view">
+                                                            <div class="row view-group">
+                                                                <label for="cheapest-route-view" class="col-sm-2 view-label">Cheapest</label>
+                                                                <div class="col-sm-10" id="cheapest-route-view">
+                                                                    <span class="glyphicon glyphicon-ok"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="shortest-route-view" class="col-sm-2 view-label">Shortest</label>
+                                                                <div class="col-sm-10" id="shortest-route-view">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row view-group">
+                                                                <label for="most-friends-route-view" class="col-sm-2 view-label">Most Friends Seen</label>
+                                                                <div class="col-sm-10" id="most-friends-route-view">
+                                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+
+        <br>
+        <br>
+        <br>
+
+        <footer style="text-align: center">
+            <h6>Web Technologies <em>Travlr</em>
+            </h6>
+        </footer>
+
+            <!-- Bootstrap core JavaScript -->
+            <!-- Placed at the end of the document so the pages load faster -->
+        <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")"></script>
+
+            <!-- Bootstrap countries and flags -->
+        <scritp src="@routes.Assets.at("plugins/bootstrap-form-helper/dist/js/bootstrap-formhelpers.min.js")" type="text/javascript"></scritp>
+        <scritp src="@routes.Assets.at("plugins/bootstrap-form-helper/dist/js/bootstrap-formhelpers.js")" type="text/javascript"></scritp>
+        <scritp src="@routes.Assets.at("plugins/bootstrap-form-helper/js/bootstrap-formhelpers-countries.js")" type="text/javascript"></scritp>
+
+    </body>
+</html>

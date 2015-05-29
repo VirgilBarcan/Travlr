@@ -14,10 +14,13 @@ GET         /                           controllers.Login.loginRegister()
 
 # Home page
 GET         /home                       controllers.Home.index()
-GET         /Home/map                       controllers.Home.map()
-GET         /Home/trip                       controllers.Home.trip()
+GET         /Home/map                   controllers.Home.map()
+GET         /Home/trip                  controllers.Home.trip()
 
 # Login Register page
 GET         /login_register_page        controllers.Login.loginRegister()
 POST        /login                      controllers.Login.login()
 POST        /register                   controllers.Register.register()
+
+# View User Data page
+GET         /view_user_data_page        controllers.UserData.viewUserData()
