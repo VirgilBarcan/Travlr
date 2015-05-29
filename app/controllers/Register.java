@@ -1,6 +1,6 @@
 package controllers;
 
-import models.UserLoginRegisterData;
+import models.UserRegisterData;
 import play.mvc.Controller;
 import play.mvc.Result;
 import views.html.login;
@@ -24,7 +24,7 @@ public class Register extends Controller {
 
     public static Result register() {
         // Get the data from the form
-        UserLoginRegisterData userLoginData = new UserLoginRegisterData();
+        UserRegisterData userLoginData = new UserRegisterData();
         String email = "";
         String username = "";
         String password = "";

@@ -1,12 +1,9 @@
 package controllers;
 
-import models.UserLoginRegisterData;
-import play.*;
-import play.data.Form;
+import models.UserLoginData;
 import play.mvc.*;
 import views.html.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,6 +12,8 @@ import java.util.Map;
  * This class is used to handle the login and register part
  */
 public class Login extends Controller {
+
+    private static String usernameEmail;
 
     /**
      * This method is used to render the login page
@@ -26,7 +25,7 @@ public class Login extends Controller {
 
     public static Result login() {
         // Get the data from the form
-        UserLoginRegisterData userLoginData = new UserLoginRegisterData();
+        UserLoginData userLoginData = new UserLoginData();
         String email = "";
         String username = "";
         String password = "";
@@ -46,6 +45,8 @@ public class Login extends Controller {
 
         System.out.println(userLoginData.toString());
 
+        usernameEmail = (email != "") ? email : username;
+
         //if (userLoginData.isValid()) {
             return redirect(controllers.routes.Home.index());
         //}
@@ -58,5 +59,10 @@ public class Login extends Controller {
     public static Result retryLogin() {
 
         return ok();
+    }
+
+
+    public static String getUsernameEmail() {
+        return usernameEmail;
     }
 }

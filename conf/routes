@@ -24,3 +24,6 @@ POST        /register                   controllers.Register.register()
 
 # View User Data page
 GET         /view_user_data_page        controllers.UserData.viewUserData()
+GET         /edit_user_data_page        controllers.UserData.editUserData()
+GET         /edit_user_data_page        controllers.UserData.viewUserData()
+POST        /edit_user_info             controllers.UserData.editUserInfo()
