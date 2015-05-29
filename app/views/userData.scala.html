@@ -1,18 +1,42 @@
 @(visibleEdit: String)(visibleView: String)(userInfo: UserInfo)
 
 @FirstName = {
-    @if(userInfo != null){ @userInfo.getFirstName} else { User }
+    @if(userInfo != null){ @userInfo.getFirstName } else { User }
 }
 @LastName = {
-    @if(userInfo != null){ @userInfo.getLastName} else { Name }
+    @if(userInfo != null){ @userInfo.getLastName } else { Name }
 }
 
 @Birthdate = {
-    @if(userInfo != null){ @userInfo.getBirthdate} else { 01-01-2015 }
+    @if(userInfo != null){ @userInfo.getBirthdate } else { 01-01-2015 }
 }
 
 @Gender = {
-    @if(userInfo != null){ @userInfo.getGender} else { male }
+    @if(userInfo != null){ @userInfo.getGender } else { male }
+}
+
+@valueFirstName = {
+    @if(userInfo != null){ value="@userInfo.getFirstName" } else { }
+}
+
+@valueLastName = {
+    @if(userInfo != null){ value="@userInfo.getLastName" } else { }
+}
+
+@valueBirthdate = {
+    @if(userInfo != null){ value="@userInfo.getBirthdate" } else { }
+}
+
+@checkedGenderMale = {
+    @if(userInfo != null){
+        @if(userInfo.getGender == "male"){ checked }
+    } else { }
+}
+
+@checkedGenderFemale = {
+    @if(userInfo != null){
+        @if(userInfo.getGender == "female"){ checked }
+    } else { }
 }
 
 <!DOCTYPE html>
@@ -87,29 +111,29 @@
                                             <div class="form-group">
                                                 <label for="input-first-name" class="col-sm-2 col-md-2 col-lg-2 control-label">First Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="input-first-name" name="input-first-name" placeholder="First Name">
+                                                    <input type="text" class="form-control" id="input-first-name" name="input-first-name" placeholder="First Name" @valueFirstName >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="input-last-name" class="col-sm-2 control-label">Last Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="input-last-name" name="input-last-name" placeholder="Last Name">
+                                                    <input type="text" class="form-control" id="input-last-name" name="input-last-name" placeholder="Last Name" @valueLastName >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="input-birthdate" class="col-sm-2 control-label">Birthdate</label>
                                                 <div class="col-sm-10">
-                                                    <input type="date" class="form-control" id="input-birthdate" name="input-birthdate" placeholder="Birthdate">
+                                                    <input type="date" class="form-control" id="input-birthdate" name="input-birthdate" placeholder="Birthdate" @valueBirthdate >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="radio-gender-group" class="col-sm-2 control-label">Gender</label>
                                                 <div class="col-sm-10 radio-gender-group" id="radio-gender-group">
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="radio-gender" id="radio-gender-male" value="male" checked> Male
+                                                        <input type="radio" name="radio-gender" id="radio-gender-male" value="male" @checkedGenderMale> Male
                                                     </label>
                                                     <label class="radio-inline">
-                                                        <input type="radio" name="radio-gender" id="radio-gender-female" value="female"> Female
+                                                        <input type="radio" name="radio-gender" id="radio-gender-female" value="female" @checkedGenderFemale> Female
                                                     </label>
                                                 </div>
                                             </div>

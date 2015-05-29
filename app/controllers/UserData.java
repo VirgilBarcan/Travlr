@@ -67,7 +67,7 @@ public class UserData extends Controller {
         String userName = firstName + " " + lastName;
         String visibleEdit = "visible";
         String visibleView = "hidden";
-        
+
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
 
