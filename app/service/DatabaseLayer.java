@@ -142,7 +142,7 @@ public class DatabaseLayer {
         /**
          // Send an request to the DB to find if the user exists
          // NOT TESTED!!!
-         String sqlQuery = "{? = call ADD_USER(?, ?, ?, ?, ?)}";
+         String sqlQuery = "{? = call ADD_USER_INFO(?, ?, ?, ?, ?)}";
          Connection connection = DB.getConnection();
          CallableStatement statement = null;
          try {
