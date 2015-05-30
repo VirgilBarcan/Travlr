@@ -1,5 +1,7 @@
 package models;
 
+import service.DatabaseLayer;
+
 /**
  * Created by Virgil Barcan on 27.05.2015.
  * This class will hold the data taken from the Login or Register form
@@ -48,21 +50,9 @@ public class UserLoginData {
 
     public boolean isValid() {
         boolean isValid = false;
-        // We know for sure that if the user inserts into either email of username, any of these is different from ""
-        String usernameEmail = (email != "") ? email : username;
-        /*
-        // Send an request to the DB to find if the user exists
-        // NOT TESTED!!!
-        String sqlQuery = "{? = call IS_VALID_USER(?, ?)}";
-        CallableStatement statement = connection.prepareCall(sqlQuery);
-        statement.registerOutParameter(1, Types.BOOL);
-        isValid = statement.getBOOL(); // ???? Not sure this is the correct type
-        statement.setString(2, usernameEmail);
-        statement.setString(3, this.password);
-        statement.execute();
 
-        // if the user exists and the password is correct, result will be 1, otherwise 0
-        */
+        // check if the user is a valid one (if it exists in the DB)
+        isValid = DatabaseLayer.isValidUser(this);
 
         return isValid;
     }

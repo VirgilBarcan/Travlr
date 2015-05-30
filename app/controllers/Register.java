@@ -19,7 +19,7 @@ public class Register extends Controller {
      * @return
      */
     public static Result loginRegister() {
-        return ok(login.render());
+        return ok(login.render(false));
     }
 
     public static Result register() {

@@ -14,8 +14,8 @@ public class Home extends Controller{
 
     public static Result index() {
         //Comment the connection for now
-        //Connection con = DB.getConnection();
-        //Statement stmt = con.createStatement();
+        //Connection connection = DB.getConnection();
+        //Statement stmt = connection.createStatement();
 
         return ok(home.render());
     }

@@ -1,3 +1,11 @@
+@(invalidUser: Boolean)
+
+@invalid = {
+    @if( invalidUser != null && invalidUser == true ) {
+        <div class="alert alert-danger">Invalid username or password!</div>
+    }
+}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -14,6 +22,7 @@
 
         <!-- The main content of the page -->
         <div class="container" style="padding-top: 70px">
+            <div class="row text-center">@invalid</div>
             <div class="row text-center">
                 <div class="col-md-12 col-lg-12"  id="text-line">
                     <div class="col-md-5 col-lg-5" id="text-login-area">

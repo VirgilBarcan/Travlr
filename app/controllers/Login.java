@@ -13,14 +13,12 @@ import java.util.Map;
  */
 public class Login extends Controller {
 
-    private static String usernameEmail;
-
     /**
      * This method is used to render the login page
      * @return
      */
     public static Result loginRegister() {
-        return ok(login.render());
+        return ok(login.render(false));
     }
 
     public static Result login() {
@@ -45,24 +43,32 @@ public class Login extends Controller {
 
         System.out.println(userLoginData.toString());
 
+        String usernameEmail;
         usernameEmail = (email != "") ? email : username;
 
-        //if (userLoginData.isValid()) {
+        if (userLoginData.isValid()) {
+            addToSession(userLoginData);
+
             return redirect(controllers.routes.Home.index());
-        //}
-        //else{
-        //    return redirect(controllers.routes.Login.retryLogin());
-        //}
+        }
+        else{
+            return retryLogin();
+        }
     }
 
     // This will implement AJAX, to update the page without reloading it
     public static Result retryLogin() {
+        // Clear the session
+        session().clear();
 
-        return ok();
+        // Print a message on the webpage to ask for a retry
+        return ok(login.render(true));
     }
 
-
-    public static String getUsernameEmail() {
-        return usernameEmail;
+    private static void addToSession(UserLoginData userLoginData) {
+        session("email", userLoginData.getEmail());
+        session("username", userLoginData.getUsername());
+        session("password", userLoginData.getPassword());
     }
+
 }

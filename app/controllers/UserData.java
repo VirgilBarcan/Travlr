@@ -49,10 +49,13 @@ public class UserData extends Controller {
         userInfo.setBirthdate(birthdate);
         userInfo.setGender(gender);
 
-        // Add to the database the information given by the user
-        boolean result = addToDB(userInfo, Login.getUsernameEmail());
+        // Add the received data to the session
+        addToSession(userInfo);
 
-        if (result == false){
+        // Add to the database the information given by the user
+        boolean addToDB = addToDB(userInfo);
+
+        if (addToDB == false){
             // the update of the DB didn't end up with success
             // ask the user to reinsert the data
         }
@@ -62,7 +65,6 @@ public class UserData extends Controller {
         }
 
         System.out.println(userInfo.toString());
-        System.out.println("usernameEmail: " + Login.getUsernameEmail());
 
         String userName = firstName + " " + lastName;
         String visibleEdit = "visible";
@@ -71,15 +73,25 @@ public class UserData extends Controller {
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
 
+    private static void addToSession(UserInfo userInfo) {
+        session("userFirstName", userInfo.getFirstName());
+        session("userLastName", userInfo.getFirstName());
+        session("userBirthdate", userInfo.getBirthdate());
+        session("userGender", userInfo.getGender());
+    }
+
     /**
      * This method is used to add the user info to the DB
      * @param userInfo the userInfo (firstName, lastName, birthdate, gender)
-     * @param userIdentifier the identifier (either the username or the email, given at login)
      * @return true if the DB was successfully updated, false otherwise
      */
-    private static boolean addToDB(UserInfo userInfo, String userIdentifier) {
+    private static boolean addToDB(UserInfo userInfo) {
         boolean result = false;
 
+        String user = session("user");
+        String password = session("password");
+
+        System.out.println(user + " " + password);
 
 
         return result;
