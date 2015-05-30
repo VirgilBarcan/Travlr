@@ -1,5 +1,6 @@
 package controllers;
 
+import models.ErrorMessage;
 import models.UserLoginData;
 import play.mvc.*;
 import views.html.*;
@@ -18,7 +19,7 @@ public class Login extends Controller {
      * @return
      */
     public static Result loginRegister() {
-        return ok(login.render(false));
+        return ok(login.render(null));
     }
 
     public static Result login() {
@@ -46,9 +47,8 @@ public class Login extends Controller {
         String usernameEmail;
         usernameEmail = (email != "") ? email : username;
 
-        if (userLoginData.isValid()) {
+        if (userLoginData.isValid() == 0) { // valid data
             addToSession(userLoginData);
-
             return redirect(controllers.routes.Home.index());
         }
         else{
@@ -62,7 +62,7 @@ public class Login extends Controller {
         session().clear();
 
         // Print a message on the webpage to ask for a retry
-        return ok(login.render(true));
+        return ok(login.render(ErrorMessage.INVALID_USERNAME_PASSWORD.toString()));
     }
 
     private static void addToSession(UserLoginData userLoginData) {
