@@ -59,7 +59,7 @@ END TRAVLR;
 
 CREATE OR REPLACE PACKAGE BODY TRAVLR
 IS
-  FUNCTION ADD_USER (
+ FUNCTION ADD_USER (
     p_email IN VARCHAR2,
     p_username IN VARCHAR2,
     p_password IN VARCHAR2)
@@ -169,7 +169,7 @@ IS
       
       RETURN v_return;
     END;
-  
+   
     procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
                         airport_name AIRPORT.airport_name%TYPE,
                         city AIRPORT.city%TYPE,

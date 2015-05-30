@@ -23,6 +23,7 @@ public class DatabaseLayer {
      * This function is used to check if the data given by the user is valid:
      * - username/email exists in the DB
      * - correct password for the username/email
+     * @param userLoginData the user login data (username, email, password)
      * @return 0 = valid, 1 = invalid
      */
     public static int isValidUser(UserLoginData userLoginData) {
@@ -60,8 +61,9 @@ public class DatabaseLayer {
 
     /**
      * This function is used to check if the data given by the user is valid:
-     * - username/email exists in the DB
-     * - correct password for the username/email
+     * - the email isn't already used in the DB
+     * - the username isn't already usen in the DB
+     * @param userRegisterData the user register data (email, username, password)
      * @return 0 = valid, 1 = invalid username, 2 = invalid email
      */
     public static int isValid(UserRegisterData userRegisterData) {
@@ -96,36 +98,42 @@ public class DatabaseLayer {
         return result;
     }
 
+    /**
+     * This function is used to insert a new user into the DB
+     * @param userRegisterData the user register data (email, username, password)
+     * @return 0 if the user was inserted successfully, 1 if the user was not inserted successfully, 2 if the user was already created
+     */
     public static boolean addToDB(UserRegisterData userRegisterData) {
-        boolean result = false;
+        int result = -1;
 
-        // We know for sure that if the user inserts into either email of username, any of these is different from ""
         String email = userRegisterData.getEmail();
         String username = userRegisterData.getUsername();
         String password = userRegisterData.getPassword();
 
-        /**
-         // Send an request to the DB to find if the user exists
-         // NOT TESTED!!!
-         String sqlQuery = "{? = call ADD_USER(?, ?, ?)}";
-         Connection connection = DB.getConnection();
-         CallableStatement statement = null;
-         try {
-             statement = connection.prepareCall(sqlQuery);
-             statement.registerOutParameter(1, Types.BOOLEAN);
-             statement.setString(2, email);
-             statement.setString(3, username);
-             statement.setString(4, password);
-             statement.execute();
+        // Add the new user (if possible, that is, if the email or username aren't already in use)
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.ADD_USER(?, ?, ?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, email);
+            statement.setString(3, username);
+            statement.setString(4, password);
+            statement.execute();
 
-             // if the user exists and the password is correct, result will be 1, otherwise 0
-             result = statement.getBoolean(1);
-         } catch (SQLException e) {
-             e.printStackTrace();
-         }
-         **/
+            // if the user was inserted successfully, 0 is returned
+            // if the user was not inserted successfully, 1 is returned
+            // if the user was already created, 2 is returned
+            result = statement.getInt(1);
+            System.out.println("result of execution: " + result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-        return result;
+
+        return result == 0;
     }
 
     public static boolean addToDB(UserInfo userInfo) {
