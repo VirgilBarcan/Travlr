@@ -1,4 +1,6 @@
+--
 drop table AIRLINE cascade constraints; 
+drop table AIRPORT cascade constraints; 
 drop table ADDRESS cascade constraints; 
 drop table CITY cascade constraints; 
 drop table FRIENDS cascade constraints; 
@@ -12,6 +14,24 @@ drop table USER_TRIP cascade constraints;
 drop table USERS cascade constraints; 
 --DROP SEQUENCE users_seq;
 
+CREATE TABLE AIRPORT
+ (
+    airport_id INTEGER NOT NULL,
+    airport_name VARCHAR2 (255) NOT NULL,
+    city VARCHAR2 (255) NOT NULL,
+    country VARCHAR2 (255) NOT NULL,
+    iata_faa_code VARCHAR2 (3),
+    icao_code VARCHAR2 (4),
+    latitude NUMBER NOT NULL,
+    longitude NUMBER NOT NULL,
+    altitude NUMBER NOT NULL,
+    timezone NUMBER NOT NULL,
+    dst VARCHAR2 (1) NOT NULL,
+    tzone_db_time VARCHAR2(255) NOT NULL,
+    rating_num  INTEGER ,
+    rating_sum  INTEGER
+  ) ;
+
 CREATE TABLE ADDRESS
   (
     address_id    INTEGER NOT NULL ,
@@ -24,6 +44,12 @@ CREATE TABLE AIRLINE
   (
     airline_id   INTEGER NOT NULL ,
     airline_name VARCHAR2 (255) NOT NULL ,
+    airline_alias VARCHAR2 (255) NOT NULL ,
+    iata_code VARCHAR2 (2) NOT NULL ,
+    icao_code VARCHAR2 (3) NOT NULL ,
+    callsign VARCHAR2 (255) NOT NULL ,
+    country VARCHAR2 (255) NOT NULL ,
+    active VARCHAR2 (1) NOT NULL ,
     rating_num  INTEGER ,
     rating_sum  INTEGER
   ) ;
@@ -82,6 +108,12 @@ ALTER TABLE TRIP ADD CONSTRAINT TRIP_PK PRIMARY KEY ( trip_id ) ;
 CREATE TABLE FLIGHT
   (
     flight_id INTEGER NOT NULL ,
+    airline_id INTEGER NOT NULL ,
+    src_airport INTEGER NOT NULL ,
+    dst_sirport INTEGER NOT NULL ,
+    codeshare VARCHAR2 (1) ,
+    stops INTEGER NOT NULL ,
+    equipment VARCHAR2 (255) ,
     src       INTEGER NOT NULL ,
     dst       INTEGER NOT NULL
   ) ;
