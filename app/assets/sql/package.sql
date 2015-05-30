@@ -21,8 +21,8 @@ IS
     BEGIN
       
       BEGIN
-        INSERT INTO USERS(email, username, password) VALUES (p_email, p_username, p_password);
         COMMIT;
+        INSERT INTO USERS(email, username, password) VALUES (p_email, p_username, p_password);
         --data inserted successfully
         v_return := 0;
       EXCEPTION  
