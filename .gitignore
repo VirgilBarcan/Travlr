@@ -16,5 +16,6 @@ dist
 *.log
 .sbtserver/*
 *.class
-/bin/
+bin/
+bin/*
 project/.sbtserver

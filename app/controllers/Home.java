@@ -25,4 +25,5 @@ public class Home extends Controller{
     }
 
     public static Result map() { return ok(map.render()); }
+    public static Result importer() {return ok();}
 }
