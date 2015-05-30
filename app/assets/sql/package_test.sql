@@ -3,9 +3,16 @@ SET SERVEROUTPUT ON;
 DECLARE
   v_returned INTEGER;
 BEGIN
-  v_returned := TRAVLR.ADD_USER('virgil.barcan@info.uaic.ro', 'virgil.barcan', 'parola');
-  DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER:' || v_returned);
+  --v_returned := TRAVLR.ADD_USER('virgil.barcan@info.uaic.ro', 'virgil.barcan', 'parola');
+  --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER:' || v_returned);
+  
+  v_returned := TRAVLR.IS_VALID_USER('virgill.barcan', 'parola');
+  DBMS_OUTPUT.PUT_LINE('Returned by IS_VALID_USER:' || v_returned);
+  
+  --v_returned := TRAVLR.IS_VALID_USER('virgill.barcan@info.uaic.ro', 'virgil.barcan', 'parola');
+  --DBMS_OUTPUT.PUT_LINE('Returned by IS_VALID_USER:' || v_returned);
 END;
+
 
 /*
 -- Select full address of a place
