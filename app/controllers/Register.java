@@ -4,6 +4,7 @@ import models.ErrorMessage;
 import models.UserRegisterData;
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.DatabaseLayer;
 import views.html.login;
 
 import java.util.Map;
@@ -47,7 +48,13 @@ public class Register extends Controller {
 
         int errorNo = userRegisterData.isValid();
         if (errorNo == 0) { // valid data
+            // put the data in the session cookie for fast retrieval
             addToSession(userRegisterData);
+
+            // put the data in the DB, for persistent storage
+            addToDB(userRegisterData);
+
+            // redirect to the homepage
             return redirect(controllers.routes.Home.index());
         }
         else{
@@ -71,6 +78,20 @@ public class Register extends Controller {
         session("username", userRegisterData.getUsername());
         session("password", userRegisterData.getPassword());
     }
+
+    /**
+     * This method is used to add the user to the DB
+     * @param userRegisterData the user register data (email, username, password)
+     * @return true if the DB was successfully updated, false otherwise
+     */
+    private static boolean addToDB(UserRegisterData userRegisterData) {
+        boolean result = false;
+
+        result = DatabaseLayer.addToDB(userRegisterData);
+
+        return result;
+    }
+
 
     private static String findErrorType(int errorNo) {
         String errorType = "";

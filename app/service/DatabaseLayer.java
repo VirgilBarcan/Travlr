@@ -79,17 +79,17 @@ public class DatabaseLayer {
          Connection connection = DB.getConnection();
          CallableStatement statement = null;
          try {
-         statement = connection.prepareCall(sqlQuery);
-         statement.registerOutParameter(1, Types.BOOLEAN);
-         statement.setString(2, email);
-         statement.setString(3, username);
-         statement.setString(4, password);
-         statement.execute();
+             statement = connection.prepareCall(sqlQuery);
+             statement.registerOutParameter(1, Types.BOOLEAN);
+             statement.setString(2, email);
+             statement.setString(3, username);
+             statement.setString(4, password);
+             statement.execute();
 
-         // if the user exists and the password is correct, result will be 1, otherwise 0
-         result = statement.getBoolean(1);
+             // if the user exists and the password is correct, result will be 1, otherwise 0
+             result = statement.getBoolean(1);
          } catch (SQLException e) {
-         e.printStackTrace();
+             e.printStackTrace();
          }
          **/
 
@@ -118,8 +118,8 @@ public class DatabaseLayer {
              statement.setString(4, password);
              statement.execute();
 
-         // if the user exists and the password is correct, result will be 1, otherwise 0
-         result = statement.getBoolean(1);
+             // if the user exists and the password is correct, result will be 1, otherwise 0
+             result = statement.getBoolean(1);
          } catch (SQLException e) {
              e.printStackTrace();
          }
@@ -155,8 +155,8 @@ public class DatabaseLayer {
              statement.setString(6, userIdentifier);
              statement.execute();
 
-         // if the user exists and the password is correct, result will be 1, otherwise 0
-         result = statement.getBoolean(1);
+             // if the user exists and the password is correct, result will be 1, otherwise 0
+             result = statement.getBoolean(1);
          } catch (SQLException e) {
              e.printStackTrace();
          }

@@ -44,11 +44,11 @@ public class Login extends Controller {
 
         System.out.println(userLoginData.toString());
 
-        String usernameEmail;
-        usernameEmail = (email != "") ? email : username;
-
         if (userLoginData.isValid() == 0) { // valid data
+            // put the data in the session cookie for fast retrieval
             addToSession(userLoginData);
+
+            // redirect to the homepage
             return redirect(controllers.routes.Home.index());
         }
         else{
