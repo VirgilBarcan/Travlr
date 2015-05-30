@@ -92,7 +92,7 @@ public class UserData extends Controller {
         String password = session("password");
 
         System.out.println(user + " " + password);
-
+        // add user info to the DB
 
         return result;
     }

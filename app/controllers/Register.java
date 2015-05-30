@@ -1,8 +1,10 @@
 package controllers;
 
+import models.ErrorMessage;
 import models.UserRegisterData;
 import play.mvc.Controller;
 import play.mvc.Result;
+import service.DatabaseLayer;
 import views.html.login;
 
 import java.util.Map;
@@ -19,12 +21,12 @@ public class Register extends Controller {
      * @return
      */
     public static Result loginRegister() {
-        return ok(login.render(false));
+        return ok(login.render(null));
     }
 
     public static Result register() {
         // Get the data from the form
-        UserRegisterData userLoginData = new UserRegisterData();
+        UserRegisterData userRegisterData = new UserRegisterData();
         String email = "";
         String username = "";
         String password = "";
@@ -38,23 +40,72 @@ public class Register extends Controller {
         if (request.containsKey("password-register"))
             password = request.get("password-register")[0];
 
-        userLoginData.setEmail(email);
-        userLoginData.setUsername(username);
-        userLoginData.setPassword(password);
+        userRegisterData.setEmail(email);
+        userRegisterData.setUsername(username);
+        userRegisterData.setPassword(password);
 
-        System.out.println(userLoginData.toString());
+        System.out.println(userRegisterData.toString());
 
-        //if (userLoginData.isValid()) {
+        int errorNo = userRegisterData.isValid();
+        if (errorNo == 0) { // valid data
+            // put the data in the session cookie for fast retrieval
+            addToSession(userRegisterData);
+
+            // put the data in the DB, for persistent storage
+            addToDB(userRegisterData);
+
+            // redirect to the homepage
             return redirect(controllers.routes.Home.index());
-        //}
-        //else{
-        //    return redirect(controllers.routes.Login.retryLogin());
-        //}
+        }
+        else{
+            return retryRegister(errorNo);
+        }
     }
 
     // This will implement AJAX, to update the page without reloading it
-    public static Result retryRegister() {
+    public static Result retryRegister(int errorNo) {
+        // Clear the session
+        session().clear();
 
-        return ok();
+        String errorType = findErrorType(errorNo);
+
+        // Print a message on the webpage to ask for a retry
+        return ok(login.render(errorType));
+    }
+
+    private static void addToSession(UserRegisterData userRegisterData) {
+        session("email", userRegisterData.getEmail());
+        session("username", userRegisterData.getUsername());
+        session("password", userRegisterData.getPassword());
+    }
+
+    /**
+     * This method is used to add the user to the DB
+     * @param userRegisterData the user register data (email, username, password)
+     * @return true if the DB was successfully updated, false otherwise
+     */
+    private static boolean addToDB(UserRegisterData userRegisterData) {
+        boolean result = false;
+
+        result = DatabaseLayer.addToDB(userRegisterData);
+
+        return result;
+    }
+
+
+    private static String findErrorType(int errorNo) {
+        String errorType = "";
+
+        switch (errorNo){
+            case 1: // invalid username
+                errorType = ErrorMessage.USERNAME_TAKEN.toString();
+                break;
+            case 2: // invalid email
+                errorType = ErrorMessage.EMAIL_USED.toString();
+                break;
+            default:
+        }
+
+        return errorType;
     }
 }

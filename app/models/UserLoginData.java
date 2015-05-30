@@ -48,8 +48,14 @@ public class UserLoginData {
         this.password = password;
     }
 
-    public boolean isValid() {
-        boolean isValid = false;
+    /**
+     * This function is used to check if the data given by the user is valid:
+     * - username/email exists in the DB
+     * - correct password for the username/email
+     * @return 0 = valid, 1 = invalid
+     */
+    public int isValid() {
+        int isValid = 1;
 
         // check if the user is a valid one (if it exists in the DB)
         isValid = DatabaseLayer.isValidUser(this);

@@ -1,8 +1,11 @@
-@(invalidUser: Boolean)
+@(invalidMessage: String)
 
 @invalid = {
-    @if( invalidUser != null && invalidUser == true ) {
-        <div class="alert alert-danger">Invalid username or password!</div>
+    @***
+    * If the user has inserted invalid login data, then we display an error message
+    ***@
+    @if( invalidMessage != null ) {
+        <div class="alert alert-danger">@invalidMessage</div>
     }
 }
 
