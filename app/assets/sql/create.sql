@@ -242,7 +242,6 @@ CREATE TABLE USER_INFO
   (
     user_info_id INTEGER NOT NULL ,
     first_name   VARCHAR2 (255) NOT NULL ,
-    middle_name  VARCHAR2 (255) ,
     last_name    VARCHAR2 (255) ,
     birthdate    DATE ,
     gender       VARCHAR2 (10) NOT NULL ,

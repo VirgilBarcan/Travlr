@@ -26,6 +26,10 @@ IS
     p_password IN VARCHAR2) 
   RETURN INTEGER;
   
+  FUNCTION GET_USER_ID (
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+  
   FUNCTION ADD_USER_INFO (
     p_first_name IN VARCHAR2,
     p_last_name  IN VARCHAR2,
@@ -131,8 +135,8 @@ IS
       IF v_exists = 0 THEN
         --the user doesn't exist
         BEGIN
-          INSERT INTO USERS(email, username, password) VALUES (p_email, p_username, p_password);
           COMMIT;
+          INSERT INTO USERS(email, username, password) VALUES (p_email, p_username, p_password);
           --data inserted successfully
           v_return := 0;
         EXCEPTION  
@@ -145,6 +149,7 @@ IS
         v_return := 2;
       END IF;
       
+      COMMIT;
       RETURN v_return;
     END ADD_USER;
 
@@ -226,6 +231,137 @@ IS
       
       RETURN v_return;
     END;
+   
+  FUNCTION GET_USER_ID (
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    v_user_id INTEGER;
+    BEGIN
+      SELECT user_id
+      INTO v_user_id
+      FROM USERS
+      WHERE username = p_user_identifier OR email = p_user_identifier;
+      
+      RETURN v_user_id;
+    END;
+   
+  FUNCTION ADD_USER_INFO (
+    p_first_name IN VARCHAR2,
+    p_last_name  IN VARCHAR2,
+    p_birthdate  IN VARCHAR2,
+    p_gender     IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    v_user_id INTEGER;
+    v_birthdate DATE;
+    v_gender VARCHAR2(40);
+    v_user_info_id INTEGER;
+    v_return INTEGER;
+    BEGIN
+      --get the user id
+      v_user_id := GET_USER_ID(p_user_identifier);
+      v_birthdate := TO_DATE(p_birthdate, 'dd-mm-yyyy');
+      v_gender := LOWER(p_gender);
+      BEGIN
+        COMMIT;
+        --first create the new user_info
+        INSERT INTO USER_INFO(first_name, last_name, birthdate, gender)
+        VALUES(p_first_name, p_last_name, v_birthdate, v_gender);
+        
+        --get the user_info_id of the newly created record
+        SELECT user_info_id
+        INTO v_user_info_id
+        FROM USER_INFO
+        WHERE first_name = p_first_name AND
+              last_name  = p_last_name  AND
+              birthdate  = v_birthdate  AND
+              gender     = p_gender;
+        
+        --then update the user record
+        UPDATE USERS SET user_info = v_user_info_id;
+        v_return := 0;
+      EXCEPTION
+        WHEN OTHERS THEN
+          ROLLBACK;
+          v_return := 1;
+      END;
+      COMMIT;
+      RETURN v_return;
+    END;
+
+  FUNCTION ADD_USER_HOMETOWN (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    BEGIN
+      null;
+    END;
+  
+  FUNCTION ADD_USER_CURRENT_ADDRESS (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    BEGIN
+      null;
+    END;
+    
+  FUNCTION GET_ADDRESS_ID (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    BEGIN
+      null;
+    END;
+  
+  FUNCTION ADD_USER_AIRLINE (
+    p_airline_name  IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    BEGIN
+      null;
+    END;
+
+  FUNCTION ADD_USER_FLIGHT_PREFERENCES (
+    p_night_flights IN INTEGER,
+    p_stopovers     IN INTEGER,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    BEGIN
+      null;
+    END;
+
+  FUNCTION ADD_USER_ROUTE_PREFERENCES (
+    p_cheapese     IN INTEGER,
+    p_shortest     IN INTEGER,
+    p_most_friends_seen IN INTEGER,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    BEGIN
+      null;
+    END;
+
    
     procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
                         airport_name AIRPORT.airport_name%TYPE,
