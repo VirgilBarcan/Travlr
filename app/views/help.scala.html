@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
+        <link href="@routes.Assets.at("stylesheets/bootstrap-social.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
+
+        <style>
+            .helpList {
+                list-style: none;
+            }
+            .helpList li:before {
+                content: "\002022  ";
+                color: rgb(173,216,230);
+            }
+        </style>
+    </head>
+    <body>
+
+        @navbar()
+        
+        <div class="container" style="padding-top: 70px">
+        <div class="row">
+            <article class="content">
+                <header style="text-align: center">
+                    <h1><strong>Travlr</strong><h1>
+                    <h2> Don't panic! We are here to help. </h2>
+                    <hr>
+                </header>
+                <div class="row col-sm-12 col-sm-offset-1 col-md-12 col-md-offset-1 col-lg-12 col-lg-offset-1">
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <h3>Basic Usage</h3>
+                        <ul class="helpList">
+                            <li><a href="#">About Travlr</a></li>
+                            <li><a href="#">Customizing your profile</a></li>
+                            <li><a href="#">FAQs</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <h3>Account Settings</h3>
+                        <ul class="helpList">
+                            <li><a href="#">Reset Password</a></li>
+                            <li><a href="#">Change Passord</a></li>
+                            <li><a href="#">Delete account</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 col-md-4 col-lg-4">
+                        <h3>Reports</h3>
+                        <ul class="helpList">
+                            <li><a href="#">Report spam</a></li>
+                            <li><a href="#">Report harrasament</a></li>
+                            <li><a href="#">Report flight company</a></li>
+                            <li><a href="#">Report other</a></li>
+                    </div>
+                </div>
+                <footer class="row" style="margin-top:300pt; text-align: center">
+                    <h3>You can contact us at: support [at] travlr.tk</h3>
+                </footer>
+            </article>
+        </div>
+    </div>
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</html>
