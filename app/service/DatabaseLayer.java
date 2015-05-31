@@ -37,25 +37,60 @@ public class DatabaseLayer {
 
         String usernameEmail = (email != "") ? email : username;
 
-        /**
         // Send an request to the DB to find if the user exists
+        // If the user is valid, 0 is returned
+        // If the user is invalid, 1 is returned
         // NOT TESTED!!!
-        String sqlQuery = "{? = call IS_VALID_USER(?, ?)}";
+        String sqlQuery = "{? = call TRAVLR.IS_VALID_USER(?, ?)}";
         Connection connection = DB.getConnection();
         CallableStatement statement = null;
         try {
             statement = connection.prepareCall(sqlQuery);
-            statement.registerOutParameter(1, Types.BOOLEAN);
+            statement.registerOutParameter(1, Types.INTEGER);
             statement.setString(2, usernameEmail);
             statement.setString(3, password);
             statement.execute();
 
-            // if the user exists and the password is correct, result will be 1, otherwise 0
-            result = statement.getBoolean(1);
+            // if the user exists and the password is correct, result will be 0, otherwise 1
+            result = statement.getInt(1);
+
+            System.out.println("isValidLogin result: " + result);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        **/
+
+        return result;
+    }
+
+
+    public static int isValidExternal(UserLoginData userLoginData) {
+        int result = 0;
+
+        // We know for sure that if the user inserts into either email of username, any of these is different from ""
+        String email = userLoginData.getEmail();
+        String username = userLoginData.getUsername();
+        String password = userLoginData.getPassword();
+
+        String usernameEmail = (email != "") ? email : username;
+
+        // Send an request to the DB to find if the user exists
+        // If the user is valid, 0 is returned
+        // If the user is invalid, 1 is returned
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.IS_VALID_USER_EXTERNAL(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, usernameEmail);
+            statement.execute();
+
+            // if the user exists and the password is correct, result will be 0, otherwise 1
+            result = statement.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return result;
     }
@@ -75,26 +110,25 @@ public class DatabaseLayer {
         String username = userRegisterData.getUsername();
         String password = userRegisterData.getPassword();
 
-        /**
+
          // Send an request to the DB to find if the user exists
          // NOT TESTED!!!
-         String sqlQuery = "{? = call IS_VALID_USER(?, ?, ?)}";
+         String sqlQuery = "{? = call TRAVLR.IS_VALID_USER(?, ?, ?)}";
          Connection connection = DB.getConnection();
          CallableStatement statement = null;
          try {
              statement = connection.prepareCall(sqlQuery);
-             statement.registerOutParameter(1, Types.BOOLEAN);
+             statement.registerOutParameter(1, Types.INTEGER);
              statement.setString(2, email);
              statement.setString(3, username);
              statement.setString(4, password);
              statement.execute();
 
-             // if the user exists and the password is correct, result will be 1, otherwise 0
-             result = statement.getBoolean(1);
+             // if the user exists and the password is correct, result will be 0, otherwise 1 or 2
+             result = statement.getInt(1);
          } catch (SQLException e) {
              e.printStackTrace();
          }
-         **/
 
         return result;
     }
@@ -142,7 +176,7 @@ public class DatabaseLayer {
      * @param userInfo the user info (firstName, lastName, birthdate, gender)
      * @return
      */
-    public static boolean addToDB(UserInfo userInfo) {
+    public static boolean addToDB(UserInfo userInfo, String userIdentifier) {
         boolean result = false;
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
@@ -151,11 +185,8 @@ public class DatabaseLayer {
         String birthdate = userInfo.getBirthdate();
         String gender = userInfo.getGender();
 
-        String userIdentifier; // username or email (to know to what user to add the info)
-
-        /**
-         // Send an request to the DB to find if the user exists
-         // NOT TESTED!!!
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
          String sqlQuery = "{? = call TRAVLR.ADD_USER_INFO(?, ?, ?, ?, ?)}";
          Connection connection = DB.getConnection();
          CallableStatement statement = null;
@@ -174,7 +205,6 @@ public class DatabaseLayer {
          } catch (SQLException e) {
              e.printStackTrace();
          }
-         **/
 
         return result;
     }

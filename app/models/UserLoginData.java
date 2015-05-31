@@ -1,5 +1,6 @@
 package models;
 
+import assets.Database;
 import service.DatabaseLayer;
 
 /**
@@ -8,9 +9,13 @@ import service.DatabaseLayer;
  */
 public class UserLoginData {
 
-    String email;
-    String username;
-    String password;
+    private String email;
+    private String username;
+    private String password;
+
+    // if the user uses external login or not (1 if the user uses external login, 0 if not)
+    private int external;
+
 
     public UserLoginData(){
         email = "";
@@ -48,6 +53,14 @@ public class UserLoginData {
         this.password = password;
     }
 
+    public int getExternal() {
+        return external;
+    }
+
+    public void setExternal(int external) {
+        this.external = external;
+    }
+
     /**
      * This function is used to check if the data given by the user is valid:
      * - username/email exists in the DB
@@ -57,9 +70,14 @@ public class UserLoginData {
     public int isValid() {
         int isValid = 1;
 
-        // check if the user is a valid one (if it exists in the DB)
-        isValid = DatabaseLayer.isValidLogin(this);
-
+        if (this.external == 0) {
+            // check if the user is a valid one (if it exists in the DB)
+            isValid = DatabaseLayer.isValidLogin(this);
+        }
+        else {
+            // check if the user is a valid one (if the email or username exist in the DB)
+            isValid = DatabaseLayer.isValidExternal(this);
+        }
         return isValid;
     }
 

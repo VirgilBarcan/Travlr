@@ -6,8 +6,8 @@ BEGIN
   --v_returned := TRAVLR.ADD_USER('virgil.barcan@info.uaic.ro', 'virgil.barcan', 'parola');
   --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER:' || v_returned);
   
-  --v_returned := TRAVLR.IS_VALID_USER('virgil.barcan', 'parola');
-  --DBMS_OUTPUT.PUT_LINE('Returned by IS_VALID_USER:' || v_returned);
+  v_returned := TRAVLR.IS_VALID_USER('virgil.barcan', 'Parola');
+  DBMS_OUTPUT.PUT_LINE('Returned by IS_VALID_USER:' || v_returned);
   
   --v_returned := TRAVLR.IS_VALID_USER('virgill.barcan@info.uaic.ro', 'virgil.barcan', 'parola');
   --DBMS_OUTPUT.PUT_LINE('Returned by IS_VALID_USER:' || v_returned);
@@ -21,11 +21,11 @@ BEGIN
   --v_returned := TRAVLR.GET_ADDRESS_ID('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16');
   --DBMS_OUTPUT.PUT_LINE('Returned by GET_ADDRESS_ID:' || v_returned);
  
-  v_returned := TRAVLR.ADD_USER_HOMETOWN('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16', 'virgil.barcan');
-  DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_HOMETOWN:' || v_returned);
+  --v_returned := TRAVLR.ADD_USER_HOMETOWN('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16', 'virgil.barcan');
+  --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_HOMETOWN:' || v_returned);
   
-  v_returned := TRAVLR.ADD_USER_CURRENT_ADDRESS('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16', 'virgil.barcan');
-  DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_CURRENT_ADDRESS:' || v_returned);
+  --v_returned := TRAVLR.ADD_USER_CURRENT_ADDRESS('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16', 'virgil.barcan');
+  --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_CURRENT_ADDRESS:' || v_returned);
 END;
 
 
