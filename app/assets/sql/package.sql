@@ -18,6 +18,14 @@ IS
   RETURN INTEGER;
   
   /**
+  This function is used to check if an user given by his username/email is valid
+  We allow this because we have users created via FB and G+
+  */
+  FUNCTION IS_VALID_USER_EXTERNAL (
+    p_usernameEmail IN VARCHAR2)
+  RETURN INTEGER;
+  
+  /**
   This function is used to check if a new user can be added (the new user having the given email, username, password)
   */
   FUNCTION IS_VALID_USER (
@@ -198,6 +206,38 @@ IS
       END;
       
       IF v_email IS NOT NULL AND v_username IS NOT NULL AND v_password IS NOT NULL THEN
+        --good! the user exists and has the given credentials
+        v_return := 0;
+      ELSE
+        --bad! the user does not exist
+        v_return := 1;
+      END IF;
+      RETURN v_return;
+    END;
+
+  FUNCTION IS_VALID_USER_EXTERNAL (
+    p_usernameEmail IN VARCHAR2)
+  RETURN INTEGER
+  IS
+    v_return INTEGER;
+    v_email VARCHAR2(255);
+    v_username VARCHAR2(255);
+    BEGIN
+      v_email := NULL;
+      v_username := NULL;
+      
+      BEGIN
+        --check if there exists an user with these fields
+        SELECT email, username
+        INTO v_email, v_username
+        FROM USERS
+        WHERE (email = p_usernameEmail OR username = p_usernameEmail);
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_return := 1;
+      END;
+      
+      IF v_email IS NOT NULL AND v_username IS NOT NULL THEN
         --good! the user exists and has the given credentials
         v_return := 0;
       ELSE

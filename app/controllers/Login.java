@@ -42,6 +42,9 @@ public class Login extends Controller {
         userLoginData.setUsername(username);
         userLoginData.setPassword(password);
 
+        //the login is done with our method, not FB or G+
+        userLoginData.setExternal(0);
+
         System.out.println(userLoginData.toString());
 
         if (userLoginData.isValid() == 0) { // valid data

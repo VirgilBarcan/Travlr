@@ -1,5 +1,7 @@
 package assets;
 
+import models.UserLoginData;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;

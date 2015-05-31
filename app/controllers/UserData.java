@@ -4,6 +4,7 @@ import models.UserInfo;
 import play.*;
 import play.data.Form;
 import play.mvc.*;
+import service.DatabaseLayer;
 import views.html.*;
 
 import java.util.Map;
@@ -88,11 +89,15 @@ public class UserData extends Controller {
     private static boolean addToDB(UserInfo userInfo) {
         boolean result = false;
 
-        String user = session("user");
+        String email = session("email");
+        String username = session("username");
         String password = session("password");
 
-        System.out.println(user + " " + password);
+        String userIdentifier = (email != null ? email : username);
+
+        System.out.println(email + " " + username + " " + password);
         // add user info to the DB
+        result = DatabaseLayer.addToDB(userInfo, userIdentifier);
 
         return result;
     }
