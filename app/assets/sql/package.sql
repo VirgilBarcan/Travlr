@@ -30,6 +30,25 @@ IS
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER;
   
+  FUNCTION GET_USER_INFO_ID (
+    p_user_id IN INTEGER
+  ) RETURN INTEGER;
+  
+  FUNCTION GET_COUNTRY_ID (
+    p_country_name IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  FUNCTION GET_CITY_ID (
+    p_city_name IN VARCHAR2,
+    p_country_name IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  FUNCTION GET_STREET_ID (
+    p_street_name IN VARCHAR2,
+    p_city_name IN VARCHAR2,
+    p_country_name IN VARCHAR2
+  ) RETURN INTEGER;
+  
   FUNCTION ADD_USER_INFO (
     p_first_name IN VARCHAR2,
     p_last_name  IN VARCHAR2,
@@ -245,6 +264,21 @@ IS
       
       RETURN v_user_id;
     END;
+  
+  FUNCTION GET_USER_INFO_ID (
+    p_user_id IN INTEGER
+  ) RETURN INTEGER
+  IS
+    v_user_info_id INTEGER;
+    BEGIN
+      SELECT user_info
+      INTO v_user_info_id
+      FROM USERS
+      WHERE user_id = p_user_id;
+      
+      RETURN v_user_info_id;
+    END;
+  
    
   FUNCTION ADD_USER_INFO (
     p_first_name IN VARCHAR2,
@@ -291,6 +325,83 @@ IS
       RETURN v_return;
     END;
 
+  FUNCTION GET_COUNTRY_ID (
+    p_country_name IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    v_country_id INTEGER;
+    BEGIN
+      SELECT country_id
+      INTO v_country_id
+      FROM COUNTRY
+      WHERE name = p_country_name;
+      
+      RETURN v_country_id;
+    END;
+  
+  FUNCTION GET_CITY_ID (
+    p_city_name IN VARCHAR2,
+    p_country_name IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    v_city_id INTEGER;
+    v_country_id INTEGER;
+    BEGIN
+      v_country_id := GET_COUNTRY_ID(p_country_name);
+    
+      SELECT city_id
+      INTO v_city_id
+      FROM CITY
+      WHERE city_name = p_city_name AND country_id = v_country_id;
+      
+      RETURN v_city_id;
+    END;
+  
+  FUNCTION GET_STREET_ID (
+    p_street_name IN VARCHAR2,
+    p_city_name IN VARCHAR2,
+    p_country_name IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    v_street_id INTEGER;
+    v_city_id INTEGER;
+    BEGIN
+      v_city_id := GET_CITY_ID(p_city_name, p_country_name);
+    
+      SELECT street_id
+      INTO v_street_id
+      FROM STREET
+      WHERE city_id = v_city_id;
+      
+      RETURN v_street_id;
+    END;
+
+  FUNCTION GET_ADDRESS_ID (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2
+  ) RETURN INTEGER
+  IS
+    v_country_id INTEGER;
+    v_city_id INTEGER;
+    v_street_id INTEGER;
+    v_address_id INTEGER;
+    BEGIN
+      v_country_id := GET_COUNTRY_ID(p_country);
+      v_city_id := GET_CITY_ID(p_locality, p_country);
+      v_street_id := GET_STREET_ID(p_street_name, p_locality, p_country);
+      
+      SELECT address_id
+      INTO v_address_id
+      FROM ADDRESS
+      WHERE country_id = v_country_id AND city_id = v_city_id AND street_id = v_street_id;
+      
+      RETURN v_address_id;
+    END;
+
   FUNCTION ADD_USER_HOMETOWN (
     p_country IN VARCHAR2,
     p_state   IN VARCHAR2,
@@ -301,8 +412,32 @@ IS
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER
   IS
+    v_address_id INTEGER;
+    v_user_id INTEGER;
+    v_user_info_id INTEGER;
+    v_returned INTEGER;
     BEGIN
-      null;
+      --get the id of the address
+      v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+      
+      --get the id of the user
+      v_user_id := GET_USER_ID(p_user_identifier);
+      
+      --get the user info id
+      v_user_info_id := GET_USER_INFO_ID(v_user_id);
+      
+      BEGIN
+        COMMIT;
+        --insert the address into the user record
+        UPDATE USER_INFO SET hometown_address = v_address_id WHERE user_info_id = v_user_info_id;
+        v_returned := 0;
+      EXCEPTION
+        WHEN OTHERS THEN
+          ROLLBACK;
+          v_returned := 1;
+      END;
+      
+      RETURN v_returned;
     END;
   
   FUNCTION ADD_USER_CURRENT_ADDRESS (
@@ -315,21 +450,32 @@ IS
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER
   IS
+    v_address_id INTEGER;
+    v_user_id INTEGER;
+    v_user_info_id INTEGER;
+    v_returned INTEGER;
     BEGIN
-      null;
-    END;
-    
-  FUNCTION GET_ADDRESS_ID (
-    p_country IN VARCHAR2,
-    p_state   IN VARCHAR2,
-    p_county  IN VARCHAR2,
-    p_locality IN VARCHAR2,
-    p_street_name IN VARCHAR2,
-    p_street_no   IN VARCHAR2
-  ) RETURN INTEGER
-  IS
-    BEGIN
-      null;
+      --get the id of the address
+      v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+      
+      --get the id of the user
+      v_user_id := GET_USER_ID(p_user_identifier);
+      
+      --get the user info id
+      v_user_info_id := GET_USER_INFO_ID(v_user_id);
+      
+      BEGIN
+        COMMIT;
+        --insert the address into the user record
+        UPDATE USER_INFO SET current_address = v_address_id;
+        v_returned := 0;
+      EXCEPTION
+        WHEN OTHERS THEN
+          ROLLBACK;
+          v_returned := 1;
+      END;
+      
+      RETURN v_returned;
     END;
   
   FUNCTION ADD_USER_AIRLINE (
