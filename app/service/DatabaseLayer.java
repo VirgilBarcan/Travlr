@@ -175,7 +175,18 @@ public class DatabaseLayer {
     }
     
     public static boolean isTable(String tableName){
-    	return true;
+    	try {
+        	String query = "? = Call TRAVLR.ADD_USER(?)";
+        	Connection con = DB.getConnection();
+			CallableStatement stmt = con.prepareCall(query);
+			stmt.registerOutParameter(1, Types.INTEGER);
+			stmt.setString(2, tableName);
+			stmt.execute();
+			return stmt.getInt(1)>=1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    	return false;
     }
 
     public static boolean importSql(String username, String password, String path){
@@ -183,8 +194,8 @@ public class DatabaseLayer {
     	if (System.getProperty("os.name").toLowerCase().contains("windows")){
     		env = "cmd /c";
     	}
-    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
-    		env = "bash -c";
+    	if (System.getProperty("os.name").toLowerCase().contains("linux")){
+    		env = "sh -c";
     	}
     	
     	String cmd = "%s echo exit | sqlplus %s/%s @%s";

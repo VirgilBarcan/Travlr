@@ -53,6 +53,7 @@ IS
                         codeshare FLIGHT.codeshare%TYPE,
                         stops FLIGHT.stops%TYPE,
                         equipment FLIGHT.equipment%TYPE);
+    function isTable(tableName Varchar2) return Integer;
   
 END TRAVLR;
 /
@@ -232,6 +233,12 @@ IS
                     return;
                 end;
         commit;
+    end;
+    function isTable(tableName Varchar2) return Integer as
+        cnt Integer;
+    begin
+        select count(*) into cnt from user_tables where upper(table_name)=upper(tableName);
+        return cnt;
     end;
 END TRAVLR;
 /
