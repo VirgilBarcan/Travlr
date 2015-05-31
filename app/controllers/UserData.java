@@ -99,14 +99,18 @@ public class UserData extends Controller {
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
 
-        if (request.containsKey("input-first-name"))
-            country = request.get("input-first-name")[0];
-        if (request.containsKey("input-last-name"))
-            state = request.get("input-last-name")[0];
-        if (request.containsKey("input-birthdate"))
-            county = request.get("input-birthdate")[0];
-        if (request.containsKey("radio-gender"))
-            locality = request.get("radio-gender")[0];
+        if (request.containsKey("input-hometown-country"))
+            country = request.get("input-hometown-country")[0];
+        if (request.containsKey("input-hometown-state"))
+            state = request.get("input-hometown-state")[0];
+        if (request.containsKey("input-hometown-county"))
+            county = request.get("input-hometown-county")[0];
+        if (request.containsKey("input-hometown-locality"))
+            locality = request.get("input-hometown-locality")[0];
+        if (request.containsKey("input-hometown-street-name"))
+            streetName = request.get("input-hometown-street-name")[0];
+        if (request.containsKey("input-hometown-street-number"))
+            streetNumber = request.get("input-hometown-street-number")[0];
 
         userHometown.setCountry(country);
         userHometown.setState(state);
