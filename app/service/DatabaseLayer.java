@@ -9,6 +9,7 @@ import models.UserLoginData;
 import models.UserRegisterData;
 import play.db.DB;
 
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -172,5 +173,33 @@ public class DatabaseLayer {
 
         return result;
     }
+    
+    public static boolean isTable(String tableName){
+    	return true;
+    }
 
+    public static boolean importSql(String username, String password, String path){
+    	String env=null;
+    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
+    		env = "cmd /c";
+    	}
+    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
+    		env = "bash -c";
+    	}
+    	
+    	String cmd = "%s echo exit | sqlplus %s/%s @%s";
+    	cmd = String.format(cmd, env, username, password, path);
+    	
+    	try{
+    		Runtime rt = Runtime.getRuntime();
+    		Process p = rt.exec(cmd);
+    		p.waitFor();
+    		return true;
+    	} catch (InterruptedException e){
+			e.printStackTrace();
+    	} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return false;
+    }
 }
