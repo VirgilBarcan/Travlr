@@ -6,9 +6,9 @@ package models;
  */
 public class UserRegisterData {
 
-    String email;
-    String username;
-    String password;
+    private String email;
+    private String username;
+    private String password;
 
     public UserRegisterData(){
         email = "";

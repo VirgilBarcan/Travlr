@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Address;
 import models.UserInfo;
 import play.*;
 import play.data.Form;
@@ -23,6 +24,17 @@ public class UserData extends Controller {
     public static Result editUserData() {
         String visibleEdit = "visible";
         String visibleView = "hidden";
+
+        UserInfo userInfo = getUserInfoFromSession();
+
+        return ok(userData.render(visibleEdit, visibleView, userInfo));
+    }
+
+    public static Result retryEditUserData() {
+        String visibleEdit = "visible";
+        String visibleView = "hidden";
+
+        session().clear();
 
         return ok(userData.render(visibleEdit, visibleView, null));
     }
@@ -54,31 +66,118 @@ public class UserData extends Controller {
         addToSession(userInfo);
 
         // Add to the database the information given by the user
-        boolean addToDB = addToDB(userInfo);
+        boolean addToDB = addUserInfoToDB(userInfo);
 
         if (addToDB == false){
             // the update of the DB didn't end up with success
             // ask the user to reinsert the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return retryEditUserData();
         }
         else{
             // the update of the DB did end up with success
             // redirect the user to the same page, but with the fields containing the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return redirect(controllers.routes.UserData.editUserData());
         }
-
-        System.out.println(userInfo.toString());
-
-        String userName = firstName + " " + lastName;
-        String visibleEdit = "visible";
-        String visibleView = "hidden";
-
-        return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
 
+    public static Result editUserHometown() {
+        Address userHometown = new Address();
+        String country = "";
+        String state = "";
+        String county = "";
+        String locality = "";
+        String streetName = "";
+        String streetNumber = "";
+
+        Map<String, String[]> request = request().body().asFormUrlEncoded();
+
+        if (request.containsKey("input-first-name"))
+            country = request.get("input-first-name")[0];
+        if (request.containsKey("input-last-name"))
+            state = request.get("input-last-name")[0];
+        if (request.containsKey("input-birthdate"))
+            county = request.get("input-birthdate")[0];
+        if (request.containsKey("radio-gender"))
+            locality = request.get("radio-gender")[0];
+
+        userHometown.setCountry(country);
+        userHometown.setState(state);
+        userHometown.setCounty(county);
+        userHometown.setLocality(locality);
+        userHometown.setStreetName(streetName);
+        userHometown.setStreetNumber(streetNumber);
+
+        // Add the received data to the session
+        //addUserHometownToSession(userHometown);
+
+        // Add to the database the information given by the user
+        boolean addToDB = addUserHometownToDB(userHometown);
+
+        if (addToDB == false){
+            // the update of the DB didn't end up with success
+            // ask the user to reinsert the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return retryEditUserData();
+        }
+        else{
+            // the update of the DB did end up with success
+            // redirect the user to the same page, but with the fields containing the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return redirect(controllers.routes.UserData.editUserData());
+        }
+    }
+
+    /**
+     * This method is used to add the user data to the session, for fast access
+     * @param userInfo user data
+     */
     private static void addToSession(UserInfo userInfo) {
         session("userFirstName", userInfo.getFirstName());
-        session("userLastName", userInfo.getFirstName());
+        session("userLastName", userInfo.getLastName());
         session("userBirthdate", userInfo.getBirthdate());
         session("userGender", userInfo.getGender());
+    }
+
+    private static void addUserHometownToSession(Address userHometown) {
+        session("userHometownCountry", userHometown.getCountry());
+        session("userHometownState", userHometown.getState());
+        session("userHometownCounty", userHometown.getCounty());
+        session("userHometownLocality", userHometown.getLocality());
+        session("userHometownStreetName", userHometown.getStreetName());
+        session("userHometownStreetNumber", userHometown.getStreetNumber());
+    }
+
+    private static UserInfo getUserInfoFromSession() {
+        String firstName = session("userFirstName");
+        String lastName = session("userLastName");
+        String birthdate = session("userBirthdate");
+        String gender = session("userGender");
+
+        UserInfo userInfo = null;
+
+        if (firstName != null && lastName != null && birthdate != null && gender != null) {
+            userInfo = new UserInfo();
+            userInfo.setFirstName(firstName);
+            userInfo.setLastName(lastName);
+            userInfo.setBirthdate(birthdate);
+            userInfo.setGender(gender);
+        }
+
+        return userInfo;
     }
 
     /**
@@ -86,7 +185,7 @@ public class UserData extends Controller {
      * @param userInfo the userInfo (firstName, lastName, birthdate, gender)
      * @return true if the DB was successfully updated, false otherwise
      */
-    private static boolean addToDB(UserInfo userInfo) {
+    private static boolean addUserInfoToDB(UserInfo userInfo) {
         boolean result = false;
 
         String email = session("email");
@@ -95,11 +194,25 @@ public class UserData extends Controller {
 
         String userIdentifier = (email != null ? email : username);
 
-        System.out.println(email + " " + username + " " + password);
         // add user info to the DB
-        result = DatabaseLayer.addToDB(userInfo, userIdentifier);
+        result = DatabaseLayer.addUserInfoToDB(userInfo, userIdentifier);
 
         return result;
     }
 
+
+    private static boolean addUserHometownToDB(Address userHometown) {
+        boolean result = false;
+
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        String userIdentifier = (email != null ? email : username);
+
+        // add user info to the DB
+        result = DatabaseLayer.addUserHometownToDB(userHometown, userIdentifier);
+
+        return result;
+    }
 }

@@ -52,7 +52,7 @@ public class Register extends Controller {
             addToSession(userRegisterData);
 
             // put the data in the DB, for persistent storage
-            addToDB(userRegisterData);
+            addUserRegisterDataToDB(userRegisterData);
 
             // redirect to the page where user info has to be entered
             return redirect(controllers.routes.UserData.editUserData());
@@ -84,10 +84,10 @@ public class Register extends Controller {
      * @param userRegisterData the user register data (email, username, password)
      * @return true if the DB was successfully updated, false otherwise
      */
-    private static boolean addToDB(UserRegisterData userRegisterData) {
+    private static boolean addUserRegisterDataToDB(UserRegisterData userRegisterData) {
         boolean result = false;
 
-        result = DatabaseLayer.addToDB(userRegisterData);
+        result = DatabaseLayer.addUserRegisterDataToDB(userRegisterData);
 
         return result;
     }

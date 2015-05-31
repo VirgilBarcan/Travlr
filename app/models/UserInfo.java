@@ -5,10 +5,10 @@ package models;
  */
 public class UserInfo {
 
-    String firstName;
-    String lastName;
-    String birthdate;
-    String gender;
+    private String firstName;
+    private String lastName;
+    private String birthdate;
+    private String gender;
 
     public UserInfo() {
         firstName = "";

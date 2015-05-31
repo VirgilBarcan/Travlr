@@ -4,6 +4,7 @@ package service;
  * Created by Virgil Barcan on 30.05.2015.
  */
 
+import models.Address;
 import models.UserInfo;
 import models.UserLoginData;
 import models.UserRegisterData;
@@ -138,7 +139,7 @@ public class DatabaseLayer {
      * @param userRegisterData the user register data (email, username, password)
      * @return 0 if the user was inserted successfully, 1 if the user was not inserted successfully, 2 if the user was already created
      */
-    public static boolean addToDB(UserRegisterData userRegisterData) {
+    public static boolean addUserRegisterDataToDB(UserRegisterData userRegisterData) {
         int result = -1;
 
         String email = userRegisterData.getEmail();
@@ -176,7 +177,7 @@ public class DatabaseLayer {
      * @param userInfo the user info (firstName, lastName, birthdate, gender)
      * @return
      */
-    public static boolean addToDB(UserInfo userInfo, String userIdentifier) {
+    public static boolean addUserInfoToDB(UserInfo userInfo, String userIdentifier) {
         int result = -1;
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
@@ -210,11 +211,43 @@ public class DatabaseLayer {
         return result == 0;
     }
 
-    /*
-    public static boolean addToDB(Address userHometown) {
-        // String sqlQuery = "{? = call TRAVLR.ADD_USER_HOMETOWN(?, ?, ?, ?, ?)}";
+    public static boolean addUserHometownToDB(Address userHometown, String userIdentifier) {
+        int result = -1;
+
+        // We know for sure that if the user inserts into either email of username, any of these is different from ""
+        String country = userHometown.getCountry();
+        String state = userHometown.getState();
+        String county = userHometown.getCounty();
+        String locality = userHometown.getLocality();
+        String streetName = userHometown.getStreetName();
+        String streetNumber = userHometown.getStreetNumber();
+
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.ADD_USER_HOMETOWN(?, ?, ?, ?, ?, ?, ?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, country);
+            statement.setString(3, state);
+            statement.setString(4, county);
+            statement.setString(5, locality);
+            statement.setString(6, streetName);
+            statement.setString(7, streetNumber);
+            statement.setString(8, userIdentifier);
+            statement.execute();
+
+            result = statement.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result == 0;
     }
 
+    /*
     public static boolean addToDB(Address userCurrentAddress) {
         // String sqlQuery = "{? = call TRAVLR.ADD_USER_CURRENT_ADDRESS(?, ?, ?, ?, ?)}";
     }
@@ -275,4 +308,5 @@ public class DatabaseLayer {
 		}
     	return false;
     }
+
 }
