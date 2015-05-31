@@ -26,6 +26,62 @@ IS
     p_password IN VARCHAR2) 
   RETURN INTEGER;
   
+  FUNCTION ADD_USER_INFO (
+    p_first_name IN VARCHAR2,
+    p_last_name  IN VARCHAR2,
+    p_birthdate  IN VARCHAR2,
+    p_gender     IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  FUNCTION ADD_USER_HOMETOWN (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  FUNCTION ADD_USER_CURRENT_ADDRESS (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  FUNCTION GET_ADDRESS_ID (
+    p_country IN VARCHAR2,
+    p_state   IN VARCHAR2,
+    p_county  IN VARCHAR2,
+    p_locality IN VARCHAR2,
+    p_street_name IN VARCHAR2,
+    p_street_no   IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  FUNCTION ADD_USER_AIRLINE (
+    p_airline_name  IN VARCHAR2,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+
+  FUNCTION ADD_USER_FLIGHT_PREFERENCES (
+    p_night_flights IN INTEGER,
+    p_stopovers     IN INTEGER,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+
+  FUNCTION ADD_USER_ROUTE_PREFERENCES (
+    p_cheapese     IN INTEGER,
+    p_shortest     IN INTEGER,
+    p_most_friends_seen IN INTEGER,
+    p_user_identifier IN VARCHAR2
+  ) RETURN INTEGER;
+  
+  
     procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
                         airport_name AIRPORT.airport_name%TYPE,
                         city AIRPORT.city%TYPE,
