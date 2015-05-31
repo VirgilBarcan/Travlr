@@ -58,7 +58,7 @@ public class UserLoginData {
         int isValid = 1;
 
         // check if the user is a valid one (if it exists in the DB)
-        isValid = DatabaseLayer.isValidUser(this);
+        isValid = DatabaseLayer.isValidLogin(this);
 
         return isValid;
     }

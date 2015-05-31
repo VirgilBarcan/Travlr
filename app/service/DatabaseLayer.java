@@ -27,7 +27,7 @@ public class DatabaseLayer {
      * @param userLoginData the user login data (username, email, password)
      * @return 0 = valid, 1 = invalid
      */
-    public static int isValidUser(UserLoginData userLoginData) {
+    public static int isValidLogin(UserLoginData userLoginData) {
         int result = 0;
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
@@ -67,7 +67,7 @@ public class DatabaseLayer {
      * @param userRegisterData the user register data (email, username, password)
      * @return 0 = valid, 1 = invalid username, 2 = invalid email
      */
-    public static int isValid(UserRegisterData userRegisterData) {
+    public static int isValidRegister(UserRegisterData userRegisterData) {
         int result = 0;
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
@@ -137,6 +137,11 @@ public class DatabaseLayer {
         return result == 0;
     }
 
+    /**
+     * This function is used to insert/update the user info
+     * @param userInfo the user info (firstName, lastName, birthdate, gender)
+     * @return
+     */
     public static boolean addToDB(UserInfo userInfo) {
         boolean result = false;
 
@@ -173,7 +178,33 @@ public class DatabaseLayer {
 
         return result;
     }
-    
+
+    /*
+    public static boolean addToDB(Address userHometown) {
+        // String sqlQuery = "{? = call TRAVLR.ADD_USER_HOMETOWN(?, ?, ?, ?, ?)}";
+    }
+
+    public static boolean addToDB(Address userCurrentAddress) {
+        // String sqlQuery = "{? = call TRAVLR.ADD_USER_CURRENT_ADDRESS(?, ?, ?, ?, ?)}";
+    }
+
+    public static boolean addToDB(Address newVisitedPlace) {
+        // String sqlQuery = "{? = call TRAVLR.ADD_USER_VISITED_PLACE(?, ?, ?, ?, ?)}";
+    }
+
+    public static boolean addToDB(Preference newAirlinePreference) {
+        // String sqlQuery = "{? = call TRAVLR.ADD_USER_AIRLINE(?, ?, ?, ?, ?)}";
+    }
+
+    public static boolean addToDB(Preference flightPreferences) {
+        // String sqlQuery = "{? = call TRAVLR.ADD_USER_FLIGHT_PREFERENCES(?, ?, ?, ?, ?)}";
+    }
+
+    public static boolean addToDB(Preference routePreferences) {
+        // String sqlQuery = "{? = call TRAVLR.ADD_USER_ROUTE_PREFERENCES(?, ?, ?, ?, ?)}";
+    }
+    */
+
     public static boolean isTable(String tableName){
     	try {
         	String query = "? = Call TRAVLR.ADD_USER(?)";
