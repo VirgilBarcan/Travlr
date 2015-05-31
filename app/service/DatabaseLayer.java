@@ -177,13 +177,15 @@ public class DatabaseLayer {
      * @return
      */
     public static boolean addToDB(UserInfo userInfo, String userIdentifier) {
-        boolean result = false;
+        int result = -1;
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
         String firstName = userInfo.getFirstName();
         String lastName = userInfo.getLastName();
         String birthdate = userInfo.getBirthdate();
         String gender = userInfo.getGender();
+
+        System.out.println("addToDB: " + userInfo + " userIdentifier: " + userIdentifier);
 
         // Send an request to the DB to find if the user exists
         // NOT TESTED!!!
@@ -192,7 +194,7 @@ public class DatabaseLayer {
          CallableStatement statement = null;
          try {
              statement = connection.prepareCall(sqlQuery);
-             statement.registerOutParameter(1, Types.BOOLEAN);
+             statement.registerOutParameter(1, Types.INTEGER);
              statement.setString(2, firstName);
              statement.setString(3, lastName);
              statement.setString(4, birthdate);
@@ -200,13 +202,12 @@ public class DatabaseLayer {
              statement.setString(6, userIdentifier);
              statement.execute();
 
-             // if the user exists and the password is correct, result will be 1, otherwise 0
-             result = statement.getBoolean(1);
+             result = statement.getInt(1);
          } catch (SQLException e) {
              e.printStackTrace();
          }
 
-        return result;
+        return result == 0;
     }
 
     /*

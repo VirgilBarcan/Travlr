@@ -54,8 +54,8 @@ public class Register extends Controller {
             // put the data in the DB, for persistent storage
             addToDB(userRegisterData);
 
-            // redirect to the homepage
-            return redirect(controllers.routes.Home.index());
+            // redirect to the page where user info has to be entered
+            return redirect(controllers.routes.UserData.editUserData());
         }
         else{
             return retryRegister(errorNo);

@@ -16,7 +16,7 @@ GET         /                           controllers.Login.loginRegister()
 GET         /home                       controllers.Home.index()
 GET         /Home/map                   controllers.Home.map()
 GET         /Home/trip                  controllers.Home.trip()
-GET         /Home/importer                  controllers.Home.importer()
+GET         /Home/importer              controllers.Home.importer()
 
 # Login Register page
 GET         /login_register_page        controllers.Login.loginRegister()
@@ -27,5 +27,4 @@ POST        /register                   controllers.Register.register()
 # View User Data page
 GET         /view_user_data_page        controllers.UserData.viewUserData()
 GET         /edit_user_data_page        controllers.UserData.editUserData()
-GET         /edit_user_data_page        controllers.UserData.viewUserData()
 POST        /edit_user_info             controllers.UserData.editUserInfo()

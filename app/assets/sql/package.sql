@@ -333,34 +333,64 @@ IS
     v_gender VARCHAR2(40);
     v_user_info_id INTEGER;
     v_return INTEGER;
+    v_has_info INTEGER;
     BEGIN
       --get the user id
       v_user_id := GET_USER_ID(p_user_identifier);
-      v_birthdate := TO_DATE(p_birthdate, 'dd-mm-yyyy');
+      v_birthdate := TO_DATE(p_birthdate, 'yyyy-mm-dd');
       v_gender := LOWER(p_gender);
-      BEGIN
-        COMMIT;
-        --first create the new user_info
-        INSERT INTO USER_INFO(first_name, last_name, birthdate, gender)
-        VALUES(p_first_name, p_last_name, v_birthdate, v_gender);
-        
-        --get the user_info_id of the newly created record
-        SELECT user_info_id
-        INTO v_user_info_id
-        FROM USER_INFO
-        WHERE first_name = p_first_name AND
-              last_name  = p_last_name  AND
-              birthdate  = v_birthdate  AND
-              gender     = p_gender;
-        
-        --then update the user record
-        UPDATE USERS SET user_info = v_user_info_id;
-        v_return := 0;
-      EXCEPTION
-        WHEN OTHERS THEN
-          ROLLBACK;
-          v_return := 1;
-      END;
+      
+      SELECT user_info
+      INTO v_has_info
+      FROM USERS
+      WHERE user_id = v_user_id;
+      
+      DBMS_OUTPUT.PUT_LINE('v_has_info: ' || v_has_info);
+      
+      IF v_has_info IS NULL THEN --the user hasn't inserted the info until now, insert new
+        BEGIN
+          COMMIT;
+          --first create the new user_info
+          INSERT INTO USER_INFO(first_name, last_name, birthdate, gender)
+          VALUES(p_first_name, p_last_name, v_birthdate, v_gender);
+          
+          --get the user_info_id of the newly created record
+          SELECT user_info_id
+          INTO v_user_info_id
+          FROM USER_INFO
+          WHERE first_name = p_first_name AND
+                last_name  = p_last_name  AND
+                birthdate  = v_birthdate  AND
+                gender     = p_gender;
+          
+          --then update the user record
+          UPDATE USERS SET user_info = v_user_info_id
+          WHERE user_id = v_user_id;
+          v_return := 0;
+        EXCEPTION
+          WHEN OTHERS THEN
+            ROLLBACK;
+            v_return := 1;
+        END;
+      ELSE --the user has inserted this data already, only update now
+        BEGIN
+          COMMIT;
+          
+          --update user info with the new data
+          UPDATE USER_INFO
+          SET first_name = p_first_name,
+              last_name = p_last_name,
+              birthdate = v_birthdate,
+              gender = v_gender
+          WHERE user_info_id = v_has_info;
+          
+          v_return := 0;
+        EXCEPTION
+          WHEN OTHERS THEN
+            ROLLBACK;
+            v_return := 1;
+        END;
+      END IF;
       COMMIT;
       RETURN v_return;
     END;
