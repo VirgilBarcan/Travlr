@@ -51,6 +51,8 @@ public class Login extends Controller {
             // put the data in the session cookie for fast retrieval
             addToSession(userLoginData);
 
+            System.out.println("path: " + controllers.routes.Home);
+
             // redirect to the homepage
             return redirect(controllers.routes.Home.index());
         }

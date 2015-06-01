@@ -18,7 +18,23 @@ public class UserData extends Controller {
     public static Result viewUserData() {
         String visibleEdit = "hidden";
         String visibleView = "visible";
-        return ok(userData.render(visibleEdit, visibleView, null));
+
+        UserInfo userInfo = null;
+        Address userHometown = null;
+        Address userCurrentAddress = null;
+
+        //look for more info about the user in the DB
+        userInfo = getUserInfoFromDB();
+
+        userHometown = getUserHometownFromDB();
+        userInfo.setHometown(userHometown);
+
+        userCurrentAddress = getUserCurrentAddressFromDB();
+        userInfo.setCurrentAddress(userCurrentAddress);
+
+        System.out.println("viewEditData> userInfo: " + userInfo.toString());
+
+        return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
 
     public static Result editUserData() {

@@ -1,18 +1,18 @@
 @(visibleEdit: String)(visibleView: String)(userInfo: UserInfo)
 
 @FirstName = {
-    @if(userInfo != null){ @userInfo.getFirstName } else { }
+    @if(userInfo != null){ @userInfo.getFirstName } else { First Name }
 }
 @LastName = {
-    @if(userInfo != null){ @userInfo.getLastName } else { }
+    @if(userInfo != null){ @userInfo.getLastName } else { Last Name }
 }
 
 @Birthdate = {
-    @if(userInfo != null){ @userInfo.getBirthdate } else { }
+    @if(userInfo != null){ @userInfo.getBirthdate } else { Birthdate }
 }
 
 @Gender = {
-    @if(userInfo != null){ @userInfo.getGender } else { }
+    @if(userInfo != null){ @userInfo.getGender } else { Gender }
 }
 
 @valueFirstName = {
@@ -37,6 +37,54 @@
     @if(userInfo != null){
         @if(userInfo.getGender == "female"){ checked }
     } else { }
+}
+
+@HometownCountry = {
+    @if(userInfo != null){
+        @if(userInfo.getHometown != null){
+            @userInfo.getHometown.getCountry
+        } else { Country }
+    } else { Country }
+}
+
+@HometownState = {
+    @if(userInfo != null){
+        @if(userInfo.getHometown != null){
+            @userInfo.getHometown.getState
+        } else { State }
+    } else { State }
+}
+
+@HometownCounty = {
+    @if(userInfo != null){
+        @if(userInfo.getHometown != null){
+            @userInfo.getHometown.getCounty
+        } else { County }
+    } else { County }
+}
+
+@HometownLocality = {
+    @if(userInfo != null){
+        @if(userInfo.getHometown != null){
+            @userInfo.getHometown.getLocality
+        } else { Locality }
+    } else { Locality }
+}
+
+@HometownStreetName = {
+    @if(userInfo != null){
+        @if(userInfo.getHometown != null){
+            @userInfo.getHometown.getStreetName
+        } else { Street Name }
+    } else { Street Name }
+}
+
+@HometownStreetNo = {
+    @if(userInfo != null){
+        @if(userInfo.getHometown != null){
+            @userInfo.getHometown.getStreetNumber
+        } else { Street Number }
+    } else { Street Number }
 }
 
 @valueHometownCountry = {
@@ -92,6 +140,54 @@
         } else { }
     } else { }
 }
+
+@CurrentAddressCountry = {
+    @if(userInfo != null){
+        @if(userInfo.getCurrentAddress != null){
+            @userInfo.getCurrentAddress.getCountry
+        } else { Country }
+    } else { Country }
+    }
+
+@CurrentAddressState = {
+    @if(userInfo != null){
+        @if(userInfo.getCurrentAddress != null){
+            @userInfo.getCurrentAddress.getState
+        } else { State }
+    } else { State }
+    }
+
+@CurrentAddressCounty = {
+    @if(userInfo != null){
+        @if(userInfo.getCurrentAddress != null){
+            @userInfo.getCurrentAddress.getCounty
+        } else { County }
+    } else { County }
+    }
+
+@CurrentAddressLocality = {
+    @if(userInfo != null){
+        @if(userInfo.getCurrentAddress != null){
+            @userInfo.getCurrentAddress.getLocality
+        } else { Locality }
+    } else { Locality }
+    }
+
+@CurrentAddressStreetName = {
+    @if(userInfo != null){
+        @if(userInfo.getCurrentAddress != null){
+            @userInfo.getCurrentAddress.getStreetName
+        } else { Street Name }
+    } else { Street Name }
+    }
+
+@CurrentAddressStreetNo = {
+    @if(userInfo != null){
+        @if(userInfo.getCurrentAddress != null){
+            @userInfo.getCurrentAddress.getStreetNumber
+        } else { Street Number }
+    } else { Street Number }
+    }
 
 @valueCurrentAddressCountry = {
     @if(userInfo != null ) {
@@ -498,37 +594,37 @@
                                                             <div class="row view-group">
                                                                 <label for="view-hometown-country" class="col-sm-2 col-md-2 col-lg-2 view-label">Country</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-hometown-country"> Country</span>
+                                                                    <span id="view-hometown-country"> @HometownCountry</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-hometown-state" class="col-sm-2 view-label">State</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-hometown-state"> State</span>
+                                                                    <span id="view-hometown-state"> @HometownState</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-hometown-county" class="col-sm-2 view-label">County</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-hometown-county"> County</span>
+                                                                    <span id="view-hometown-county"> @HometownCounty</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-hometown-locality" class="col-sm-2 view-label">Locality</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-hometown-locality"> Locality</span>
+                                                                    <span id="view-hometown-locality"> @HometownLocality</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-hometown-street-name" class="col-sm-2 view-label">Street Name</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-hometown-street-name"> Street Name</span>
+                                                                    <span id="view-hometown-street-name"> @HometownStreetName</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-hometown-street-number" class="col-sm-2 view-label">Street No</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-hometown-street-number"> Street Number</span>
+                                                                    <span id="view-hometown-street-number"> @HometownStreetNo</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -547,37 +643,37 @@
                                                             <div class="row view-group">
                                                                 <label for="view-current-location-country" class="col-sm-2 col-md-2 col-lg-2 view-label">Country</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-current-location-country"> Country</span>
+                                                                    <span id="view-current-location-country"> @CurrentAddressCountry</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-current-location-state" class="col-sm-2 view-label">State</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-current-location-state"> State</span>
+                                                                    <span id="view-current-location-state"> @CurrentAddressState</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-current-location-county" class="col-sm-2 view-label">County</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-current-location-county"> County</span>
+                                                                    <span id="view-current-location-county"> @CurrentAddressCounty</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-current-location-locality" class="col-sm-2 view-label">Locality</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-current-location-locality"> Locality</span>
+                                                                    <span id="view-current-location-locality"> @CurrentAddressLocality</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-current-location-street-name" class="col-sm-2 view-label">Street Name</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-current-location-street-name"> Street Name</span>
+                                                                    <span id="view-current-location-street-name"> @CurrentAddressStreetName</span>
                                                                 </div>
                                                             </div>
                                                             <div class="row view-group">
                                                                 <label for="view-current-location-street-number" class="col-sm-2 view-label">Street No</label>
                                                                 <div class="col-sm-10">
-                                                                    <span id="view-current-location-street-number"> Street Number</span>
+                                                                    <span id="view-current-location-street-number"> @CurrentAddressStreetNo</span>
                                                                 </div>
                                                             </div>
                                                         </div>
