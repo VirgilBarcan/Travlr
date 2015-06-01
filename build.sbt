@@ -8,22 +8,9 @@ scalaVersion := "2.11.1"
 
 libraryDependencies ++= Seq(
   javaJdbc,
-  javaEbean,
   cache,
   javaWs
 )
 
-
-fork in run := true
-
-fork in run := true
-
-fork in run := true
-
-fork in run := true
-
-fork in run := true
-
-fork in run := true
 
 fork in run := true
