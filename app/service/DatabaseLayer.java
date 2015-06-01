@@ -487,7 +487,7 @@ public class DatabaseLayer {
         return false;
     }
     
-	public Response query(String q){
+	public static Response query(String q){
 		try {
 			Connection con = DB.getConnection();
 			Statement stmt = con.createStatement();

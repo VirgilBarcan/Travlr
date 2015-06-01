@@ -8,6 +8,8 @@ import java.sql.Statement;
 import play.*;
 import play.db.*;
 import play.mvc.*;
+import service.DatabaseLayer;
+import service.Response;
 import views.html.*;
 
 public class Home extends Controller{
@@ -21,6 +23,7 @@ public class Home extends Controller{
     }
 
     public static Result trip() {
+    	Response resp = DatabaseLayer.query("SELECT * FROM AIRPORT");
         return ok(trip.render());
     }
 
