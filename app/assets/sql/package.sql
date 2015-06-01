@@ -1072,7 +1072,7 @@ IS
       
       --get the user_info for the specified user
       BEGIN
-        SELECT UI.first_name, UI.last_name, UI.birthdate, UI.gender
+        SELECT UI.first_name, UI.last_name, TO_CHAR(UI.birthdate, 'yyyy-mm-dd'), UI.gender
         INTO v_first_name, v_last_name, v_birthdate, v_gender
         FROM USERS U, USER_INFO UI
         WHERE U.user_info = UI.user_info_id AND

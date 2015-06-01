@@ -1,30 +1,30 @@
 @(visibleEdit: String)(visibleView: String)(userInfo: UserInfo)
 
 @FirstName = {
-    @if(userInfo != null){ @userInfo.getFirstName } else { User }
+    @if(userInfo != null){ @userInfo.getFirstName } else { }
 }
 @LastName = {
-    @if(userInfo != null){ @userInfo.getLastName } else { Name }
+    @if(userInfo != null){ @userInfo.getLastName } else { }
 }
 
 @Birthdate = {
-    @if(userInfo != null){ @userInfo.getBirthdate } else { 01-01-2015 }
+    @if(userInfo != null){ @userInfo.getBirthdate } else { }
 }
 
 @Gender = {
-    @if(userInfo != null){ @userInfo.getGender } else { male }
+    @if(userInfo != null){ @userInfo.getGender } else { }
 }
 
 @valueFirstName = {
-    @if(userInfo != null){ value="@userInfo.getFirstName" } else { }
+    @if(userInfo != null && userInfo.getFirstName != "First Name"){ value="@userInfo.getFirstName" } else { }
 }
 
 @valueLastName = {
-    @if(userInfo != null){ value="@userInfo.getLastName" } else { }
+    @if(userInfo != null && userInfo.getLastName != "Last Name"){ value="@userInfo.getLastName" } else { }
 }
 
 @valueBirthdate = {
-    @if(userInfo != null){ value="@userInfo.getBirthdate" } else { }
+    @if(userInfo != null && userInfo.getBirthdate != "Birthdate"){ value="@userInfo.getBirthdate" } else { }
 }
 
 @checkedGenderMale = {
@@ -42,7 +42,10 @@
 @valueHometownCountry = {
     @if(userInfo != null ) {
         @if(userInfo.getHometown != null) {
-            value="@userInfo.getHometown.getCountry"
+            @if(userInfo.getHometown.getCountry != "Country") {
+                value="@userInfo.getHometown.getCountry"
+            }
+            else { }
         }
         else { }
     }
@@ -52,7 +55,10 @@
 @valueHometownState = {
     @if(userInfo != null ) {
         @if(userInfo.getHometown != null) {
-            value="@userInfo.getHometown.getState"
+            @if(userInfo.getHometown.getState != "State") {
+                value="@userInfo.getHometown.getState"
+            }
+            else { }
         }
         else { }
     }
@@ -62,7 +68,10 @@
 @valueHometownCounty = {
     @if(userInfo != null ) {
         @if(userInfo.getHometown != null) {
-            value="@userInfo.getHometown.getCounty"
+            @if(userInfo.getHometown.getCounty != "County") {
+                value="@userInfo.getHometown.getCounty"
+            }
+            else { }
         }
         else { }
     }
@@ -72,7 +81,10 @@
 @valueHometownLocality = {
     @if(userInfo != null ) {
         @if(userInfo.getHometown != null) {
-            value="@userInfo.getHometown.getLocality"
+            @if(userInfo.getHometown.getLocality != "Locality") {
+                value="@userInfo.getHometown.getLocality"
+            }
+            else { }
         }
         else { }
     }
@@ -82,7 +94,10 @@
 @valueHometownStreetName = {
     @if(userInfo != null ) {
         @if(userInfo.getHometown != null) {
-            value="@userInfo.getHometown.getStreetName"
+            @if(userInfo.getHometown.getStreetName != "Street Name") {
+                value="@userInfo.getHometown.getStreetName"
+            }
+            else { }
         }
         else { }
     }
@@ -92,7 +107,10 @@
 @valueHometownStreetNo = {
     @if(userInfo != null ) {
         @if(userInfo.getHometown != null) {
-            value="@userInfo.getHometown.getStreetNumber"
+            @if(userInfo.getHometown.getStreetNumber != "Street Number") {
+                value="@userInfo.getHometown.getStreetNumber"
+            }
+            else { }
         }
         else { }
     }
