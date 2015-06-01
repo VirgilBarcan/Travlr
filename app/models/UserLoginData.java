@@ -18,7 +18,7 @@ public class UserLoginData {
 
 
     public UserLoginData(){
-        email = "";
+        this.email = "";
         username = "";
         password = "";
     }

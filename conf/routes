@@ -25,14 +25,14 @@ POST        /login                      controllers.Login.login()
 POST        /register                   controllers.Register.register()
 
 # View User Data page
-GET         /view_user_data_page         controllers.UserData.viewUserData()
-GET         /edit_user_data_page         controllers.UserData.editUserData()
-POST        /edit_user_info              controllers.UserData.editUserInfo()
-POST        /edit_user_hometown          controllers.UserData.editUserHometown()
-#POST        /edit_user_current           controllers.UserData.editUserCurrentAddress() 
+GET         /view_user_data_page        controllers.UserData.viewUserData()
+GET         /edit_user_data_page        controllers.UserData.editUserData()
+POST        /edit_user_info             controllers.UserData.editUserInfo()
+POST        /edit_user_hometown         controllers.UserData.editUserHometown()
+POST        /edit_user_current          controllers.UserData.editUserCurrentAddress()
 
 #Contact Page
-GET 		/contact					controllers.Contact.index()
+GET         /contact                    controllers.Contact.index()
 
 #Help Page
-GET 		/help						controllers.Help.index()
+GET         /help                       controllers.Help.index()

@@ -247,27 +247,189 @@ public class DatabaseLayer {
         return result == 0;
     }
 
+    public static boolean addUserCurrentAddressToDB(Address userCurrentAddress, String userIdentifier) {
+        int result = -1;
+
+        // We know for sure that if the user inserts into either email of username, any of these is different from ""
+        String country = userCurrentAddress.getCountry();
+        String state = userCurrentAddress.getState();
+        String county = userCurrentAddress.getCounty();
+        String locality = userCurrentAddress.getLocality();
+        String streetName = userCurrentAddress.getStreetName();
+        String streetNumber = userCurrentAddress.getStreetNumber();
+
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.ADD_USER_CURREENT_ADDRESS(?, ?, ?, ?, ?, ?, ?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, country);
+            statement.setString(3, state);
+            statement.setString(4, county);
+            statement.setString(5, locality);
+            statement.setString(6, streetName);
+            statement.setString(7, streetNumber);
+            statement.setString(8, userIdentifier);
+            statement.execute();
+
+            result = statement.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result == 0;
+    }
+
     /*
-    public static boolean addToDB(Address userCurrentAddress) {
-        // String sqlQuery = "{? = call TRAVLR.ADD_USER_CURRENT_ADDRESS(?, ?, ?, ?, ?)}";
+    public static boolean addNewVisitedPlaceToDB(Address newVisitedPlace, String userIdentifier) {
+        int result = -1;
+
+        // We know for sure that if the user inserts into either email of username, any of these is different from ""
+        String country = userCurrentAddress.getCountry();
+        String state = userCurrentAddress.getState();
+        String county = userCurrentAddress.getCounty();
+        String locality = userCurrentAddress.getLocality();
+        String streetName = userCurrentAddress.getStreetName();
+        String streetNumber = userCurrentAddress.getStreetNumber();
+
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.ADD_USER_VISITED_PLACE(?, ?, ?, ?, ?, ?, ?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, country);
+            statement.setString(3, state);
+            statement.setString(4, county);
+            statement.setString(5, locality);
+            statement.setString(6, streetName);
+            statement.setString(7, streetNumber);
+            statement.setString(8, userIdentifier);
+            statement.execute();
+
+            result = statement.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result == 0;
     }
 
-    public static boolean addToDB(Address newVisitedPlace) {
-        // String sqlQuery = "{? = call TRAVLR.ADD_USER_VISITED_PLACE(?, ?, ?, ?, ?)}";
-    }
-
-    public static boolean addToDB(Preference newAirlinePreference) {
+    public static boolean addNewAirlinePreferenceToDB(Preference newAirlinePreference, String userIdentifier) {
         // String sqlQuery = "{? = call TRAVLR.ADD_USER_AIRLINE(?, ?, ?, ?, ?)}";
     }
 
-    public static boolean addToDB(Preference flightPreferences) {
+    public static boolean addUserFlightPreferencesToDB(Preference flightPreferences, String userIdentifier) {
         // String sqlQuery = "{? = call TRAVLR.ADD_USER_FLIGHT_PREFERENCES(?, ?, ?, ?, ?)}";
     }
 
-    public static boolean addToDB(Preference routePreferences) {
+    public static boolean addUserRoutePreferencesToDB(Preference routePreferences String userIdentifier) {
         // String sqlQuery = "{? = call TRAVLR.ADD_USER_ROUTE_PREFERENCES(?, ?, ?, ?, ?)}";
     }
     */
+
+    /**
+     * This function will be used to get the user info from the DB (FirstName, LastName, Birthdate, Gender)
+     * @param userIdentifier the user identifier (to know for whom we search in the DB)
+     * @return userInfo object representing the user info
+     */
+    public static UserInfo getUserInfoFromDB(String userIdentifier) {
+        UserInfo userInfo = null;
+
+
+        // get userInfo from DB
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.GET_USER_INFO(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.STRUCT);
+            statement.setString(2, userIdentifier);
+            statement.execute();
+
+            Object object;
+            object = statement.getObject(1);
+
+            //get userInfo from object ?????
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return userInfo;
+    }
+
+    /**
+     * This function will be used to get the user hometown from the DB
+     * @param userIdentifier the user identifier (to know for whom we search in the DB)
+     * @return address object representing the user's hometown
+     */
+    public static Address getUserHometownFromDB(String userIdentifier) {
+        Address userHometown = null;
+
+
+        // get userInfo from DB
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.GET_USER_INFO(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.STRUCT);
+            statement.setString(2, userIdentifier);
+            statement.execute();
+
+            Object object;
+            object = statement.getObject(1);
+
+            //get userHometown from object ?????
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userHometown;
+    }
+
+    /**
+     * This function will be used to get the user current address from the DB
+     * @param userIdentifier the user identifier (to know for whom we search in the DB)
+     * @return address object representing the user's current address
+     */
+    public static Address getUserCurrentAddressFromDB(String userIdentifier) {
+        Address userCurrentAddress = null;
+
+
+        // get userInfo from DB
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.GET_USER_INFO(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.STRUCT);
+            statement.setString(2, userIdentifier);
+            statement.execute();
+
+            Object object;
+            object = statement.getObject(1);
+
+            //get userCurrentAddress from object ?????
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userCurrentAddress;
+    }
+
 
     public static boolean isTable(String tableName){
     	try {
@@ -284,29 +446,28 @@ public class DatabaseLayer {
     	return false;
     }
 
-    public static boolean importSql(String username, String password, String path){
-    	String env=null;
-    	if (System.getProperty("os.name").toLowerCase().contains("windows")){
-    		env = "cmd /c";
-    	}
-    	if (System.getProperty("os.name").toLowerCase().contains("linux")){
-    		env = "sh -c";
-    	}
-    	
-    	String cmd = "%s echo exit | sqlplus %s/%s @%s";
-    	cmd = String.format(cmd, env, username, password, path);
-    	
-    	try{
-    		Runtime rt = Runtime.getRuntime();
-    		Process p = rt.exec(cmd);
-    		p.waitFor();
-    		return true;
-    	} catch (InterruptedException e){
-			e.printStackTrace();
-    	} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	return false;
-    }
+    public static boolean importSql(String username, String password, String path) {
+        String env = null;
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            env = "cmd /c";
+        }
+        if (System.getProperty("os.name").toLowerCase().contains("linux")) {
+            env = "sh -c";
+        }
 
+        String cmd = "%s echo exit | sqlplus %s/%s @%s";
+        cmd = String.format(cmd, env, username, password, path);
+
+        try {
+            Runtime rt = Runtime.getRuntime();
+            Process p = rt.exec(cmd);
+            p.waitFor();
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

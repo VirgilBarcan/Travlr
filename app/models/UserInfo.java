@@ -10,6 +10,9 @@ public class UserInfo {
     private String birthdate;
     private String gender;
 
+    private Address hometown;
+    private Address currentAddress;
+
     public UserInfo() {
         firstName = "";
         lastName = "";
@@ -54,6 +57,22 @@ public class UserInfo {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public Address getHometown() {
+        return hometown;
+    }
+
+    public void setHometown(Address hometown) {
+        this.hometown = hometown;
+    }
+
+    public Address getCurrentAddress() {
+        return currentAddress;
+    }
+
+    public void setCurrentAddress(Address currentAddress) {
+        this.currentAddress = currentAddress;
     }
 
     @Override

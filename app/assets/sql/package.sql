@@ -355,11 +355,15 @@ IS
   IS
     v_user_id INTEGER;
     BEGIN
-      SELECT user_id
-      INTO v_user_id
-      FROM USERS
-      WHERE username = p_user_identifier OR email = p_user_identifier;
-      
+      BEGIN
+        SELECT user_id
+        INTO v_user_id
+        FROM USERS
+        WHERE username = p_user_identifier OR email = p_user_identifier;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_user_id := -1;
+      END;
       RETURN v_user_id;
     END;
   
@@ -915,22 +919,33 @@ IS
       --get the id of the address
       v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
       
+      IF v_address_id = -1 THEN --address does not exist
+        --create the address
+        v_address_id := ADD_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+        
+        --get the id of the newly created address
+        v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+      END IF;
+      
       --get the id of the user
       v_user_id := GET_USER_ID(p_user_identifier);
-      
-      --get the user info id
-      v_user_info_id := GET_USER_INFO_ID(v_user_id);
-      
-      BEGIN
-        COMMIT;
-        --insert the address into the user record
-        UPDATE USER_INFO SET hometown_address = v_address_id WHERE user_info_id = v_user_info_id;
-        v_returned := 0;
-      EXCEPTION
-        WHEN OTHERS THEN
-          ROLLBACK;
-          v_returned := 1;
-      END;
+      IF v_user_id != -1 THEN --user does exist
+        --get the user info id
+        v_user_info_id := GET_USER_INFO_ID(v_user_id);
+        
+        BEGIN
+          COMMIT;
+          --insert the address into the user record
+          UPDATE USER_INFO SET hometown_address = v_address_id WHERE user_info_id = v_user_info_id;
+          v_returned := 0;
+        EXCEPTION
+          WHEN OTHERS THEN
+            ROLLBACK;
+            v_returned := 1;
+        END;
+      ELSE
+        v_returned := 1;
+      END IF;          
       
       RETURN v_returned;
     END;
@@ -953,22 +968,33 @@ IS
       --get the id of the address
       v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
       
+      IF v_address_id = -1 THEN --address does not exist
+        --create the address
+        v_address_id := ADD_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+        
+        --get the id of the newly created address
+        v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+      END IF;
+      
       --get the id of the user
       v_user_id := GET_USER_ID(p_user_identifier);
-      
-      --get the user info id
-      v_user_info_id := GET_USER_INFO_ID(v_user_id);
-      
-      BEGIN
-        COMMIT;
-        --insert the address into the user record
-        UPDATE USER_INFO SET current_address = v_address_id;
-        v_returned := 0;
-      EXCEPTION
-        WHEN OTHERS THEN
-          ROLLBACK;
-          v_returned := 1;
-      END;
+      IF v_user_id != -1 THEN --user does exist
+        --get the user info id
+        v_user_info_id := GET_USER_INFO_ID(v_user_id);
+        
+        BEGIN
+          COMMIT;
+          --insert the address into the user record
+          UPDATE USER_INFO SET current_address = v_address_id WHERE user_info_id = v_user_info_id;
+          v_returned := 0;
+        EXCEPTION
+          WHEN OTHERS THEN
+            ROLLBACK;
+            v_returned := 1;
+        END;
+      ELSE
+        v_returned := 1;
+      END IF;          
       
       RETURN v_returned;
     END;

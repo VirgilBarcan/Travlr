@@ -52,7 +52,8 @@ public class Login extends Controller {
             addToSession(userLoginData);
 
             // redirect to the homepage
-            return redirect(controllers.routes.Home.index());
+            //return redirect(controllers.routes.Home.index());
+            return redirect(controllers.routes.UserData.editUserData());
         }
         else{
             return retryLogin();
