@@ -191,7 +191,8 @@ public class DatabaseLayer {
         String birthdate = userInfo.getBirthdate();
         String gender = userInfo.getGender();
 
-        System.out.println("addToDB: " + userInfo + " userIdentifier: " + userIdentifier);
+        System.out.println("addUserInfoToDB> userIdentifier: " + userIdentifier);
+        System.out.println("add this userInfo: " + userInfo);
 
         // Send an request to the DB to find if the user exists
         // NOT TESTED!!!
@@ -218,6 +219,9 @@ public class DatabaseLayer {
 
     public static boolean addUserHometownToDB(Address userHometown, String userIdentifier) {
         int result = -1;
+
+        System.out.println("addUserHometownToDB> userIdentifier: " + userIdentifier);
+        System.out.println("add this userHometown: " + userHometown.toString());
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
         String country = userHometown.getCountry();
@@ -254,6 +258,9 @@ public class DatabaseLayer {
 
     public static boolean addUserCurrentAddressToDB(Address userCurrentAddress, String userIdentifier) {
         int result = -1;
+
+        System.out.println("addUserCurrentAddressToDB> userIdentifier: " + userIdentifier);
+        System.out.println("add this userCurrentAddress: " + userCurrentAddress.toString());
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
         String country = userCurrentAddress.getCountry();
@@ -346,6 +353,7 @@ public class DatabaseLayer {
     public static UserInfo getUserInfoFromDB(String userIdentifier) {
         UserInfo userInfo = null;
 
+        System.out.println("getUserInfoFromDB> userIdentifier: " + userIdentifier);
 
         // get userInfo from DB
         // Send an request to the DB to find if the user exists
@@ -360,8 +368,24 @@ public class DatabaseLayer {
             statement.execute();
 
             STRUCT result = (STRUCT) statement.getObject(1);
+
+            if (result != null) {
+                System.out.println("Received STRUCT: " + result);
+                userInfo = new UserInfo();
+            }
+            else{
+                System.out.println("STRUCT null");
+            }
+
             Object[] attributes;
             attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
 
             String firstName = attributes[0].toString();
             String lastName  = attributes[1].toString();
@@ -390,23 +414,57 @@ public class DatabaseLayer {
     public static Address getUserHometownFromDB(String userIdentifier) {
         Address userHometown = null;
 
+        System.out.println("getUserHometownFromDB> userIdentifier: " + userIdentifier);
+
 
         // get userInfo from DB
         // Send an request to the DB to find if the user exists
         // NOT TESTED!!!
-        String sqlQuery = "{? = call TRAVLR.GET_USER_INFO(?)}";
+        String sqlQuery = "{? = call TRAVLR.GET_USER_HOMETOWN(?)}";
         Connection connection = DB.getConnection();
         CallableStatement statement = null;
         try {
             statement = connection.prepareCall(sqlQuery);
-            statement.registerOutParameter(1, Types.STRUCT);
+            statement.registerOutParameter(1, Types.STRUCT, "ADDRESS_TYPE");
             statement.setString(2, userIdentifier);
             statement.execute();
 
-            Object object;
-            object = statement.getObject(1);
+            STRUCT result = (STRUCT) statement.getObject(1);
 
-            //get userHometown from object ?????
+            if (result != null) {
+                System.out.println("Received STRUCT: " + result);
+                userHometown = new Address();
+            }
+            else{
+                System.out.println("STRUCT null");
+            }
+
+            Object[] attributes;
+            attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
+
+            String country = attributes[0].toString();
+            String state  = attributes[1].toString();
+            String county = attributes[2].toString();
+            String locality    = attributes[3].toString();
+            String streetName = attributes[4].toString();
+            String streetNo = attributes[5].toString();
+
+            System.out.println("GET_USER_HOMETOWN: " + country + " " + state + " " + county + " " + locality + " " + streetName + " " + streetNo);
+
+            userHometown.setCountry(country);
+            userHometown.setState(state);
+            userHometown.setCounty(county);
+            userHometown.setLocality(locality);
+            userHometown.setStreetName(streetName);
+            userHometown.setStreetNumber(streetNo);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -422,6 +480,7 @@ public class DatabaseLayer {
     public static Address getUserCurrentAddressFromDB(String userIdentifier) {
         Address userCurrentAddress = null;
 
+        System.out.println("getUserCurrentAddressFromDB> userIdentifier: " + userIdentifier);
 
         // get userInfo from DB
         // Send an request to the DB to find if the user exists
@@ -431,14 +490,47 @@ public class DatabaseLayer {
         CallableStatement statement = null;
         try {
             statement = connection.prepareCall(sqlQuery);
-            statement.registerOutParameter(1, Types.STRUCT);
+            statement.registerOutParameter(1, Types.STRUCT, "ADDRESS_TYPE");
             statement.setString(2, userIdentifier);
             statement.execute();
 
-            Object object;
-            object = statement.getObject(1);
+            STRUCT result = (STRUCT) statement.getObject(1);
 
-            //get userCurrentAddress from object ?????
+            if (result != null) {
+                System.out.println("Received STRUCT: " + result);
+                userCurrentAddress = new Address();
+            }
+            else{
+                System.out.println("STRUCT null");
+            }
+
+            Object[] attributes;
+            attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
+
+            String country = attributes[0].toString();
+            String state  = attributes[1].toString();
+            String county = attributes[2].toString();
+            String locality    = attributes[3].toString();
+            String streetName = attributes[4].toString();
+            String streetNo = attributes[5].toString();
+
+            System.out.println("GET_USER_HOMETOWN: " + country + " " + state + " " + county + " " + locality + " " + streetName + " " + streetNo);
+
+            userCurrentAddress.setCountry(country);
+            userCurrentAddress.setState(state);
+            userCurrentAddress.setCounty(county);
+            userCurrentAddress.setLocality(locality);
+            userCurrentAddress.setStreetName(streetName);
+            userCurrentAddress.setStreetNumber(streetNo);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

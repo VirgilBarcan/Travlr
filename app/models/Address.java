@@ -77,4 +77,16 @@ public class Address {
     public void setStreetNumber(String streetNumber) {
         this.streetNumber = streetNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "country='" + country + '\'' +
+                ", state='" + state + '\'' +
+                ", county='" + county + '\'' +
+                ", locality='" + locality + '\'' +
+                ", streetName='" + streetName + '\'' +
+                ", streetNumber='" + streetNumber + '\'' +
+                '}';
+    }
 }

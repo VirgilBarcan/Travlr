@@ -26,9 +26,17 @@ public class UserData extends Controller {
         String visibleView = "hidden";
 
         UserInfo userInfo = null;
+        Address userHometown = null;
+        Address userCurrentAddress = null;
 
         //look for more info about the user in the DB
-        //userInfo = getUserInfoFromDB();
+        userInfo = getUserInfoFromDB();
+
+        userHometown = getUserHometownFromDB();
+        userInfo.setHometown(userHometown);
+
+        userCurrentAddress = getUserCurrentAddressFromDB();
+        userInfo.setCurrentAddress(userCurrentAddress);
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
@@ -298,7 +306,8 @@ public class UserData extends Controller {
         String username = session("username");
         String password = session("password");
 
-        String userIdentifier = (email != null ? email : username);
+        String userIdentifier = email;
+        if (email.equals("")) userIdentifier = username;
 
         // add user info to the DB
         result = DatabaseLayer.addUserHometownToDB(userHometown, userIdentifier);
@@ -313,7 +322,8 @@ public class UserData extends Controller {
         String username = session("username");
         String password = session("password");
 
-        String userIdentifier = (email != null ? email : username);
+        String userIdentifier = email;
+        if (email.equals("")) userIdentifier = username;
 
         // add user info to the DB
         result = DatabaseLayer.addUserCurrentAddressToDB(userHometown, userIdentifier);
@@ -328,11 +338,45 @@ public class UserData extends Controller {
         String username = session("username");
         String password = session("password");
 
-        String userIdentifier = (email != null ? email : username);
+        String userIdentifier = email;
+        if (email.equals("")) userIdentifier = username;
 
         //get user info from the DB
         userInfo = DatabaseLayer.getUserInfoFromDB(userIdentifier);
 
         return userInfo;
     }
+
+    private static Address getUserHometownFromDB() {
+        Address userHometown = null;
+
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        String userIdentifier = email;
+        if (email.equals("")) userIdentifier = username;
+
+        //get user info from the DB
+        userHometown = DatabaseLayer.getUserHometownFromDB(userIdentifier);
+
+        return userHometown;
+    }
+
+    private static Address getUserCurrentAddressFromDB() {
+        Address userCurrentAddress = null;
+
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        String userIdentifier = email;
+        if (email.equals("")) userIdentifier = username;
+
+        //get user info from the DB
+        userCurrentAddress = DatabaseLayer.getUserCurrentAddressFromDB(userIdentifier);
+
+        return userCurrentAddress;
+    }
+
 }

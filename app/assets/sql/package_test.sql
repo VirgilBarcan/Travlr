@@ -67,7 +67,6 @@ BEGIN
                        v_user_current_address.street_no);
 END;
 
-
 /*
 -- Select full address of a place
 SELECT CO.name, CI.state, CI.county, CI.city_name, ST.street_name, ST.street_no
