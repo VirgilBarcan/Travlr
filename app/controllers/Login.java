@@ -52,16 +52,59 @@ public class Login extends Controller {
             addToSession(userLoginData);
 
             // redirect to the homepage
-            //return redirect(controllers.routes.Home.index());
-            return redirect(controllers.routes.UserData.editUserData());
+            return redirect(controllers.routes.Home.index());
         }
         else{
             return retryLogin();
         }
     }
 
+    public static Result loginFB()
+    {
+        Map<String, String[]> parameters = request().queryString();
+
+        UserLoginData userLoginData = new UserLoginData();
+        String first_name = "";
+        String last_name = "";
+        String gender = "";
+        String email = "";        
+
+        if (parameters.containsKey("first_name")) first_name = parameters.get("first_name")[0];
+        if (parameters.containsKey("last_name")) last_name = parameters.get("last_name")[0];
+        if (parameters.containsKey("gender")) gender = parameters.get("gender")[0];
+        if (parameters.containsKey("email")) email = parameters.get("email")[0];
+
+        // TODO: Add the first_name, last_name, gender
+
+        userLoginData.setEmail(email);
+
+        //the login is done with our method, not FB or G+
+        userLoginData.setExternal(1);
+
+        System.out.println(userLoginData.toString());
+
+        if (userLoginData.isValid() == 0) { // valid data
+            // put the data in the session cookie for fast retrieval
+            addToSession(userLoginData);
+
+            // redirect to the homepage
+            return redirect(controllers.routes.Home.index());
+        }
+        else
+        {
+            return retryLogin();
+        }     
+
+        //System.out.println(queryParameters.get("first_name") + " " + queryParameters.get("last_name") + " " + queryParameters.get("email"));
+        //return ok(String.format("Here's my server-side data using $.get(), and you sent me [%s]", queryParameters.get("first_name"))); // [0]
+    }
+
+
+
+
     // This will implement AJAX, to update the page without reloading it
-    public static Result retryLogin() {
+    public static Result retryLogin() 
+    {
         // Clear the session
         session().clear();
 
@@ -69,7 +112,8 @@ public class Login extends Controller {
         return ok(login.render(ErrorMessage.INVALID_USERNAME_PASSWORD.toString()));
     }
 
-    private static void addToSession(UserLoginData userLoginData) {
+    private static void addToSession(UserLoginData userLoginData) 
+    {
         session("email", userLoginData.getEmail());
         session("username", userLoginData.getUsername());
         session("password", userLoginData.getPassword());

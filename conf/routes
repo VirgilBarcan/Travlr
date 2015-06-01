@@ -21,6 +21,7 @@ GET         /Home/importer              controllers.Home.importer()
 # Login Register page
 GET         /login_register_page        controllers.Login.loginRegister()
 GET         /login_retry                controllers.Login.retryLogin()
+GET         /loginFB                    controllers.Login.loginFB()
 POST        /login                      controllers.Login.login()
 POST        /register                   controllers.Register.register()
 

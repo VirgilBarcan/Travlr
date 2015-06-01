@@ -83,7 +83,7 @@ public class UserLoginData {
 
     @Override
     public String toString() {
-        return "UserLoginRegisterData{" +
+        return "UserLoginData{" +
                 "password='" + password + '\'' +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +

@@ -73,10 +73,14 @@
             console.log('Welcome!  Fetching your information.... ');
 
             FB.api('/me', function(response) {
-              console.log('Successful login for: ' + response.name);
+              	console.log('Successful login for: ' + response.name);
 
-              // document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!<br/>Email: ' + response.email;
-              alert('Thanks for logging in, ' + response.name + '!<br/>Email: ' + response.email);
+          		$.get('@routes.Login.loginFB()', 
+          			{'first_name': response.first_name,
+              		'last_name': response.last_name,
+              		'email': response.email,
+              		'gender': response.gender});
+
             });            
           }
 

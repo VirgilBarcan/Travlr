@@ -53,7 +53,7 @@ public class UserRegisterData {
      * @return 0 = valid, 1 = invalid username, 2 = invalid email
      */
     public int isValid() {
-        int isValid = 1;
+        int isValid = 0;
         /*
         // Send an request to the DB to find if the user already exists
         // NOT TESTED!!!
