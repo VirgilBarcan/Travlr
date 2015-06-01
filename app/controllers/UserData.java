@@ -1,7 +1,6 @@
 package controllers;
 
-import models.Address;
-import models.UserInfo;
+import models.*;
 import play.*;
 import play.data.Form;
 import play.mvc.*;
@@ -229,7 +228,94 @@ public class UserData extends Controller {
             String visibleEdit = "visible";
             String visibleView = "hidden";
 
-            return redirect(controllers.routes.UserData.editUserData());
+            return showWithCurrentAddress(currentAddress);
+            //return redirect(controllers.routes.UserData.editUserData());
+        }
+    }
+
+    public static Result editUserFlightPreferences() {
+        FlightPreferences userFlightPreferences  = new FlightPreferences();
+
+        Map<String, String[]> request = request().body().asFormUrlEncoded();
+
+        // Flight Preferences
+        String nightFlight = null;
+        String stopowerFlight = null;
+        if (request.containsKey("radio-night-flight"))
+            nightFlight = request.get("radio-night-flight")[0];
+        if (request.containsKey("radio-stopover-flight"))
+            stopowerFlight = request.get("radio-stopover-flight")[0];
+
+        userFlightPreferences.setNightFlight(nightFlight);
+        userFlightPreferences.setStopowersFlight(stopowerFlight);
+
+        // Add to the database the information given by the user
+        boolean addToDB = false;
+        //TODO addToDB = addUserFlightPreferencesToDB(userFlightPreferences);
+
+        if (addToDB == false){
+            // the update of the DB didn't end up with success
+            // ask the user to reinsert the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return retryEditUserData();
+        }
+        else{
+            // the update of the DB did end up with success
+            // redirect the user to the same page, but with the fields containing the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return showWithFlightPreferences(userFlightPreferences);
+            //return redirect(controllers.routes.UserData.editUserData());
+        }
+    }
+
+    public static Result editUserRoutePreferences() {
+        RoutePreferences userRoutePreferences = new RoutePreferences();
+
+        Map<String, String[]> request = request().body().asFormUrlEncoded();
+
+        // Flight Preferences
+        String cheapestRoute = null;
+        String shortestRoute = null;
+        String mostFriendsSeenRoute = null;
+        if (request.containsKey("radio-cheapest-route"))
+            cheapestRoute = request.get("radio-cheapest-route")[0];
+        if (request.containsKey("radio-shortest-route"))
+            shortestRoute = request.get("radio-shortest-route")[0];
+        if (request.containsKey("radio-most-friends-route"))
+            mostFriendsSeenRoute = request.get("radio-most-friends-route")[0];
+
+        userRoutePreferences.setCheapestRoute(cheapestRoute);
+        userRoutePreferences.setShortestRoute(shortestRoute);
+        userRoutePreferences.setMostFriendsSeenRoute(mostFriendsSeenRoute);
+
+        // Add to the database the information given by the user
+        boolean addToDB = false;
+        //TODO addToDB = addUserRoutePreferencesToDB(userFlightPreferences);
+
+        if (addToDB == false){
+            // the update of the DB didn't end up with success
+            // ask the user to reinsert the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return retryEditUserData();
+        }
+        else{
+            // the update of the DB did end up with success
+            // redirect the user to the same page, but with the fields containing the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return showWithRoutePreferences(userRoutePreferences);
+            //return redirect(controllers.routes.UserData.editUserData());
         }
     }
 
@@ -252,6 +338,37 @@ public class UserData extends Controller {
 
         UserInfo userInfo = getUserInfoFromSession();
         userInfo.setHometown(userHometown);
+
+        return ok(userData.render(visibleEdit, visibleView, userInfo));
+    }
+
+
+    private static Result showWithCurrentAddress(Address currentAddress) {
+        String visibleEdit = "visible";
+        String visibleView = "hidden";
+
+        UserInfo userInfo = getUserInfoFromSession();
+        userInfo.setCurrentAddress(currentAddress);
+
+        return ok(userData.render(visibleEdit, visibleView, userInfo));
+    }
+
+    public static Result showWithFlightPreferences(FlightPreferences flightPreferences) {
+        String visibleEdit = "visible";
+        String visibleView = "hidden";
+
+        UserInfo userInfo = getUserInfoFromSession();
+        // TODO userInfo.setFlightPreferences(flightPreferences);
+
+        return ok(userData.render(visibleEdit, visibleView, userInfo));
+    }
+
+    public static Result showWithRoutePreferences(RoutePreferences routePreferences) {
+        String visibleEdit = "visible";
+        String visibleView = "hidden";
+
+        UserInfo userInfo = getUserInfoFromSession();
+        // TODO userInfo.setRoutePreferences(route0Preferences);
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }

@@ -1,5 +1,15 @@
 @(visibleEdit: String)(visibleView: String)(userInfo: UserInfo)
 
+@PageTitle = {
+    @if(visibleEdit == "visible"){
+        Edit User Data
+    } else {
+        @if(visibleView == "visible"){
+            View User Data
+        }
+    }
+}
+
 @FirstName = {
     @if(userInfo != null){ @userInfo.getFirstName } else { First Name }
 }
@@ -253,7 +263,7 @@
 <html>
     <head lang="en">
         <meta charset="UTF-8">
-        <title>Edit user data</title>
+        <title>@PageTitle</title>
 
             <!-- Bootstrap core CSS -->
         <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
@@ -856,7 +866,7 @@
                                                             <form class="form-horizontal" id="form-flight-preferences">
                                                                 <div class="form-group">
                                                                     <label for="radio-night-flight-group" class="col-sm-2 control-label">Night Flights</label>
-                                                                    <div class="col-sm-10 radio-night-flight-group">
+                                                                    <div class="col-sm-10 radio-night-flight-group" id="radio-night-flight-group">
                                                                         <label class="radio-inline">
                                                                             <input type="radio" name="radio-night-flight" id="radio-night-flight-yes" value="yes" checked> Yes
                                                                         </label>
@@ -867,13 +877,18 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <label for="radio-stopover-flight-group" class="col-sm-2 control-label">With Stopovers</label>
-                                                                    <div class="col-sm-10 radio-stopover-flight-group">
+                                                                    <div class="col-sm-10 radio-stopover-flight-group" id="radio-stopover-flight-group">
                                                                         <label class="radio-inline">
                                                                             <input type="radio" name="radio-stopover-flight" id="radio-stopover-flight-yes" value="yes" checked> Yes
                                                                         </label>
                                                                         <label class="radio-inline">
                                                                             <input type="radio" name="radio-stopover-flight" id="radio-stopover-flight-no" value="no"> No
                                                                         </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="col-sm-offset-2 col-sm-10">
+                                                                        <button type="submit" class="btn btn-default">Save Changes</button>
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -894,7 +909,7 @@
                                                             <form class="form-horizontal" id="form-route-preferences">
                                                                 <div class="form-group">
                                                                     <label for="radio-cheapest-route-group" class="col-sm-2 control-label">Cheapest</label>
-                                                                    <div class="col-sm-10 radio-cheapest-route-group">
+                                                                    <div class="col-sm-10 radio-cheapest-route-group" id="radio-cheapest-route-group">
                                                                         <label class="radio-inline">
                                                                             <input type="radio" name="radio-cheapest-route" id="radio-cheapest-route-yes" value="yes" checked> Yes
                                                                         </label>
@@ -923,6 +938,11 @@
                                                                         <label class="radio-inline">
                                                                             <input type="radio" name="radio-most-friends-route" id="radio-most-friends-route-no" value="no"> No
                                                                         </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <div class="col-sm-offset-2 col-sm-10">
+                                                                        <button type="submit" class="btn btn-default">Save Changes</button>
                                                                     </div>
                                                                 </div>
                                                             </form>
