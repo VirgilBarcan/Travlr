@@ -79,6 +79,7 @@ IS
   FUNCTION ADD_STREET (
     p_street_name IN VARCHAR2,
     p_street_no IN VARCHAR2,
+    p_country IN VARCHAR2,
     p_city_name IN VARCHAR2,
     p_state IN VARCHAR2,
     p_county IN VARCHAR2
@@ -107,6 +108,7 @@ IS
   FUNCTION EXISTS_STREET (
     p_street_name IN VARCHAR2,
     p_street_no IN VARCHAR2,
+    p_country IN VARCHAR2,
     p_city_name IN VARCHAR2,
     p_state IN VARCHAR2,
     p_county IN VARCHAR2
@@ -400,9 +402,7 @@ IS
       INTO v_has_info
       FROM USERS
       WHERE user_id = v_user_id;
-      
-      DBMS_OUTPUT.PUT_LINE('v_has_info: ' || v_has_info);
-      
+   
       IF v_has_info IS NULL THEN --the user hasn't inserted the info until now, insert new
         BEGIN
           COMMIT;
@@ -457,10 +457,15 @@ IS
   IS
     v_country_id INTEGER;
     BEGIN
-      SELECT country_id
-      INTO v_country_id
-      FROM COUNTRY
-      WHERE name = p_country_name;
+      BEGIN
+        SELECT country_id
+        INTO v_country_id
+        FROM COUNTRY
+        WHERE name = p_country_name;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_country_id := -1;
+      END;
       
       RETURN v_country_id;
     END;
@@ -475,10 +480,15 @@ IS
     BEGIN
       v_country_id := GET_COUNTRY_ID(p_country_name);
     
-      SELECT city_id
-      INTO v_city_id
-      FROM CITY
-      WHERE city_name = p_city_name AND country_id = v_country_id;
+      BEGIN
+        SELECT city_id
+        INTO v_city_id
+        FROM CITY
+        WHERE city_name = p_city_name AND country_id = v_country_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_city_id := -1;
+      END; 
       
       RETURN v_city_id;
     END;
@@ -493,11 +503,16 @@ IS
     v_city_id INTEGER;
     BEGIN
       v_city_id := GET_CITY_ID(p_city_name, p_country_name);
-    
+      
+      BEGIN
       SELECT street_id
-      INTO v_street_id
-      FROM STREET
-      WHERE city_id = v_city_id;
+        INTO v_street_id
+        FROM STREET
+        WHERE city_id = v_city_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_street_id := -1;
+      END;
       
       RETURN v_street_id;
     END;
@@ -520,11 +535,15 @@ IS
       v_city_id := GET_CITY_ID(p_locality, p_country);
       v_street_id := GET_STREET_ID(p_street_name, p_locality, p_country);
       
-      SELECT address_id
-      INTO v_address_id
-      FROM ADDRESS
-      WHERE country_id = v_country_id AND city_id = v_city_id AND street_id = v_street_id;
-      
+      BEGIN
+        SELECT address_id
+        INTO v_address_id
+        FROM ADDRESS
+        WHERE country_id = v_country_id AND city_id = v_city_id AND street_id = v_street_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_address_id := -1;
+      END;      
       RETURN v_address_id;
     END;
 
@@ -532,9 +551,11 @@ IS
     p_country_name IN VARCHAR2
   ) RETURN INTEGER
   IS
+    v_exists INTEGER;
+    v_return INTEGER;
     BEGIN
       --check if the country already exists
-      v_exists := EXISTS_COUNTRY(p_country);
+      v_exists := EXISTS_COUNTRY(p_country_name);
       
       IF v_exists = 1 THEN
         --address exists
@@ -542,10 +563,18 @@ IS
       ELSE
         --address does not exist yet
         BEGIN
+          COMMIT;
+          
           INSERT INTO COUNTRY(name)
           VALUES(p_country_name);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := 0;
         END;
       END IF;
+      
+      RETURN v_return;
     END;
   
   FUNCTION ADD_CITY (
@@ -556,6 +585,9 @@ IS
   ) RETURN INTEGER
   IS
     v_country INTEGER;
+    v_return INTEGER;
+    v_exists INTEGER;
+    v_country_id INTEGER;
     BEGIN
       --check if the country already exists
       v_exists := EXISTS_CITY(p_city_name, p_country_name, p_state, p_county);
@@ -575,29 +607,71 @@ IS
             
             v_country_id := GET_COUNTRY_ID(p_country_name);
             
-            INSERT INTO CITY(city_name, country_id, state, county)
-            VALUES(p_city_name, v_country_id, p_state, p_county);
+            BEGIN
+              COMMIT;
+              
+              INSERT INTO CITY(city_name, country_id, state, county)
+              VALUES(p_city_name, v_country_id, p_state, p_county);
+              v_return := 1;
+            EXCEPTION
+              WHEN OTHERS THEN
+                v_return := 0;
+            END;
           ELSE
             --country exists
             v_country_id := GET_COUNTRY_ID(p_country_name);
             
+            BEGIN
             INSERT INTO CITY(city_name, country_id, state, county)
             VALUES(p_city_name, v_country_id, p_state, p_county);
+            v_return := 1;
+            EXCEPTION
+              WHEN OTHERS THEN
+                v_return := 0;
+            END;
           END IF;
         END;
       END IF;
+      
+      RETURN v_return;
     END;
   
   FUNCTION ADD_STREET (
     p_street_name IN VARCHAR2,
     p_street_no IN VARCHAR2,
+    p_country IN VARCHAR2,
     p_city_name IN VARCHAR2,
     p_state IN VARCHAR2,
     p_county IN VARCHAR2
   ) RETURN INTEGER
   IS
+    v_return INTEGER;
+    v_city_id INTEGER;
+    v_exists INTEGER;
     BEGIN
-      null;
+      --check if the country already exists
+      v_exists := EXISTS_STREET(p_street_name, p_street_no, p_country, p_city_name, p_state, p_county);
+      
+      IF v_exists = 1 THEN
+        --street exists
+        v_return := 1;
+      ELSE
+        --street does not exist yet
+        --add it to
+        BEGIN
+          v_city_id := GET_CITY_ID(p_city_name, p_country);
+          COMMIT;
+          INSERT INTO STREET(street_name, street_no, city_id)
+          VALUES(p_street_name, p_street_no, v_city_id);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            ROLLBACK;
+            v_return := 0;
+        END;
+      END IF;
+      
+      RETURN v_return;
     END;
 
   FUNCTION ADD_ADDRESS (
@@ -615,6 +689,8 @@ IS
     v_city_id INTEGER;
     v_street_id INTEGER;
     BEGIN
+      v_return := 0;
+      
       --check if the address doesn't already exist
       v_exists := EXISTS_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
       
@@ -626,29 +702,78 @@ IS
         BEGIN
           --find country_id, city_id, street_id
           --if these don't exist, create them
-          INSERT INTO ADDRESS(country_id, city_id, street_id)
-          VALUES(v_country_id, v_city_id, v_street_id);
+          
+          --find country_id
+          v_country_id := GET_COUNTRY_ID(p_country);
+          
+          IF v_country_id = -1 THEN
+            --country does not exist
+            --create the country
+            v_country_id := ADD_COUNTRY(p_country);
+            
+            --get the id of the newly created country
+            v_country_id := GET_COUNTRY_ID(p_country);
+          END IF;
+          
+          --find city_id
+          v_city_id := GET_CITY_ID(p_locality, p_country);
+          IF v_city_id = -1 THEN
+            --city does not exist
+            --create the city
+            v_city_id := ADD_CITY(p_locality, p_country, p_state, p_county);
+            --get the id of the newly created city
+            v_city_id := GET_CITY_ID(p_locality, p_country);
+          END IF;
+          
+          --find street_id
+          v_street_id := GET_STREET_ID(p_street_name, p_locality, p_country);
+          IF v_street_id = -1 THEN
+            --street does not exist
+            --create the street
+            v_street_id := ADD_STREET(p_street_name, p_street_no, p_country, p_locality, p_state, p_county);
+            --get the id of the newly created street
+            v_street_id := GET_STREET_ID(p_street_name, p_locality, p_country);
+          END IF;
+          COMMIT;
+          BEGIN
+            INSERT INTO ADDRESS(country_id, city_id, street_id)
+            VALUES(v_country_id, v_city_id, v_street_id);
+            v_return := 1;
+          EXCEPTION
+            WHEN OTHERS THEN
+              v_return := 0;
+          END;
         END;
       END IF;
+      
+      RETURN v_return;
     END;
 
-FUNCTION EXISTS_COUNTRY (
+  FUNCTION EXISTS_COUNTRY (
     p_country_name IN VARCHAR2
   ) RETURN INTEGER
   IS
     v_country_name VARCHAR2(255);
+    v_return INTEGER;
     BEGIN
       v_country_name := NULL;
       
-      SELECT name
-      INTO v_country_name
-      FROM COUNTRY;
+      BEGIN
+        SELECT name
+        INTO v_country_name
+        FROM COUNTRY;
+        
+        IF v_country_name IS NOT NULL THEN
+          v_return := 1;
+        ELSE
+          v_return := 0;
+        END IF;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_return := 0;
+      END;
       
-      IF v_country_name IS NOT NULL THEN
-        RETURN 1;
-      ELSE
-        RETURN 0;
-      END IF;
+      RETURN v_return;
     END;
   
   FUNCTION EXISTS_CITY (
@@ -659,19 +784,27 @@ FUNCTION EXISTS_COUNTRY (
   ) RETURN INTEGER
   IS
     v_city_name VARCHAR2(255);
+    v_return INTEGER;
     BEGIN
       v_city_name := NULL;
       
-      SELECT city_name
-      INTO v_city_name
-      FROM CITY
-      WHERE state = p_state AND county = p_county;
+      BEGIN
+        SELECT city_name
+        INTO v_city_name
+        FROM CITY
+        WHERE state = p_state AND county = p_county;
+        
+        IF v_city_name IS NOT NULL THEN
+          v_return := 1;
+        ELSE
+          v_return := 0;
+        END IF;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_return := 0;
+      END;
       
-      IF v_city_name IS NOT NULL THEN
-        RETURN 1;
-      ELSE
-        RETURN 0;
-      END IF;
+      RETURN v_return;
     END;
   
   FUNCTION EXISTS_STREET (
@@ -686,22 +819,30 @@ FUNCTION EXISTS_COUNTRY (
     v_street_name VARCHAR2(255);
     v_street_no VARCHAR2(255);
     v_city_id INTEGER;
+    v_return INTEGER;
     BEGIN
       v_street_name := NULL;
       v_street_no := NULL;
       
-      v_city_id := GET_CITY_ID(p_city_name, p_country);
+      BEGIN
+        v_city_id := GET_CITY_ID(p_city_name, p_country);
+        
+        SELECT street_name, street_no
+        INTO v_street_name, v_street_no
+        FROM STREET
+        WHERE city_id = v_city_id;
+        
+        IF v_street_name IS NOT NULL AND v_street_no IS NOT NULL THEN
+          v_return := 1;
+        ELSE
+          v_return := 0;
+        END IF;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_return := 0;
+      END;      
+      RETURN v_return;
       
-      SELECT street_name, street_no
-      INTO v_street_name, v_street_no
-      FROM STREET
-      WHERE city_id = v_city_id;
-      
-      IF v_street_name IS NOT NULL AND v_street_no IS NOT NULL THEN
-        RETURN 1;
-      ELSE
-        RETURN 0;
-      END IF;
     END;
   
   FUNCTION EXISTS_ADDRESS (
@@ -729,24 +870,29 @@ FUNCTION EXISTS_COUNTRY (
       v_street_no := null;
       v_return := 0;
       
-      SELECT CO.name, CI.state, CI.county, CI.city_name, ST.street_name, ST.street_no
-      INTO v_country, v_state, v_county, v_locality, v_street_name, v_street_no
-      FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A
-      WHERE A.country_id = CO.country_id AND
-            A.city_id = CI.city_id AND
-            A.street_id = ST.street_id AND
-            CO.country_id = CI.country_id AND 
-            CI.city_id = ST.city_id;
-      
-      IF v_country IS NOT NULL AND
-         v_state IS NOT NULL AND
-         v_county IS NOT NULL AND
-         v_locality IS NOT NULL AND
-         v_street_name IS NOT NULL AND
-         v_street_no IS NOT NULL
-      THEN
-        v_return := 1;  
-      END IF;
+      BEGIN
+        SELECT CO.name, CI.state, CI.county, CI.city_name, ST.street_name, ST.street_no
+        INTO v_country, v_state, v_county, v_locality, v_street_name, v_street_no
+        FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A
+        WHERE A.country_id = CO.country_id AND
+              A.city_id = CI.city_id AND
+              A.street_id = ST.street_id AND
+              CO.country_id = CI.country_id AND 
+              CI.city_id = ST.city_id;
+        
+        IF v_country IS NOT NULL AND
+           v_state IS NOT NULL AND
+           v_county IS NOT NULL AND
+           v_locality IS NOT NULL AND
+           v_street_name IS NOT NULL AND
+           v_street_no IS NOT NULL
+        THEN
+          v_return := 1;  
+        END IF;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_return := 0;
+      END;
       
       RETURN v_return;
     END;
