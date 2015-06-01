@@ -485,7 +485,7 @@ public class DatabaseLayer {
         // get userInfo from DB
         // Send an request to the DB to find if the user exists
         // NOT TESTED!!!
-        String sqlQuery = "{? = call TRAVLR.GET_USER_INFO(?)}";
+        String sqlQuery = "{? = call TRAVLR.GET_USER_CURRENT_ADDRESS(?)}";
         Connection connection = DB.getConnection();
         CallableStatement statement = null;
         try {
@@ -521,7 +521,7 @@ public class DatabaseLayer {
             String streetName = attributes[4].toString();
             String streetNo = attributes[5].toString();
 
-            System.out.println("GET_USER_HOMETOWN: " + country + " " + state + " " + county + " " + locality + " " + streetName + " " + streetNo);
+            System.out.println("GET_USER_CURRENT_ADDRESS: " + country + " " + state + " " + county + " " + locality + " " + streetName + " " + streetNo);
 
             userCurrentAddress.setCountry(country);
             userCurrentAddress.setState(state);

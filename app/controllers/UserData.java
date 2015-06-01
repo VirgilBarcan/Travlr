@@ -38,6 +38,8 @@ public class UserData extends Controller {
         userCurrentAddress = getUserCurrentAddressFromDB();
         userInfo.setCurrentAddress(userCurrentAddress);
 
+        System.out.println("userEditData> userInfo: " + userInfo.toString());
+
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
 

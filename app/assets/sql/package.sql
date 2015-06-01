@@ -726,7 +726,6 @@ IS
       
       --check if the address doesn't already exist
       v_exists := EXISTS_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
-      
       IF v_exists = 1 THEN
         --address exists
         v_return := 1;
@@ -764,6 +763,7 @@ IS
             --street does not exist
             --create the street
             v_street_id := ADD_STREET(p_street_name, p_street_no, p_country, p_locality, p_state, p_county);
+            
             --get the id of the newly created street
             v_street_id := GET_STREET_ID(p_street_name, p_locality, p_country);
           END IF;
@@ -911,7 +911,9 @@ IS
               A.city_id = CI.city_id AND
               A.street_id = ST.street_id AND
               CO.country_id = CI.country_id AND 
-              CI.city_id = ST.city_id;
+              CI.city_id = ST.city_id AND
+              CO.name = p_country AND CI.state = p_state AND CI.county = p_county AND CI.city_name = p_locality AND
+              ST.street_name = p_street_name AND ST.street_no = p_street_no;
         
         IF v_country IS NOT NULL AND
            v_state IS NOT NULL AND
@@ -958,10 +960,11 @@ IS
       
       --get the id of the user
       v_user_id := GET_USER_ID(p_user_identifier);
+      
       IF v_user_id != -1 THEN --user does exist
         --get the user info id
         v_user_info_id := GET_USER_INFO_ID(v_user_id);
-        
+
         BEGIN
           COMMIT;
           --insert the address into the user record
@@ -1126,7 +1129,7 @@ IS
         INTO v_country, v_state, v_county, v_locality, v_street_name, v_street_no
         FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A, USER_INFO UI, USERS U
         WHERE U.user_info = UI.user_info_id AND
-              (U.email = 'abc' OR U.username = 'abc') AND
+              (U.email = p_user_identifier OR U.username = p_user_identifier) AND
               UI.hometown_address = A.address_id AND
               A.country_id = CO.country_id AND
               A.city_id = CI.city_id AND
@@ -1191,7 +1194,7 @@ IS
         INTO v_country, v_state, v_county, v_locality, v_street_name, v_street_no
         FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A, USER_INFO UI, USERS U
         WHERE U.user_info = UI.user_info_id AND
-              (U.email = 'abc' OR U.username = 'abc') AND
+              (U.email = p_user_identifier OR U.username = p_user_identifier) AND
               UI.current_address = A.address_id AND
               A.country_id = CO.country_id AND
               A.city_id = CI.city_id AND

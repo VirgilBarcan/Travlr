@@ -82,6 +82,8 @@ public class UserInfo {
                 ", lastName='" + lastName + '\'' +
                 ", birthdate='" + birthdate + '\'' +
                 ", gender='" + gender + '\'' +
+                ", hometown=" + hometown +
+                ", currentAddress=" + currentAddress +
                 '}';
     }
 }

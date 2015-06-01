@@ -40,16 +40,7 @@
 }
 
 @valueHometownCountry = {
-    @if(userInfo != null ) {
-        @if(userInfo.getHometown != null) {
-            @if(userInfo.getHometown.getCountry != "Country") {
-                value="@userInfo.getHometown.getCountry"
-            }
-            else { }
-        }
-        else { }
-    }
-    else { }
+    @if(userInfo != null ) { @if(userInfo.getHometown != null) { @if(userInfo.getHometown.getCountry != "Country") { value="@userInfo.getHometown.getCountry" } else {} } else {} } else { }
 }
 
 @valueHometownState = {
@@ -57,12 +48,9 @@
         @if(userInfo.getHometown != null) {
             @if(userInfo.getHometown.getState != "State") {
                 value="@userInfo.getHometown.getState"
-            }
-            else { }
-        }
-        else { }
-    }
-    else { }
+            } else { }
+        } else { }
+    } else { }
 }
 
 @valueHometownCounty = {
@@ -70,12 +58,9 @@
         @if(userInfo.getHometown != null) {
             @if(userInfo.getHometown.getCounty != "County") {
                 value="@userInfo.getHometown.getCounty"
-            }
-            else { }
-        }
-        else { }
-    }
-    else { }
+            } else { }
+        } else { }
+    } else { }
 }
 
 @valueHometownLocality = {
@@ -83,12 +68,9 @@
         @if(userInfo.getHometown != null) {
             @if(userInfo.getHometown.getLocality != "Locality") {
                 value="@userInfo.getHometown.getLocality"
-            }
-            else { }
-        }
-        else { }
-    }
-    else { }
+            } else { }
+        } else { }
+    } else { }
 }
 
 @valueHometownStreetName = {
@@ -96,12 +78,9 @@
         @if(userInfo.getHometown != null) {
             @if(userInfo.getHometown.getStreetName != "Street Name") {
                 value="@userInfo.getHometown.getStreetName"
-            }
-            else { }
-        }
-        else { }
-    }
-    else { }
+            } else { }
+        } else { }
+    } else { }
 }
 
 @valueHometownStreetNo = {
@@ -109,12 +88,69 @@
         @if(userInfo.getHometown != null) {
             @if(userInfo.getHometown.getStreetNumber != "Street Number") {
                 value="@userInfo.getHometown.getStreetNumber"
-            }
-            else { }
-        }
-        else { }
-    }
-    else { }
+            } else { }
+        } else { }
+    } else { }
+}
+
+@valueCurrentAddressCountry = {
+    @if(userInfo != null ) {
+        @if(userInfo.getCurrentAddress != null) {
+            @if(userInfo.getCurrentAddress.getCountry != "Country") {
+                value="@userInfo.getCurrentAddress.getCountry"
+            } else { }
+        } else { }
+    } else { }
+}
+
+@valueCurrentAddressState = {
+    @if(userInfo != null ) {
+        @if(userInfo.getCurrentAddress != null) {
+            @if(userInfo.getCurrentAddress.getState != "State") {
+                value="@userInfo.getCurrentAddress.getState"
+            } else { }
+        } else { }
+    } else { }
+}
+
+@valueCurrentAddressCounty = {
+    @if(userInfo != null ) {
+        @if(userInfo.getCurrentAddress != null) {
+            @if(userInfo.getCurrentAddress.getCounty != "County") {
+                value="@userInfo.getCurrentAddress.getCounty"
+            } else { }
+        } else { }
+    } else { }
+}
+
+@valueCurrentAddressLocality = {
+    @if(userInfo != null ) {
+        @if(userInfo.getCurrentAddress != null) {
+            @if(userInfo.getCurrentAddress.getLocality != "Locality") {
+                value="@userInfo.getCurrentAddress.getLocality"
+            } else { }
+        } else { }
+    } else { }
+}
+
+@valueCurrentAddressStreetName = {
+    @if(userInfo != null ) {
+        @if(userInfo.getCurrentAddress != null) {
+            @if(userInfo.getCurrentAddress.getStreetName != "Street Name") {
+                value="@userInfo.getCurrentAddress.getStreetName"
+            } else { }
+        } else { }
+    } else { }
+}
+
+@valueCurrentAddressStreetNo = {
+    @if(userInfo != null ) {
+        @if(userInfo.getCurrentAddress != null) {
+            @if(userInfo.getCurrentAddress.getStreetNumber != "Street Number") {
+                value="@userInfo.getCurrentAddress.getStreetNumber"
+            } else { }
+        } else { }
+    } else { }
 }
 
 <!DOCTYPE html>
@@ -347,37 +383,37 @@
                                                                     <div class="form-group">
                                                                         <label for="input-current-country" class="col-sm-2 col-md-2 col-lg-2 control-label">Country</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-country" placeholder="Country">
+                                                                            <input type="text" class="form-control" id="input-current-country" placeholder="Country" @valueCurrentAddressCountry>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-state" class="col-sm-2 control-label">State</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-state" placeholder="State">
+                                                                            <input type="text" class="form-control" id="input-current-state" placeholder="State" @valueCurrentAddressState>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-county" class="col-sm-2 control-label">County</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-county" placeholder="County">
+                                                                            <input type="text" class="form-control" id="input-current-county" placeholder="County" @valueCurrentAddressCounty>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-locality" class="col-sm-2 control-label">Locality</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-locality" placeholder="Locality">
+                                                                            <input type="text" class="form-control" id="input-current-locality" placeholder="Locality" @valueCurrentAddressLocality>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-street-name" class="col-sm-2 control-label">Street Name</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-street-name" placeholder="Street Name">
+                                                                            <input type="text" class="form-control" id="input-current-street-name" placeholder="Street Name" @valueCurrentAddressStreetName>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-street-number" class="col-sm-2 control-label">Street No</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-street-number" placeholder="Street No">
+                                                                            <input type="text" class="form-control" id="input-current-street-number" placeholder="Street No" @valueCurrentAddressStreetNo>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
