@@ -263,7 +263,7 @@ IS
           v_return := 1;
       END;
       
-      IF v_email IS NOT NULL AND v_username IS NOT NULL AND v_password IS NOT NULL THEN
+      IF (v_email IS NOT NULL OR v_username IS NOT NULL) AND v_password IS NOT NULL THEN
         --good! the user exists and has the given credentials
         v_return := 0;
       ELSE
@@ -295,7 +295,7 @@ IS
           v_return := 1;
       END;
       
-      IF v_email IS NOT NULL AND v_username IS NOT NULL THEN
+      IF v_email IS NOT NULL OR v_username IS NOT NULL THEN
         --good! the user exists and has the given credentials
         v_return := 0;
       ELSE
