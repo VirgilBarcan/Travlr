@@ -14,8 +14,12 @@ import play.db.DB;
 import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 
 /**
  * This class is used to handle all the database work required by other classes (by the controllers, for example)
@@ -482,4 +486,47 @@ public class DatabaseLayer {
         }
         return false;
     }
+    
+	public Response query(String q){
+		try {
+			Connection con = DB.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(q);
+			ResultSetMetaData rsmd = null;
+			ArrayList<Object[]> rows = new ArrayList<Object[]>();
+
+			
+			rsmd = rs.getMetaData();
+			int columns = rsmd.getColumnCount();
+			String[] columnNames = new String[columns];
+			
+			for (int c=0; c<columns; ++c){
+				columnNames[c] = rsmd.getColumnName(c+1);
+			}
+			
+			while (rs.next()){
+				Object[] row = new Object[columns];
+				for (int c=1; c<=columns; ++c){
+					Object o = rs.getObject(c);
+					if (o==null)
+						row[c-1] = "NULL";
+					else
+						row[c-1] = o;
+				}
+				rows.add(row);
+			}
+			
+			Object data[][] = null;
+			if (rows.size()>0){
+				data = new Object[rows.size()][];
+				for (int i=0; i<rows.size(); ++i)
+					data[i] = rows.get(i);
+			}
+			return new Response(columnNames, data);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
