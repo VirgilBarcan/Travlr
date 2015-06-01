@@ -1,3 +1,20 @@
+/* CUSTOM TYPES, FOR FAST RETREIVAL OF DATA FORM THE DB */
+  CREATE OR REPLACE TYPE USER_INFO_TYPE AS OBJECT (
+    first_name VARCHAR2(255),
+    last_name VARCHAR2(255),
+    birthdate VARCHAR2(255),
+    gender VARCHAR2(255)
+  );
+/ 
+  CREATE OR REPLACE TYPE ADDRESS_TYPE AS OBJECT (
+    country VARCHAR2(255),
+    state VARCHAR2(255),
+    county VARCHAR2(255),
+    locality VARCHAR2(255),
+    street_name VARCHAR2(255),
+    street_no VARCHAR2(255)
+  );
+/
 CREATE OR REPLACE PACKAGE TRAVLR
 IS
   /**
@@ -169,6 +186,18 @@ IS
     p_most_friends_seen IN INTEGER,
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER;
+  
+  FUNCTION GET_USER_INFO (
+    p_user_identifier IN VARCHAR2
+  ) RETURN USER_INFO_TYPE;
+  
+  FUNCTION GET_USER_HOMETOWN (
+    p_user_identifier IN VARCHAR2
+  ) RETURN ADDRESS_TYPE;
+
+  FUNCTION GET_USER_CURRENT_ADDRESS (
+    p_user_identifier IN VARCHAR2
+  ) RETURN ADDRESS_TYPE;
   
   
     procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
@@ -1029,6 +1058,184 @@ IS
       null;
     END;
 
+  FUNCTION GET_USER_INFO (
+    p_user_identifier IN VARCHAR2
+  ) RETURN USER_INFO_TYPE
+  IS
+    v_user_info USER_INFO_TYPE;
+    v_first_name VARCHAR2(255);
+    v_last_name VARCHAR2(255);
+    v_birthdate VARCHAR2(255);
+    v_gender VARCHAR2(255);
+    BEGIN
+      v_user_info := USER_INFO_TYPE('First Name', 'Last Name', 'Birthdate', 'Gender');
+      
+      --get the user_info for the specified user
+      BEGIN
+        SELECT UI.first_name, UI.last_name, UI.birthdate, UI.gender
+        INTO v_first_name, v_last_name, v_birthdate, v_gender
+        FROM USERS U, USER_INFO UI
+        WHERE U.user_info = UI.user_info_id AND
+              (U.email = p_user_identifier OR
+               U.username = p_user_identifier);
+        
+        IF v_first_name IS NOT NULL THEN
+          v_user_info.first_name := v_first_name;
+        END IF;
+        
+        IF v_last_name IS NOT NULL THEN
+          v_user_info.last_name := v_last_name;
+        END IF;
+        
+        IF v_birthdate IS NOT NULL THEN
+          v_user_info.birthdate := v_birthdate;
+        END IF;
+        
+        IF v_gender IS NOT NULL THEN
+          v_user_info.gender := v_gender;
+        END IF;
+        
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_user_info.first_name := 'First Name';
+          v_user_info.last_name := 'Last Name';
+          v_user_info.birthdate := 'Birthdate';
+          v_user_info.gender := 'Gender';
+      END;
+      
+      RETURN v_user_info;
+    END;
+  
+  FUNCTION GET_USER_HOMETOWN (
+    p_user_identifier IN VARCHAR2
+  ) RETURN ADDRESS_TYPE
+  IS
+    v_user_hometown ADDRESS_TYPE;
+    v_country VARCHAR2(255);
+    v_state VARCHAR2(255);
+    v_county VARCHAR2(255);
+    v_locality VARCHAR2(255);
+    v_street_name VARCHAR2(255);
+    v_street_no VARCHAR2(255);
+    BEGIN
+      v_user_hometown := ADDRESS_TYPE('Country', 'State', 'County', 'Locality', 'Street Name', 'Street Number');
+      
+      --get the user_info for the specified user
+      BEGIN
+        SELECT CO.name, CI.state, CI.county, CI.city_name, ST.street_name, ST.street_no
+        INTO v_country, v_state, v_county, v_locality, v_street_name, v_street_no
+        FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A, USER_INFO UI, USERS U
+        WHERE U.user_info = UI.user_info_id AND
+              (U.email = 'abc' OR U.username = 'abc') AND
+              UI.hometown_address = A.address_id AND
+              A.country_id = CO.country_id AND
+              A.city_id = CI.city_id AND
+              A.street_id = ST.street_id AND
+              CO.country_id = CI.country_id AND 
+              CI.city_id = ST.city_id;
+        
+        IF v_country IS NOT NULL THEN
+          v_user_hometown.country := v_country;
+        END IF;
+        
+        IF v_state IS NOT NULL THEN
+          v_user_hometown.state := v_state;
+        END IF;
+        
+        IF v_county IS NOT NULL THEN
+          v_user_hometown.county := v_county;
+        END IF;
+        
+        IF v_locality IS NOT NULL THEN
+          v_user_hometown.locality := v_locality;
+        END IF;
+        
+        IF v_street_name IS NOT NULL THEN
+          v_user_hometown.street_name := v_street_name;
+        END IF;
+
+        IF v_street_no IS NOT NULL THEN
+          v_user_hometown.street_no := v_street_no;
+        END IF;
+        
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_user_hometown.country := 'Country';
+          v_user_hometown.state := 'State';
+          v_user_hometown.county := 'County';
+          v_user_hometown.locality := 'Locality';
+          v_user_hometown.street_name := 'Street Name';
+          v_user_hometown.street_no := 'Street Number';
+      END;
+      
+      RETURN v_user_hometown;
+    END;
+
+  FUNCTION GET_USER_CURRENT_ADDRESS (
+    p_user_identifier IN VARCHAR2
+  ) RETURN ADDRESS_TYPE
+  IS
+    v_user_current_address ADDRESS_TYPE;
+    v_country VARCHAR2(255);
+    v_state VARCHAR2(255);
+    v_county VARCHAR2(255);
+    v_locality VARCHAR2(255);
+    v_street_name VARCHAR2(255);
+    v_street_no VARCHAR2(255);
+    BEGIN
+      v_user_current_address := ADDRESS_TYPE('Country', 'State', 'County', 'Locality', 'Street Name', 'Street Number');
+      
+      --get the user_info for the specified user
+      BEGIN
+        SELECT CO.name, CI.state, CI.county, CI.city_name, ST.street_name, ST.street_no
+        INTO v_country, v_state, v_county, v_locality, v_street_name, v_street_no
+        FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A, USER_INFO UI, USERS U
+        WHERE U.user_info = UI.user_info_id AND
+              (U.email = 'abc' OR U.username = 'abc') AND
+              UI.current_address = A.address_id AND
+              A.country_id = CO.country_id AND
+              A.city_id = CI.city_id AND
+              A.street_id = ST.street_id AND
+              CO.country_id = CI.country_id AND 
+              CI.city_id = ST.city_id;
+        
+        IF v_country IS NOT NULL THEN
+          v_user_current_address.country := v_country;
+        END IF;
+        
+        IF v_state IS NOT NULL THEN
+          v_user_current_address.state := v_state;
+        END IF;
+        
+        IF v_county IS NOT NULL THEN
+          v_user_current_address.county := v_county;
+        END IF;
+        
+        IF v_locality IS NOT NULL THEN
+          v_user_current_address.locality := v_locality;
+        END IF;
+        
+        IF v_street_name IS NOT NULL THEN
+          v_user_current_address.street_name := v_street_name;
+        END IF;
+
+        IF v_street_no IS NOT NULL THEN
+          v_user_current_address.street_no := v_street_no;
+        END IF;
+        
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_user_current_address.country := 'Country';
+          v_user_current_address.state := 'State';
+          v_user_current_address.county := 'County';
+          v_user_current_address.locality := 'Locality';
+          v_user_current_address.street_name := 'Street Name';
+          v_user_current_address.street_no := 'Street Number';
+      END;
+      
+      RETURN v_user_current_address;
+    END;
+    
    
     procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
                         airport_name AIRPORT.airport_name%TYPE,
