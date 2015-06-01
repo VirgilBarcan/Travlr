@@ -77,7 +77,19 @@ WHERE A.country_id = CO.country_id AND
       A.street_id = ST.street_id AND
       CO.country_id = CI.country_id AND 
       CI.city_id = ST.city_id;
-      
+        
+-- Select hometown address for a specified user
+SELECT CO.name, CI.state, CI.county, CI.city_name, ST.street_name, ST.street_no
+FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A, USER_INFO UI, USERS U
+WHERE U.user_info = UI.user_info_id AND
+      (U.email = 'abc' OR U.username = 'abc') AND
+      UI.hometown_address = A.address_id AND
+      A.country_id = CO.country_id AND
+      A.city_id = CI.city_id AND
+      A.street_id = ST.street_id AND
+      CO.country_id = CI.country_id AND 
+      CI.city_id = ST.city_id;
+
 -- Get user info for a specified user
 SELECT UI.first_name, UI.last_name, UI.birthdate, UI.gender
 FROM USERS U, USER_INFO UI

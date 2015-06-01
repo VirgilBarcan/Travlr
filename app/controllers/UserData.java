@@ -28,7 +28,7 @@ public class UserData extends Controller {
         UserInfo userInfo = null;
 
         //look for more info about the user in the DB
-        userInfo = getUserInfoFromDB();
+        //userInfo = getUserInfoFromDB();
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
@@ -322,7 +322,7 @@ public class UserData extends Controller {
     }
 
     private static UserInfo getUserInfoFromDB() {
-        UserInfo result = null;
+        UserInfo userInfo = null;
 
         String email = session("email");
         String username = session("username");
@@ -331,8 +331,8 @@ public class UserData extends Controller {
         String userIdentifier = (email != null ? email : username);
 
         //get user info from the DB
-        //result = DatabaseLayer.getUserInfoFromDB(userIdentifier);
+        userInfo = DatabaseLayer.getUserInfoFromDB(userIdentifier);
 
-        return result;
+        return userInfo;
     }
 }

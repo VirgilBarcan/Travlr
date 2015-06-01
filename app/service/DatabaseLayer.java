@@ -8,6 +8,7 @@ import models.Address;
 import models.UserInfo;
 import models.UserLoginData;
 import models.UserRegisterData;
+import oracle.sql.STRUCT;
 import play.db.DB;
 
 import java.io.IOException;
@@ -350,18 +351,29 @@ public class DatabaseLayer {
         CallableStatement statement = null;
         try {
             statement = connection.prepareCall(sqlQuery);
-            statement.registerOutParameter(1, Types.STRUCT);
+            statement.registerOutParameter(1, Types.STRUCT, "USER_INFO_TYPE");
             statement.setString(2, userIdentifier);
             statement.execute();
 
-            Object object;
-            object = statement.getObject(1);
+            STRUCT result = (STRUCT) statement.getObject(1);
+            Object[] attributes;
+            attributes = result.getAttributes();
 
-            //get userInfo from object ?????
+            String firstName = attributes[0].toString();
+            String lastName  = attributes[1].toString();
+            String birthdate = attributes[2].toString();
+            String gender    = attributes[3].toString();
+
+            System.out.println("GET_USER_INFO: " + firstName + " " + lastName + " " + birthdate + " " + gender);
+
+            userInfo.setFirstName(firstName);
+            userInfo.setLastName(lastName);
+            userInfo.setBirthdate(birthdate);
+            userInfo.setGender(gender);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
 
         return userInfo;
     }
