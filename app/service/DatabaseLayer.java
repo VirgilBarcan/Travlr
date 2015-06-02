@@ -697,7 +697,7 @@ public class DatabaseLayer {
 
     public static boolean isTable(String tableName){
         try {
-            String query = "? = Call TRAVLR.ADD_USER(?)";
+            String query = "? = Call TRAVLR.ISTABLE(?)";
             Connection con = DB.getConnection();
             CallableStatement stmt = con.prepareCall(query);
             stmt.registerOutParameter(1, Types.INTEGER);

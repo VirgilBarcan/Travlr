@@ -1,7 +1,9 @@
-@(tripPoint:String, labelString:String)
+@(label:String, placeholder:String, index:String, date:Boolean)
 
 <div>
-    <label>@labelString</label><input type="text" class="form-control" placeholder="@tripPoint" />
-    <label>On</label><input type="date" class="form-control" />
+    <label>@label</label><input type="text" name="airport@index" class="form-control" placeholder="@placeholder" />
+    @if(date){
+        <label>On</label><input type="date" name="date@index" class="form-control" />
+    }
     <!--input type="time" class="form-control" /-->
 </div>
