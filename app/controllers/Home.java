@@ -6,9 +6,12 @@ import java.sql.Connection;
 import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import models.Flight;
 import play.*;
 import play.db.*;
 import play.mvc.*;
@@ -30,7 +33,7 @@ public class Home extends Controller{
     public static Result trip() {
     	Map<String, String[]> request = request().body().asFormUrlEncoded();
     	if (request != null){
-    		StringBuilder flights = new StringBuilder();
+    		ArrayList<Flight> flights = new ArrayList<Flight>();
     		
     		if (!request.containsKey("submit"))
     	        return ok(trip.render());
@@ -64,11 +67,15 @@ public class Home extends Controller{
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-    				if (d!=null)
-    					flights.append(FlightStats.getFlights(from, to, d).toString());
+    				if (d!=null){
+    					ArrayList<HashMap<String, Object>> routes = FlightStats.getFlights(from, to, d);
+    					for (HashMap<String, Object> route : routes){
+    						flights.add(new Flight(route.get("iata").toString(), 0, route.get("carrier").toString(), route.get("departure").toString(), route.get("arrival").toString()));
+    					}
+    				}
     			}
     		}
-    		return ok(flights.toString());
+    		return ok(trip_completed.render(flights));
     	}
         return ok(trip.render());
     }
