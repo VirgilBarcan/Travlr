@@ -5,6 +5,9 @@ DECLARE
   v_user_info USER_INFO_TYPE;
   v_user_hometown ADDRESS_TYPE;
   v_user_current_address ADDRESS_TYPE;
+  
+  v_user_flight_preferences FLIGHT_PREFERENCES_TYPE;
+  v_user_route_preferences ROUTE_PREFERENCES_TYPE;
 BEGIN
   --v_returned := TRAVLR.ADD_USER('virgil.barcan@info.uaic.ro', 'virgil.barcan', 'parola');
   --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER:' || v_returned);
@@ -79,6 +82,15 @@ BEGIN
   
   v_returned := TRAVLR.ADD_USER_FLIGHT_PREFERENCES('yes', 'yes', 'virgil.barcan');
   DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_FLIGHT_PREFERENCES: ' || v_returned);
+  
+  v_user_flight_preferences := TRAVLR.GET_USER_FLIGHT_PREFERENCES('virgil.barcan');
+  DBMS_OUTPUT.PUT_LINE('Returned by GET_USER_FLIGHT_PREFERENCES: ' || v_user_flight_preferences.night_flights || ' ' || v_user_flight_preferences.stopovers_flights);
+  
+  v_returned := TRAVLR.ADD_USER_ROUTE_PREFERENCES('yes', 'yes', 'yes', 'virgil.barcan');
+  DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_ROUTE_PREFERENCES: ' || v_returned);
+  
+  v_user_route_preferences := TRAVLR.GET_USER_ROUTE_PREFERENCES('virgil.barcan');
+  DBMS_OUTPUT.PUT_LINE('Returned by GET_USER_ROUTE_PREFERENCES: ' || v_user_route_preferences.cheapest_route || ' ' || v_user_route_preferences.shortest_route || ' ' || v_user_route_preferences.most_friends_seen_route);
 END;
 
 /*

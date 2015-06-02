@@ -199,7 +199,7 @@ IS
   ) RETURN INTEGER;
 
   FUNCTION ADD_USER_ROUTE_PREFERENCES (
-    p_cheapese     IN VARCHAR2,
+    p_cheapest     IN VARCHAR2,
     p_shortest     IN VARCHAR2,
     p_most_friends_seen IN VARCHAR2,
     p_user_identifier IN VARCHAR2
@@ -1295,7 +1295,8 @@ IS
         BEGIN
           UPDATE PREFERENCE 
           SET preference_type = 'night_flights',
-              preference_value = p_night_flights;
+              preference_value = p_night_flights
+          WHERE preference_id = v_preference_id;
           v_return := 1;
         EXCEPTION
           WHEN OTHERS THEN
@@ -1308,7 +1309,7 @@ IS
           VALUES('night_flights', p_night_flights);
           
           --get the preference id of the newly created preference
-          SELECT P.preference_id
+          SELECT MAX(P.preference_id)
           INTO v_preference_id
           FROM PREFERENCE P
           WHERE preference_type = 'night_flights' AND
@@ -1346,7 +1347,8 @@ IS
         BEGIN
           UPDATE PREFERENCE 
           SET preference_type = 'stopovers_flights',
-              preference_value = p_stopovers;
+              preference_value = p_stopovers
+          WHERE preference_id = v_preference_id;
           v_return := 1;
         EXCEPTION
           WHEN OTHERS THEN
@@ -1360,7 +1362,7 @@ IS
           VALUES('stopovers_flights', p_stopovers);
           
           --get the preference id of the newly created preference
-          SELECT P.preference_id
+          SELECT MAX(P.preference_id)
           INTO v_preference_id
           FROM PREFERENCE P
           WHERE preference_type = 'stopovers_flights' AND
@@ -1382,16 +1384,187 @@ IS
     END;
 
   FUNCTION ADD_USER_ROUTE_PREFERENCES (
-    p_cheapese     IN VARCHAR2,
+    p_cheapest     IN VARCHAR2,
     p_shortest     IN VARCHAR2,
     p_most_friends_seen IN VARCHAR2,
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER
   IS
+    v_cheapest VARCHAR2(5);
+    v_shortest VARCHAR2(5);
+    v_most_friends_seen VARCHAR2(5);
+    v_preference_id INTEGER;
+    v_user_id INTEGER;
+    v_return INTEGER;
     BEGIN
-      null;
+      v_return := 0;
+      --CHEAPEST
+      --check if the user preference doesn't already exist
+      v_cheapest := null;
+      
+      
+      --get v_user_id
+      v_user_id := GET_USER_ID(p_user_identifier);
+      
+      BEGIN
+        SELECT P.preference_value, P.preference_id
+        INTO v_cheapest, v_preference_id
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'cheapest_route' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_cheapest := null;
+      END;
+      IF v_cheapest IS NOT NULL THEN
+        --cheapest route exist, only update
+        BEGIN
+          UPDATE PREFERENCE 
+          SET preference_type = 'cheapest_route',
+              preference_value = p_cheapest
+          WHERE preference_id = v_preference_id;
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -1;
+        END;
+      ELSE  
+        --cheapest route doesn't exist, insert
+        BEGIN
+          INSERT INTO PREFERENCE (preference_type, preference_value)
+          VALUES('cheapest_route', p_cheapest);
+          
+          --get the preference id of the newly created preference
+          SELECT MAX(P.preference_id)
+          INTO v_preference_id
+          FROM PREFERENCE P
+          WHERE preference_type = 'cheapest_route' AND
+                preference_value = p_cheapest;
+          
+          --insert user_preference
+          INSERT INTO USER_PREFERENCE (user_id, preference_id)
+          VALUES(v_user_id, v_preference_id);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -2;
+        END;
+      END IF;
+      
+      
+      --SHORTEST ROUTE
+      --check if the user preference doesn't already exist
+      v_shortest := null;
+      
+      BEGIN
+        SELECT P.preference_value, P.preference_id
+        INTO v_shortest, v_preference_id
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'shortest_route' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_shortest := null;
+      END;
+      IF v_shortest IS NOT NULL THEN
+        --shortest route exist, only update
+        BEGIN
+          UPDATE PREFERENCE 
+          SET preference_type = 'shortest_route',
+              preference_value = p_shortest
+          WHERE preference_id= v_preference_id;
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -3;
+        END;
+      ELSE  
+        --shortest route doesn't exist, insert
+        BEGIN
+          --insert preference
+          INSERT INTO PREFERENCE (preference_type, preference_value)
+          VALUES('shortest_route', p_shortest);
+          
+          --get the preference id of the newly created preference
+          SELECT MAX(P.preference_id)
+          INTO v_preference_id
+          FROM PREFERENCE P
+          WHERE preference_type = 'shortest_route' AND
+                preference_value = p_shortest;
+          
+          DBMS_OUTPUT.PUT_LINE('v_preference_id: ' || v_preference_id || ' v_user_id: ' || v_user_id);
+          
+          --insert user_preference
+          INSERT INTO USER_PREFERENCE (user_id, preference_id)
+          VALUES(v_user_id, v_preference_id);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -4;
+        END;
+      END IF;
+      
+      
+      --MOST FRIENDS SEEN ROUTE
+      --check if the user preference doesn't already exist
+      v_most_friends_seen := null;
+      
+      BEGIN
+        SELECT P.preference_value, P.preference_id
+        INTO v_most_friends_seen, v_preference_id
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'most_friends_seen' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_most_friends_seen := null;
+      END;
+      IF v_most_friends_seen IS NOT NULL THEN
+        --most friends seen route exist, only update
+        BEGIN
+          UPDATE PREFERENCE 
+          SET preference_type = 'most_friends_seen',
+              preference_value = p_most_friends_seen
+          WHERE preference_id = v_preference_id;
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -5;
+        END;
+      ELSE  
+        --most friends seen route doesn't exist, insert
+        BEGIN
+          --insert preference
+          INSERT INTO PREFERENCE (preference_type, preference_value)
+          VALUES('most_friends_seen', p_most_friends_seen);
+          
+          --get the preference id of the newly created preference
+          SELECT MAX(P.preference_id)
+          INTO v_preference_id
+          FROM PREFERENCE P
+          WHERE preference_type = 'most_friends_seen' AND
+                preference_value = p_most_friends_seen;
+          
+          DBMS_OUTPUT.PUT_LINE('v_preference_id: ' || v_preference_id || ' v_user_id: ' || v_user_id);
+          
+          --insert user_preference
+          INSERT INTO USER_PREFERENCE (user_id, preference_id)
+          VALUES(v_user_id, v_preference_id);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -6;
+        END;
+      END IF;
+      
+      RETURN v_return;
     END;
-
     
   FUNCTION GET_USER_FLIGHT_PREFERENCES (
     p_user_identifier VARCHAR2
@@ -1448,10 +1621,68 @@ IS
     p_user_identifier VARCHAR2
   ) RETURN ROUTE_PREFERENCES_TYPE
   IS
+    v_user_route_preferences ROUTE_PREFERENCES_TYPE;
+    v_cheapest VARCHAR2(5);
+    v_shortest VARCHAR2(5);
+    v_most_friends_seen VARCHAR2(5);
+    v_user_id INTEGER;
     BEGIN
-      null;
-    END;
-    
+      --initialize
+      v_user_route_preferences := ROUTE_PREFERENCES_TYPE('yes', 'yes', 'yes');
+            
+      --get v_user_id
+      v_user_id := GET_USER_ID(p_user_identifier);
+      
+      v_cheapest := null;
+      BEGIN
+        SELECT P.preference_value
+        INTO v_cheapest
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'cheapest_route' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_cheapest := null;
+      END;
+      
+      v_shortest := null;
+      BEGIN
+        SELECT P.preference_value
+        INTO v_shortest
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'shortest_route' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_shortest := null;
+      END;
+
+      v_most_friends_seen := null;
+      BEGIN
+        SELECT P.preference_value
+        INTO v_shortest
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'most_friends_seen_route' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_most_friends_seen := null;
+      END;
+      
+      IF v_cheapest IS NOT NULL AND v_shortest IS NOT NULL AND v_most_friends_seen IS NOT NULL THEN
+        v_user_route_preferences.cheapest_route := v_cheapest;
+        v_user_route_preferences.shortest_route := v_shortest;
+        v_user_route_preferences.most_friends_seen_route := v_most_friends_seen;
+      END IF;
+      
+      RETURN v_user_route_preferences;
+    END;    
    
     procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
                         airport_name AIRPORT.airport_name%TYPE,
