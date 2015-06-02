@@ -5,10 +5,8 @@ import java.io.FileReader;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLType;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -127,18 +125,18 @@ public class Importer {
 			return;
 		
 		Connection con = null;
-		ArrayList<SQLType> procedureTypes = new ArrayList<SQLType>();
+		//ArrayList<SQLType> procedureTypes = new ArrayList<SQLType>();
 		String query = "call %s (%s)";
 		try{
 			con = DB.getConnection();
 			DatabaseMetaData metadata = con.getMetaData();
 			ResultSet columns = metadata.getProcedureColumns(null, null, procName.substring(procName.indexOf('.')+1), null);
 			StringBuilder queryValues = new StringBuilder();
-			for (int i=0; columns.next(); ++i){
-				if (columns.getString("TYPE_NAME").equals("VARCHAR2")){
+			while (columns.next()){
+				/*if (columns.getString("TYPE_NAME").equals("VARCHAR2")){
 					//order.get(i).setFormat("'%s'");
-				}
-				procedureTypes.add(JDBCType.values()[columns.getInt("DATA_TYPE")]);
+				}*/
+				//procedureTypes.add(JDBCType.values()[columns.getInt("DATA_TYPE")]);
 				if (queryValues.length()>0){
 					queryValues.append(", ?");
 				}
