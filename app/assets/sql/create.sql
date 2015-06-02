@@ -3,6 +3,7 @@ drop table AIRLINE cascade constraints;
 drop table AIRPORT cascade constraints; 
 drop table ADDRESS cascade constraints; 
 drop table CITY cascade constraints; 
+drop table SREET cascade constraints; 
 drop table FRIENDS cascade constraints; 
 drop table PREFERENCE cascade constraints; 
 drop table TRIP cascade constraints; 
