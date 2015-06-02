@@ -3,7 +3,7 @@ drop table AIRLINE cascade constraints;
 drop table AIRPORT cascade constraints; 
 drop table ADDRESS cascade constraints; 
 drop table CITY cascade constraints; 
-drop table SREET cascade constraints; 
+drop table STREET cascade constraints; 
 drop table FRIENDS cascade constraints; 
 drop table PREFERENCE cascade constraints; 
 drop table TRIP cascade constraints; 
@@ -19,21 +19,33 @@ CREATE TABLE AIRPORT
  (
     airport_id INTEGER NOT NULL,
     airport_name VARCHAR2 (255) NOT NULL,
-    city VARCHAR2 (255) NOT NULL,
-    country VARCHAR2 (255) NOT NULL,
-    iata_faa_code VARCHAR2 (3),
-    icao_code VARCHAR2 (4),
+    airport_city VARCHAR2 (255) NOT NULL,
+    airport_citycode VARCHAR2 (5) NOT NULL,
+    airport_country VARCHAR2 (255) NOT NULL,
+    airport_countrycode VARCHAR2 (5) NOT NULL,
+    iata_code VARCHAR2 (3),
+    icao_code VARCHAR2 (3),
     latitude NUMBER NOT NULL,
     longitude NUMBER NOT NULL,
-    altitude NUMBER NOT NULL,
-    timezone NUMBER NOT NULL,
-    dst VARCHAR2 (1) NOT NULL,
-    tzone_db_time VARCHAR2(255) NOT NULL,
     rating_num  INTEGER ,
     rating_sum  INTEGER
   ) ;
 ALTER TABLE AIRPORT ADD CONSTRAINT AIRPORT_PK PRIMARY KEY ( airport_id ) ;
 
+DROP SEQUENCE airport_seq;
+CREATE SEQUENCE airport_seq;
+
+CREATE OR REPLACE TRIGGER trigger_airport_incr
+BEFORE INSERT ON AIRPORT
+FOR EACH ROW
+  BEGIN
+    -- :new.user_id := users_seq.NEXTVAL;
+    SELECT airport_seq.NEXTVAL
+    INTO :new.airport_id
+    FROM DUAL;
+  END;
+ /
+ 
 CREATE TABLE ADDRESS
   (
     address_id    INTEGER NOT NULL ,
@@ -61,17 +73,27 @@ CREATE TABLE AIRLINE
   (
     airline_id   INTEGER NOT NULL ,
     airline_name VARCHAR2 (255) NOT NULL ,
-    airline_alias VARCHAR2 (255) NOT NULL ,
-    iata_code VARCHAR2 (2) NOT NULL ,
+    iata_code VARCHAR2 (3) NOT NULL ,
     icao_code VARCHAR2 (3) NOT NULL ,
-    callsign VARCHAR2 (255) NOT NULL ,
-    country VARCHAR2 (255) NOT NULL ,
-    active VARCHAR2 (1) NOT NULL ,
     rating_num  INTEGER ,
     rating_sum  INTEGER
   ) ;
 ALTER TABLE AIRLINE ADD CONSTRAINT AIRLINE_PK PRIMARY KEY ( airline_id ) ;
 
+DROP SEQUENCE airline_seq;
+CREATE SEQUENCE airline_seq;
+
+CREATE OR REPLACE TRIGGER trigger_airline_incr
+BEFORE INSERT ON AIRLINE
+FOR EACH ROW
+  BEGIN
+    -- :new.user_id := users_seq.NEXTVAL;
+    SELECT airline_seq.NEXTVAL
+    INTO :new.airline_id
+    FROM DUAL;
+  END;
+ /
+ 
 CREATE TABLE AIRLINE_USER
   (
     airline_id    INTEGER NOT NULL ,
