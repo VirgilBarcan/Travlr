@@ -50,7 +50,7 @@ public class FlightStats {
 			JsonNode flightsArray = obj.get("scheduledFlights");
 			for (int i=0; i<flightsArray.size(); ++i){
 				HashMap<String, Object> flight = new HashMap<String, Object>();
-				flight.put("carrier", getCarrier(flightsArray.get(i).get("carrierFsCode").asText()));
+				flight.putAll(getInfo(flightsArray.get(i).get("carrierFsCode").asText()));
 				flight.put("departure", flightsArray.get(i).get("departureTime").asText());
 				flight.put("arrival", flightsArray.get(i).get("arrivalTime").asText());
 				flights.add(flight);
@@ -61,17 +61,20 @@ public class FlightStats {
 		return flights;
 	}
 	
-	public static String getCarrier(String code) {
+	public static HashMap<String, String> getInfo(String code) {
 		String url = "https://api.flightstats.com/flex/airlines/rest/v1/json/fs/%s?appId=%s&appKey=%s";
 		url = String.format(url, code, appID, appKey);
+		HashMap<String, String> info = new HashMap<String, String>();
 
+		info.put("carrier", code);
 		try {
 			String doc = download(url);
 			JsonNode obj = Json.parse(doc);
-			return obj.get("airline").get("name").asText();
+			info.put("iata", obj.get("airline").get("iata").asText());
+			info.put("carrier", obj.get("airline").get("name").asText());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return code;
+		return info;
 	}
 }
