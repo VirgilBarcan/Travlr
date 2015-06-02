@@ -226,26 +226,19 @@ IS
   ) RETURN ADDRESS_TYPE;
   
   
-    procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
-                        airport_name AIRPORT.airport_name%TYPE,
-                        city AIRPORT.city%TYPE,
-                        country AIRPORT.country%TYPE,
-                        iata_faa_code AIRPORT.iata_faa_code%TYPE,
+    
+    procedure addAirport(airport_name AIRPORT.airport_name%TYPE,
+                        airport_city AIRPORT.airport_city%TYPE,
+                        airport_citycode AIRPORT.airport_citycode%TYPE,
+                        airport_country AIRPORT.airport_country%TYPE,
+                        airport_countrycode AIRPORT.airport_countrycode%TYPE,
+                        iata_code AIRPORT.iata_code%TYPE,
                         icao_code AIRPORT.icao_code%TYPE,
                         latitude AIRPORT.latitude%TYPE,
-                        longitude AIRPORT.longitude%TYPE,
-                        altitude AIRPORT.altitude%TYPE,
-                        timezone AIRPORT.timezone%TYPE,
-                        dst AIRPORT.dst%TYPE,
-                        tzone_db_time AIRPORT.tzone_db_time%TYPE);
-    procedure addAirline(airline_id AIRLINE.airline_id%TYPE,
-                        airline_name AIRLINE.airline_name%TYPE,
-                        airline_alias AIRLINE.airline_alias%TYPE,
+                        longitude AIRPORT.longitude%TYPE);
+    procedure addAirline(airline_name AIRLINE.airline_name%TYPE,
                         iata_code AIRLINE.iata_code%TYPE,
-                        icao_code AIRLINE.icao_code%TYPE,
-                        callsign AIRLINE.callsign%TYPE,
-                        country AIRLINE.country%TYPE,
-                        active AIRLINE.active%TYPE);
+                        icao_code AIRLINE.icao_code%TYPE);
     procedure addFlights(flight_id FLIGHT.flight_id%TYPE,
                         airline_id FLIGHT.airline_id%TYPE,
                         src_airport FLIGHT.src_airport%TYPE,
@@ -1684,23 +1677,20 @@ IS
       RETURN v_user_route_preferences;
     END;    
    
-    procedure addAirport(airport_id AIRPORT.airport_id%TYPE,
-                        airport_name AIRPORT.airport_name%TYPE,
-                        city AIRPORT.city%TYPE,
-                        country AIRPORT.country%TYPE,
-                        iata_faa_code AIRPORT.iata_faa_code%TYPE,
+    procedure addAirport(airport_name AIRPORT.airport_name%TYPE,
+                        airport_city AIRPORT.airport_city%TYPE,
+                        airport_citycode AIRPORT.airport_citycode%TYPE,
+                        airport_country AIRPORT.airport_country%TYPE,
+                        airport_countrycode AIRPORT.airport_countrycode%TYPE,
+                        iata_code AIRPORT.iata_code%TYPE,
                         icao_code AIRPORT.icao_code%TYPE,
                         latitude AIRPORT.latitude%TYPE,
-                        longitude AIRPORT.longitude%TYPE,
-                        altitude AIRPORT.altitude%TYPE,
-                        timezone AIRPORT.timezone%TYPE,
-                        dst AIRPORT.dst%TYPE,
-                        tzone_db_time AIRPORT.tzone_db_time%TYPE) as
+                        longitude AIRPORT.longitude%TYPE) as
     begin
-        insert into AIRPORT values(airport_id, airport_name, city, country,
-                                    iata_faa_code, icao_code, latitude,
-                                    longitude, altitude, timezone, dst,
-                                    tzone_db_time, 0, 0);
+        insert into AIRPORT values(0, airport_name, airport_city,
+                                    airport_citycode, airport_country,
+                                    airport_countrycode, iata_code, icao_code,
+                                    latitude, longitude, 0, 0);
         exception
             when others then
                 begin
@@ -1709,18 +1699,11 @@ IS
                 end;
         commit;
     end;
-    procedure addAirline(airline_id AIRLINE.airline_id%TYPE,
-                        airline_name AIRLINE.airline_name%TYPE,
-                        airline_alias AIRLINE.airline_alias%TYPE,
+    procedure addAirline(airline_name AIRLINE.airline_name%TYPE,
                         iata_code AIRLINE.iata_code%TYPE,
-                        icao_code AIRLINE.icao_code%TYPE,
-                        callsign AIRLINE.callsign%TYPE,
-                        country AIRLINE.country%TYPE,
-                        active AIRLINE.active%TYPE) as
+                        icao_code AIRLINE.icao_code%TYPE) as
     begin
-        insert into AIRLINE values(airline_id, airline_name, airline_alias,
-                                    iata_code, icao_code, callsign,
-                                    country, active, 0, 0);
+        insert into AIRLINE values(0, airline_name, iata_code, icao_code, 0, 0);
         exception
             when others then
                 begin
