@@ -296,9 +296,14 @@
         window.onload = init;
 
         function init(){
-        var dataList = document.getElementById('results-hometown');
-        var input = document.getElementById('search-hometown');
+        var dataListHometown = document.getElementById('results-hometown');
+        var inputHometown = document.getElementById('search-hometown');
 
+        var dataListCurrent = document.getElementById('results-current-location');
+        var inputCurrent = document.getElementById('search-current-location');
+
+        var dataListVisited = document.getElementById('results-new-location');
+        var inputVisited = document.getElementById('search-new-location');
         //alert(dataList);
         //alert(input);
 
@@ -314,26 +319,38 @@
                     // Loop over the JSON array.
                     jsonOptions.forEach(function(item) {
                         // Create a new <option> element.
-                        var option = document.createElement('option');
+                        var optionHometown = document.createElement('option');
+                        var optionCurrent = document.createElement('option');
+                        var optionNew = document.createElement('option');
+
                         // Set the value using the item in the JSON array.
 
                         var value = item.country + " " + item.state + " " + item.county + " " + item.locality + " " + item.street_name + " " + item.street_number;
 
-                        option.value = value;
+                        optionHometown.value = value;
+                        optionCurrent.value = value;
+                        optionNew.value = value;
+
                         // Add the <option> element to the <datalist>.
-                        dataList.appendChild(option);
+                        dataListHometown.appendChild(optionHometown);
+                        dataListCurrent.appendChild(optionCurrent);
+                        dataListNew.appendChild(optionsNew);
                     });
 
                     // Update the placeholder text.
-                    input.placeholder = "Search Hometown";
+                    inputHometown.placeholder = "Search Hometown";
+                    inputCurrent.placeholder = "Search Current Location";
+                    inputNew.placeholder = "Search and Add New Location"
                 } else {
                     // An error occured :(
-                    input.placeholder = "Couldn't load datalist options :(";
+                    inputHometown.placeholder = "Couldn't load datalist options :(";
+                    inputCurrent.placeholder = "Couldn't load datalist options :(";
+                    inputNew.placeholder = "Couldn't load datalist options :(";
                 }
             }
         };
 
-        request.open("GET", "search_user_hometown", true);
+        request.open("GET", "search_addresses", true);
         request.send();
         }
 
@@ -528,7 +545,8 @@
                                                                 <div class="form-group" style="display:inline;">
                                                                     <div class="input-group" style="display:table;">
                                                                         <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
-                                                                        <input type="text" class="form-control" name="search-current-location" placeholder="Search location" autocomplete="off" autofocus="autofocus">
+                                                                        <input type="text" class="form-control search-current-location" name="search-current-location" id="search-current-location" placeholder="Search current location" autocomplete="off" autofocus="autofocus" list="results-current-location">
+                                                                        <datalist id="results-current-location"></datalist>
                                                                     </div>
                                                                 </div>
                                                             </form>
@@ -591,11 +609,12 @@
                                                 </div>
                                                 <div id="collapse-places-visited-edit" class="panel-collapse collapse">
                                                     <div class="panel-body">
-                                                        <form class="form-horizontal" id="form-search-current-location">
+                                                        <form class="form-horizontal" id="form-search-new-location">
                                                             <div class="form-group" style="display:inline;">
                                                                 <div class="input-group" style="display:table;">
                                                                     <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
-                                                                    <input type="text" class="form-control" name="search-current-location" placeholder="Search and Add new location" autocomplete="off" autofocus="autofocus">
+                                                                    <input type="text" class="form-control search-new-location" name="search-new-location" id="search-new-location" placeholder="Search and Add new location" autocomplete="off" autofocus="autofocus" list="results-new-location">
+                                                                    <datalist id="results-new-location"></datalist>
                                                                 </div>
                                                             </div>
                                                         </form>

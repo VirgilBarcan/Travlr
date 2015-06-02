@@ -45,10 +45,10 @@ GET         /contact                             controllers.Contact.index()
 GET         /help                                controllers.Help.index()
 
 #Group Trip Page
-GET         /group_trip                 controllers.GroupTrip.index()
+GET         /group_trip                          controllers.GroupTrip.index()
 
-POST        /group_trip                 controllers.GroupTrip.postIndex()
+POST        /group_trip                          controllers.GroupTrip.postIndex()
 
 #SearchHometown
-GET         /search_user_hometown                   controllers.UserData.searchUserHometown()
-GET         /search_user_hometown_results           controllers.UserData.searchUserHometownResults()
+GET         /search_addresses                    controllers.UserData.searchAddresses()
+GET         /search_addresses_results        controllers.UserData.searchAddressesResults()

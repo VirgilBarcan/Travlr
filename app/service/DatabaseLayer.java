@@ -396,7 +396,7 @@ public class DatabaseLayer {
         return result;
     }
 
-    public static ArrayList<Address> getHometownRecommendations() {
+    public static ArrayList<Address> getAddressesRecommendations() {
         ArrayList<Address> recommendations = new ArrayList<Address>();
         Address userHometown = null;
 

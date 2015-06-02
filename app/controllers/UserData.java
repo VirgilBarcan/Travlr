@@ -1,8 +1,6 @@
 package controllers;
 
 import models.*;
-import play.*;
-import play.data.Form;
 import play.mvc.*;
 import service.DatabaseLayer;
 import views.html.*;
@@ -15,7 +13,7 @@ import java.util.Map;
  */
 public class UserData extends Controller {
 
-    private static ArrayList<Address> recommendationsHometown;
+    private static ArrayList<Address> addresses;
 
     public static Result viewUserData() {
         String visibleEdit = "hidden";
@@ -608,31 +606,31 @@ public class UserData extends Controller {
         return userInfo;
     }
 
-    public static Result searchUserHometown() {
-        recommendationsHometown = new ArrayList<Address>();
+    public static Result searchAddresses() {
+        addresses = new ArrayList<Address>();
 
-        recommendationsHometown = DatabaseLayer.getHometownRecommendations();
+        addresses = DatabaseLayer.getAddressesRecommendations();
 
-        return searchUserHometownResults();
+        return searchAddressesResults();
     }
 
-    public static Result searchUserHometownResults() {
+    public static Result searchAddressesResults() {
 
-        String recommendationsStringHTML = createAddressDatalist(recommendationsHometown);
+        String recommendationsStringHTML = createAddressDatalist(addresses);
 
         System.out.println(recommendationsStringHTML);
 
         return ok(recommendationsStringHTML);
     }
 
-    private static String createAddressDatalist(ArrayList<Address> recommendationsHometown) {
+    private static String createAddressDatalist(ArrayList<Address> addresses) {
         String result = "[{";
-        int n = recommendationsHometown.size();
+        int n = addresses.size();
 
         for (int i = 0; i < n - 1; ++i){
-            result += recommendationsHometown.get(i).toJSON() + "}, ";
+            result += addresses.get(i).toJSON() + "}, ";
         }
-        result += "{" + recommendationsHometown.get(n - 1).toJSON() + "}]";
+        result += "{" + addresses.get(n - 1).toJSON() + "}]";
 
         System.out.println("result: " + result);
 
