@@ -34,4 +34,12 @@ public class FlightPreferences {
     public void setStopowersFlight(String stopowersFlight) {
         this.stopowersFlight = stopowersFlight;
     }
+
+    @Override
+    public String toString() {
+        return "FlightPreferences{" +
+                "nightFlight='" + nightFlight + '\'' +
+                ", stopowersFlight='" + stopowersFlight + '\'' +
+                '}';
+    }
 }

@@ -15,6 +15,17 @@
     street_no VARCHAR2(255)
   );
 /
+  CREATE OR REPLACE TYPE FLIGHT_PREFERENCE_TYPE AS OBJECT (
+    night_flights VARCHAR2(5),
+    stopovers_flights VARCHAR2(5)
+  );
+/
+  CREATE OR REPLACE TYPE ROUTE_PREFERENCE_TYPE AS OBJECT (
+    cheapest_route VARCHAR2(5),
+    shortest_route VARCHAR2(5),
+    most_friends_seen_route VARCHAR2(5)
+  );
+/
 CREATE OR REPLACE PACKAGE TRAVLR
 IS
   /**
@@ -175,15 +186,15 @@ IS
   ) RETURN INTEGER;
 
   FUNCTION ADD_USER_FLIGHT_PREFERENCES (
-    p_night_flights IN INTEGER,
-    p_stopovers     IN INTEGER,
+    p_night_flights IN VARCHAR2,
+    p_stopovers     IN VARCHAR2,
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER;
 
   FUNCTION ADD_USER_ROUTE_PREFERENCES (
-    p_cheapese     IN INTEGER,
-    p_shortest     IN INTEGER,
-    p_most_friends_seen IN INTEGER,
+    p_cheapese     IN VARCHAR2,
+    p_shortest     IN VARCHAR2,
+    p_most_friends_seen IN VARCHAR2,
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER;
   
@@ -1041,19 +1052,133 @@ IS
     END;
 
   FUNCTION ADD_USER_FLIGHT_PREFERENCES (
-    p_night_flights IN INTEGER,
-    p_stopovers     IN INTEGER,
+    p_night_flights IN VARCHAR2,
+    p_stopovers     IN VARCHAR2,
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER
   IS
+    v_night_flights VARCHAR2(5);
+    v_stopovers_flights VARCHAR2(5);
+    v_preference_id INTEGER;
+    v_user_id INTEGER;
+    v_return INTEGER;
     BEGIN
-      null;
+      v_return := 0;
+      --NIGHT_FLIGHTS
+      --check if the user preference doesn't already exist
+      v_night_flights := null;
+      
+      
+      --get v_user_id
+      v_user_id := GET_USER_ID(p_user_identifier);
+      
+      BEGIN
+        SELECT P.preference_value, P.preference_id
+        INTO v_night_flights, v_preference_id
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'night_flights' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_night_flights := null;
+      END;
+      IF v_night_flights IS NOT NULL THEN
+        --night flights exist, only update
+        BEGIN
+          UPDATE PREFERENCE 
+          SET preference_type = 'night_flights',
+              preference_value = p_night_flights;
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -1;
+        END;
+      ELSE  
+        --night flights don't exist, insert
+        BEGIN
+          INSERT INTO PREFERENCE (preference_type, preference_value)
+          VALUES('night_flights', p_night_flights);
+          
+          --get the preference id of the newly created preference
+          SELECT P.preference_id
+          INTO v_preference_id
+          FROM PREFERENCE P
+          WHERE preference_type = 'night_flights' AND
+                preference_value = p_night_flights;
+          
+          --insert user_preference
+          INSERT INTO USER_PREFERENCE (user_id, preference_id)
+          VALUES(v_user_id, v_preference_id);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -2;
+        END;
+      END IF;
+      
+      
+      --STOPOVERS_FLIGHTS
+      --check if the user preference doesn't already exist
+      v_stopovers_flights := null;
+      
+      BEGIN
+        SELECT P.preference_value, P.preference_id
+        INTO v_stopovers_flights, v_preference_id
+        FROM PREFERENCE P, USER_PREFERENCE UP, USERS U
+        WHERE P.preference_type = 'stopovers_flights' AND
+              UP.preference_id = P.preference_id AND
+              U.user_id = UP.user_id AND
+              U.user_id = v_user_id;
+      EXCEPTION
+        WHEN OTHERS THEN
+          v_stopovers_flights := null;
+      END;
+      IF v_stopovers_flights IS NOT NULL THEN
+        --stopover flights exist, only update
+        BEGIN
+          UPDATE PREFERENCE 
+          SET preference_type = 'stopovers_flights',
+              preference_value = p_stopovers;
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -3;
+        END;
+      ELSE  
+        --stopover flights don't exist, insert
+        BEGIN
+          --insert preference
+          INSERT INTO PREFERENCE (preference_type, preference_value)
+          VALUES('stopovers_flights', p_stopovers);
+          
+          --get the preference id of the newly created preference
+          SELECT P.preference_id
+          INTO v_preference_id
+          FROM PREFERENCE P
+          WHERE preference_type = 'stopovers_flights' AND
+                preference_value = p_stopovers;
+          
+          DBMS_OUTPUT.PUT_LINE('v_preference_id: ' || v_preference_id || ' v_user_id: ' || v_user_id);
+          
+          --insert user_preference
+          INSERT INTO USER_PREFERENCE (user_id, preference_id)
+          VALUES(v_user_id, v_preference_id);
+          v_return := 1;
+        EXCEPTION
+          WHEN OTHERS THEN
+            v_return := -4;
+        END;
+      END IF;
+      
+      RETURN v_return;
     END;
 
   FUNCTION ADD_USER_ROUTE_PREFERENCES (
-    p_cheapese     IN INTEGER,
-    p_shortest     IN INTEGER,
-    p_most_friends_seen IN INTEGER,
+    p_cheapese     IN VARCHAR2,
+    p_shortest     IN VARCHAR2,
+    p_most_friends_seen IN VARCHAR2,
     p_user_identifier IN VARCHAR2
   ) RETURN INTEGER
   IS

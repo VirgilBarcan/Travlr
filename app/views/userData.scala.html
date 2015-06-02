@@ -485,7 +485,7 @@
                                                             </form>
                                                             <div>
                                                                 <label for="form-current-location">Or introduce it here: </label>
-                                                                <form class="form-horizontal" id="form-current-location">
+                                                                <form class="form-horizontal" id="form-current-location" action="@routes.UserData.editUserCurrentAddress()" method="post">
                                                                     <div class="form-group">
                                                                         <label for="input-current-country" class="col-sm-2 col-md-2 col-lg-2 control-label">Country</label>
                                                                         <div class="col-sm-10">
@@ -863,7 +863,7 @@
                                                 <div id="collapse-flight-edit" class="panel-collapse collapse">
                                                     <div class="panel-body">
                                                         <div class="flight-preferences">
-                                                            <form class="form-horizontal" id="form-flight-preferences">
+                                                            <form class="form-horizontal" id="form-flight-preferences" action="@routes.UserData.editUserFlightPreferences()" method="post">
                                                                 <div class="form-group">
                                                                     <label for="radio-night-flight-group" class="col-sm-2 control-label">Night Flights</label>
                                                                     <div class="col-sm-10 radio-night-flight-group" id="radio-night-flight-group">
@@ -906,7 +906,7 @@
                                                 <div id="collapse-route-edit" class="panel-collapse collapse">
                                                     <div class="panel-body">
                                                         <div class="route-preferences">
-                                                            <form class="form-horizontal" id="form-route-preferences">
+                                                            <form class="form-horizontal" id="form-route-preferences" action="@routes.UserData.editUserRoutePreferences()" method="post">
                                                                 <div class="form-group">
                                                                     <label for="radio-cheapest-route-group" class="col-sm-2 control-label">Cheapest</label>
                                                                     <div class="col-sm-10 radio-cheapest-route-group" id="radio-cheapest-route-group">

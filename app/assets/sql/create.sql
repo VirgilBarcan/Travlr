@@ -181,7 +181,7 @@ CREATE TABLE TRIP
     trip_id             INTEGER NOT NULL ,
     origin_address      INTEGER NOT NULL ,
     destination_address INTEGER NOT NULL ,
-    departure_time      DATE NOT NULL ,
+    departure_date      DATE NOT NULL ,
     arrival_date        DATE NOT NULL
   ) ;
 ALTER TABLE TRIP ADD CONSTRAINT TRIP_PK PRIMARY KEY ( trip_id ) ;

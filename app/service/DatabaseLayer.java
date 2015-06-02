@@ -4,10 +4,7 @@ package service;
  * Created by Virgil Barcan on 30.05.2015.
  */
 
-import models.Address;
-import models.UserInfo;
-import models.UserLoginData;
-import models.UserRegisterData;
+import models.*;
 import oracle.sql.STRUCT;
 import play.db.DB;
 
@@ -300,12 +297,12 @@ public class DatabaseLayer {
         int result = -1;
 
         // We know for sure that if the user inserts into either email of username, any of these is different from ""
-        String country = userCurrentAddress.getCountry();
-        String state = userCurrentAddress.getState();
-        String county = userCurrentAddress.getCounty();
-        String locality = userCurrentAddress.getLocality();
-        String streetName = userCurrentAddress.getStreetName();
-        String streetNumber = userCurrentAddress.getStreetNumber();
+        String country = newVisitedPlace.getCountry();
+        String state = newVisitedPlace.getState();
+        String county = newVisitedPlace.getCounty();
+        String locality = newVisitedPlace.getLocality();
+        String streetName = newVisitedPlace.getStreetName();
+        String streetNumber = newVisitedPlace.getStreetNumber();
 
         // Send an request to the DB to find if the user exists
         // NOT TESTED!!!
@@ -538,6 +535,165 @@ public class DatabaseLayer {
         return userCurrentAddress;
     }
 
+    public static AirlinePreferences getUserAirlinePreferencesFromDB(String userIdentifier) {
+        AirlinePreferences userAirlinePreferences = null;
+
+        System.out.println("getUserAirlinePreferencesFromDB> userIdentifier: " + userIdentifier);
+
+        // get userInfo from DB
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.GET_USER_AIRLINE_PREFERENCES(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            //TODO define a new SQL Type
+            statement.registerOutParameter(1, Types.STRUCT, "ADDRESS_TYPE");
+            statement.setString(2, userIdentifier);
+            statement.execute();
+
+            STRUCT result = (STRUCT) statement.getObject(1);
+
+            if (result != null) {
+                System.out.println("Received STRUCT: " + result);
+                userAirlinePreferences = new AirlinePreferences();
+            }
+            else{
+                System.out.println("STRUCT null");
+            }
+
+            Object[] attributes;
+            attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
+
+            String country = attributes[0].toString();
+
+            //System.out.println("GET_USER_CURRENT_ADDRESS: " + country + " " + state + " " + county + " " + locality + " " + streetName + " " + streetNo);
+
+            userAirlinePreferences.setPreferedAirlines(null);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userAirlinePreferences;
+    }
+
+    public static FlightPreferences getUserFlightPreferencesFromDB(String userIdentifier) {
+        FlightPreferences userFlightPreferences = null;
+
+        System.out.println("getUserAirlinePreferencesFromDB> userIdentifier: " + userIdentifier);
+
+        // get userInfo from DB
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.GET_USER_FLIGHT_PREFERENCES(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            //TODO define a new SQL Type
+            statement.registerOutParameter(1, Types.STRUCT, "FLIGHT_PREFERENCES_TYPE");
+            statement.setString(2, userIdentifier);
+            statement.execute();
+
+            STRUCT result = (STRUCT) statement.getObject(1);
+
+            if (result != null) {
+                System.out.println("Received STRUCT: " + result);
+                userFlightPreferences = new FlightPreferences();
+            }
+            else{
+                System.out.println("STRUCT null");
+            }
+
+            Object[] attributes;
+            attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
+
+            String nightFlights = attributes[0].toString();
+            String stopoversFlights = attributes[1].toString();
+
+            //System.out.println("GET_USER_FLIGHT_PREFERENCES: " + nightFlights + " " + stopoversFlights);
+
+            userFlightPreferences.setNightFlight(nightFlights);
+            userFlightPreferences.setStopowersFlight(stopoversFlights);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userFlightPreferences;
+    }
+
+    public static RoutePreferences getUserRoutePreferencesFromDB(String userIdentifier) {
+        RoutePreferences userRoutePreferences = null;
+
+        System.out.println("getUserAirlinePreferencesFromDB> userIdentifier: " + userIdentifier);
+
+        // get userInfo from DB
+        // Send an request to the DB to find if the user exists
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.GET_USER_ROUTE_PREFERENCES(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            //TODO define a new SQL Type
+            statement.registerOutParameter(1, Types.STRUCT, "ROUTE_PREFERENCES_TYPE");
+            statement.setString(2, userIdentifier);
+            statement.execute();
+
+            STRUCT result = (STRUCT) statement.getObject(1);
+
+            if (result != null) {
+                System.out.println("Received STRUCT: " + result);
+                userRoutePreferences = new RoutePreferences();
+            }
+            else{
+                System.out.println("STRUCT null");
+            }
+
+            Object[] attributes;
+            attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
+
+            String cheapestRoute = attributes[0].toString();
+            String shortestRoute = attributes[1].toString();
+            String mostFriendsSeenRoute = attributes[2].toString();
+
+            //System.out.println("GET_USER_FLIGHT_PREFERENCES: " + nightFlights + " " + stopoversFlights);
+
+            userRoutePreferences.setCheapestRoute(cheapestRoute);
+            userRoutePreferences.setShortestRoute(shortestRoute);
+            userRoutePreferences.setMostFriendsSeenRoute(mostFriendsSeenRoute);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return userRoutePreferences;
+    }
 
     public static boolean isTable(String tableName){
     	try {

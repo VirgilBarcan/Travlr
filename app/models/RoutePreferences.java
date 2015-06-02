@@ -45,4 +45,13 @@ public class RoutePreferences {
     public void setMostFriendsSeenRoute(String mostFriendsSeenRoute) {
         this.mostFriendsSeenRoute = mostFriendsSeenRoute;
     }
+
+    @Override
+    public String toString() {
+        return "RoutePreferences{" +
+                "cheapestRoute='" + cheapestRoute + '\'' +
+                ", shortestRoute='" + shortestRoute + '\'' +
+                ", mostFriendsSeenRoute='" + mostFriendsSeenRoute + '\'' +
+                '}';
+    }
 }

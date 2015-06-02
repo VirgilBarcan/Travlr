@@ -18,18 +18,8 @@ public class UserData extends Controller {
         String visibleEdit = "hidden";
         String visibleView = "visible";
 
-        UserInfo userInfo = null;
-        Address userHometown = null;
-        Address userCurrentAddress = null;
-
-        //look for more info about the user in the DB
-        userInfo = getUserInfoFromDB();
-
-        userHometown = getUserHometownFromDB();
-        userInfo.setHometown(userHometown);
-
-        userCurrentAddress = getUserCurrentAddressFromDB();
-        userInfo.setCurrentAddress(userCurrentAddress);
+        UserInfo userInfo;
+        userInfo = getAllUserInfoFromDB();
 
         System.out.println("viewEditData> userInfo: " + userInfo.toString());
 
@@ -41,17 +31,7 @@ public class UserData extends Controller {
         String visibleView = "hidden";
 
         UserInfo userInfo = null;
-        Address userHometown = null;
-        Address userCurrentAddress = null;
-
-        //look for more info about the user in the DB
-        userInfo = getUserInfoFromDB();
-
-        userHometown = getUserHometownFromDB();
-        userInfo.setHometown(userHometown);
-
-        userCurrentAddress = getUserCurrentAddressFromDB();
-        userInfo.setCurrentAddress(userCurrentAddress);
+        userInfo = getAllUserInfoFromDB();
 
         System.out.println("userEditData> userInfo: " + userInfo.toString());
 
@@ -233,6 +213,36 @@ public class UserData extends Controller {
         }
     }
 
+    public static Result editUserAirlinePreferences() {
+        AirlinePreferences userAirlinePreferences= new AirlinePreferences();
+
+        Map<String, String[]> request = request().body().asFormUrlEncoded();
+
+        // Add to the database the information given by the user
+        boolean addToDB = false;
+        //TODO addToDB = addUserAirlinePreferencesToDB(userAirlinePreferences);
+
+        if (addToDB == false){
+            // the update of the DB didn't end up with success
+            // ask the user to reinsert the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            return retryEditUserData();
+        }
+        else{
+            // the update of the DB did end up with success
+            // redirect the user to the same page, but with the fields containing the data
+
+            String visibleEdit = "visible";
+            String visibleView = "hidden";
+
+            //return showWithAirlinePreferences(userAirlinePreferences);
+            return redirect(controllers.routes.UserData.editUserData());
+        }
+    }
+
     public static Result editUserFlightPreferences() {
         FlightPreferences userFlightPreferences  = new FlightPreferences();
 
@@ -249,6 +259,7 @@ public class UserData extends Controller {
         userFlightPreferences.setNightFlight(nightFlight);
         userFlightPreferences.setStopowersFlight(stopowerFlight);
 
+        //!!! As a TRICK, we could add this data to the session, to have it in a somewhat persistent state
         // Add to the database the information given by the user
         boolean addToDB = false;
         //TODO addToDB = addUserFlightPreferencesToDB(userFlightPreferences);
@@ -279,7 +290,7 @@ public class UserData extends Controller {
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
 
-        // Flight Preferences
+        // Route Preferences
         String cheapestRoute = null;
         String shortestRoute = null;
         String mostFriendsSeenRoute = null;
@@ -294,6 +305,7 @@ public class UserData extends Controller {
         userRoutePreferences.setShortestRoute(shortestRoute);
         userRoutePreferences.setMostFriendsSeenRoute(mostFriendsSeenRoute);
 
+        //!!! As a TRICK, we could add this data to the session, to have it in a somewhat persistent state
         // Add to the database the information given by the user
         boolean addToDB = false;
         //TODO addToDB = addUserRoutePreferencesToDB(userFlightPreferences);
@@ -372,7 +384,6 @@ public class UserData extends Controller {
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
     }
-
 
     /**
      * This method is used to add the user data to the session, for fast access
@@ -512,6 +523,86 @@ public class UserData extends Controller {
         userCurrentAddress = DatabaseLayer.getUserCurrentAddressFromDB(userIdentifier);
 
         return userCurrentAddress;
+    }
+
+    private static AirlinePreferences getUserAirlinePreferencesFromDB() {
+        AirlinePreferences userAirlinePreferences = null;
+
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        String userIdentifier = email;
+
+        if (email.equals("")) userIdentifier = username;
+
+        //get the airline preferences from the DB
+        userAirlinePreferences = DatabaseLayer.getUserAirlinePreferencesFromDB(userIdentifier);
+
+        return userAirlinePreferences;
+    }
+
+    private static FlightPreferences getUserFlightPreferencesFromDB() {
+        FlightPreferences userFlightPreferences = new FlightPreferences();
+
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        String userIdentifier = email;
+
+        if (email.equals("")) userIdentifier = username;
+
+        //get the flight preferences from the DB
+        userFlightPreferences = DatabaseLayer.getUserFlightPreferencesFromDB(userIdentifier);
+
+        return userFlightPreferences;
+    }
+
+    private static RoutePreferences getUserRoutePreferencesFromDB() {
+        RoutePreferences userRoutePreferences = new RoutePreferences();
+
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        String userIdentifier = email;
+
+        if (email.equals("")) userIdentifier = username;
+
+        //get the route preferences from the DB
+        userRoutePreferences = DatabaseLayer.getUserRoutePreferencesFromDB(userIdentifier);
+
+        return userRoutePreferences;
+    }
+
+    private static UserInfo getAllUserInfoFromDB() {
+        UserInfo userInfo = null;
+        Address userHometown = null;
+        Address userCurrentAddress = null;
+        FlightPreferences userFlightPreferences = null;
+        RoutePreferences userRoutePreferences = null;
+
+        //look for more info about the user in the DB
+        userInfo = getUserInfoFromDB();
+
+        //get user's hometown
+        userHometown = getUserHometownFromDB();
+        userInfo.setHometown(userHometown);
+
+        //get user's current address
+        userCurrentAddress = getUserCurrentAddressFromDB();
+        userInfo.setCurrentAddress(userCurrentAddress);
+
+        //get user's flight preferences
+        userFlightPreferences = getUserFlightPreferencesFromDB();
+        userInfo.setFlightPreferences(userFlightPreferences);
+
+        //get user's route preferences
+        userRoutePreferences = getUserRoutePreferencesFromDB();
+        userInfo.setRoutePreferences(userRoutePreferences);
+
+        return userInfo;
     }
 
 }

@@ -13,6 +13,9 @@ public class UserInfo {
     private Address hometown;
     private Address currentAddress;
 
+    private FlightPreferences flightPreferences;
+    private RoutePreferences routePreferences;
+
     public UserInfo() {
         firstName = "";
         lastName = "";
@@ -25,6 +28,17 @@ public class UserInfo {
         this.lastName = lastName;
         this.birthdate = birthdate;
         this.gender = gender;
+    }
+
+    public UserInfo(String firstName, String lastName, String birthdate, String gender, Address hometown, Address currentAddress, FlightPreferences flightPreferences, RoutePreferences routePreferences) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.gender = gender;
+        this.hometown = hometown;
+        this.currentAddress = currentAddress;
+        this.flightPreferences = flightPreferences;
+        this.routePreferences = routePreferences;
     }
 
     public String getFirstName() {
@@ -75,6 +89,22 @@ public class UserInfo {
         this.currentAddress = currentAddress;
     }
 
+    public RoutePreferences getRoutePreferences() {
+        return routePreferences;
+    }
+
+    public void setRoutePreferences(RoutePreferences routePreferences) {
+        this.routePreferences = routePreferences;
+    }
+
+    public FlightPreferences getFlightPreferences() {
+        return flightPreferences;
+    }
+
+    public void setFlightPreferences(FlightPreferences flightPreferences) {
+        this.flightPreferences = flightPreferences;
+    }
+
     @Override
     public String toString() {
         return "UserInfo{" +
@@ -84,6 +114,8 @@ public class UserInfo {
                 ", gender='" + gender + '\'' +
                 ", hometown=" + hometown +
                 ", currentAddress=" + currentAddress +
+                ", flightPreferences=" + flightPreferences +
+                ", routePreferences=" + routePreferences +
                 '}';
     }
 }
