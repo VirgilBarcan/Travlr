@@ -16,7 +16,7 @@ GET         /                                    controllers.Login.loginRegister
 GET         /home                                controllers.Home.index()
 GET         /Home/map                            controllers.Home.map()
 GET         /Home/trip                           controllers.Home.trip()
-POST         /Home/trip                           controllers.Home.trip()
+POST        /Home/trip                           controllers.Home.trip()
 GET         /Home/importer                       controllers.Home.importer()
 
 # Login Register page

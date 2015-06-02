@@ -1,0 +1,48 @@
+html {
+	position: relative;
+	min-height: 100%;
+}
+
+body {
+	padding-top: 70px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+.btn-container-right {
+  direction: rtl;
+
+  * {
+    direction: ltr;
+  }
+}
+
+.profile-picture, .profile-message-picture { 
+	transition: all .2s ease-in-out;
+}
+
+.profile-picture {
+	width: 64px;
+	height: 64px;
+}
+
+.profile-message-picture {
+	width: 48px;
+	height: 48px;
+}
+
+.profile-picture:hover, .profile-message-picture:hover { 
+    transform: scale(1.1);
+}
+
+textarea[name="submit-message"] {
+	resize: none;
+}
+
+footer {
+	margin-top: 10px;
+}
