@@ -15,6 +15,59 @@ drop table USER_TRIP cascade constraints;
 drop table USERS cascade constraints; 
 --DROP SEQUENCE users_seq;
 
+DROP TABLE POST CASCADE CONSTRAINTS;
+                
+CREATE TABLE POST
+(
+    post_id INTEGER NOT NULL,
+    transmitter      INTEGER NOT NULL, -- Can't use FROM because it's a reserved keyword
+    receiver      INTEGER NOT NULL,
+    availability INTEGER DEFAULT 0, -- 0 - public, 1 - friends, 2 - only me
+    message VARCHAR2(1024) NOT NULL,  
+    at VARCHAR(32) -- Can't use timestamp or date name ( are taken by data types )
+);
+
+ALTER TABLE POST ADD CONSTRAINT POST_PK PRIMARY KEY (post_id);
+
+ALTER TABLE POST ADD CONSTRAINT POST_TRANSMITTER_FK FOREIGN KEY (transmitter) REFERENCES USERS(user_id);
+ALTER TABLE POST ADD CONSTRAINT POST_RECEIVER_FK FOREIGN KEY (receiver) REFERENCES USERS(user_id);
+
+DROP SEQUENCE post_seq;
+CREATE SEQUENCE post_seq;
+
+CREATE OR REPLACE TRIGGER trigger_post_incr
+BEFORE INSERT ON POST
+FOR EACH ROW
+  BEGIN
+    SELECT post_seq.NEXTVAL
+    INTO :new.post_id
+    FROM DUAL;
+
+    :new.at := TO_CHAR(SYSDATE, 'DD-MM-YYYY HH24:MI:SS');
+  END;
+ /
+
+DROP TABLE PROFILE_PICTURE CASCADE CONSTRAINTS;
+                
+CREATE TABLE PROFILE_PICTURE
+(
+    user_id INTEGER NOT NULL,
+    picture_id INTEGER NOT NULL
+);
+
+ALTER TABLE PROFILE_PICTURE ADD CONSTRAINT PROFILE_PICTURE_USER_PK PRIMARY KEY (user_id);
+ALTER TABLE PROFILE_PICTURE ADD CONSTRAINT PROFILE_PICTURE_USER_FK FOREIGN KEY (user_id) REFERENCES USERS(user_id);
+
+CREATE OR REPLACE TRIGGER trigger_profile_picture
+BEFORE INSERT ON PROFILE_PICTURE
+FOR EACH ROW
+  BEGIN
+    SELECT NVL(MAX(picture_id), 0) + 1
+    INTO :new.picture_id
+    FROM PROFILE_PICTURE;
+  END;
+ / 
+
 CREATE TABLE AIRPORT
  (
     airport_id INTEGER NOT NULL,
