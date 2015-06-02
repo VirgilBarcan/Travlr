@@ -595,12 +595,12 @@ public class UserData extends Controller {
         userInfo.setCurrentAddress(userCurrentAddress);
 
         //get user's flight preferences
-        userFlightPreferences = getUserFlightPreferencesFromDB();
-        userInfo.setFlightPreferences(userFlightPreferences);
+        //userFlightPreferences = getUserFlightPreferencesFromDB();
+        //userInfo.setFlightPreferences(userFlightPreferences);
 
         //get user's route preferences
-        userRoutePreferences = getUserRoutePreferencesFromDB();
-        userInfo.setRoutePreferences(userRoutePreferences);
+        //userRoutePreferences = getUserRoutePreferencesFromDB();
+        //userInfo.setRoutePreferences(userRoutePreferences);
 
         return userInfo;
     }

@@ -41,3 +41,7 @@ GET         /contact                             controllers.Contact.index()
 
 #Help Page
 GET         /help                                controllers.Help.index()
+
+#Group Trip Page
+GET 		/group_trip					controllers.GroupTrip.index()
+POST 		/group_trip					controllers.GroupTrip.postIndex()
