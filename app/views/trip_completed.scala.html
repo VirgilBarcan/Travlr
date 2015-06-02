@@ -1,0 +1,39 @@
+@(result: ArrayList[Flight])
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
+        <link href="@routes.Assets.at("stylesheets/bootstrap-social.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    </head>
+    <body>
+
+        @navbar()
+    
+        <div class="container" style="padding-top: 70px">
+            <table class="table table-striped">
+            <tr class="info">
+                <th>Company IATA</th>
+                <th>Company Name</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+            </tr> 
+            @for(flight <- result) {
+                <tr>
+                    <td>@flight.getCompanyIATA()</td>
+                    <td>@flight.getCompanyName()</td>
+                    <td>@flight.getDeparture()</td>
+                    <td>@flight.getArrival()</td>
+                </tr>
+            }
+            </table>
+        </div>
+    </body>
+
+    <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</html>

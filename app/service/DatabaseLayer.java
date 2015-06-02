@@ -365,6 +365,36 @@ public class DatabaseLayer {
         }
         return result;
     }
+    
+    public static HashMap<Integer, Integer> getAirlinesPerferences(String username) {
+        HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
+        try {
+            String query = "SELECT airline_id, rating FROM Airline_user a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username='" + username + "'";
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next())
+                result.put(rs.getInt(1), rs.getInt(2));
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static Integer getAirlineByIATA(String airlineName) {
+        Integer result = 0;
+        try {
+            String query = "SELECT airline_id from Airline where iata_code='" + airlineName + "'";
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next())
+                result = rs.getInt(1);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     /*
     public static boolean addNewVisitedPlaceToDB(Address newVisitedPlace, String userIdentifier) {

@@ -15,7 +15,11 @@
         <div class="group_form container" style="padding-top: 70px">
             <button class="add_friend btn btn-default">Add friend</button>
             <form class="form-horizontal" method="POST">
-
+            <hr />
+            @tripView("Source", "From", 0, true)
+            <hr />
+            @tripView("Destination", "To", 1, false)
+            <hr />
             </form>
         </div>
     </body>
@@ -24,6 +28,11 @@
     <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
     <script>
         $(document).ready(function () {
+            var availableTags = [
+                  @for(friend <- friends) {
+                    "@friend",
+                  }
+                ];
             var max_friends = 12;
             var wrapper = $(".group_form");
             var add_btn = $(".add_friend");
@@ -35,6 +44,7 @@
                 if(x < 12) {
                     $(forms).prepend('<div class="form-group"><label for="friend' + cnt + '" class="col-sm-2 control-label">Friend</label><div class="col-sm-6"><input class="friend-input form-control" name="friend' + cnt + '" placeholder="Friend" autocomplete="on"/></div><div class="col-sm-4"><button class="remove btn btn-danger">Remove friend</button></div></div>');
                     x = x + 1;
+                    cnt = cnt + 1;
                     if(x == 1) {
                         $(forms).append("<input type=\"submit\" class=\"submit_btn btn btn-default\" value=\"Compute\">");
                     }
@@ -50,14 +60,25 @@
                 }
             });
             $(forms).on("click",".friend-input", function(e) {
-                var availableTags = [
-                  @for(friend <- friends) {
-                    "@friend",
-                  }
-                ];
                 $(this).autocomplete({
                     source: availableTags
                 });
+            });
+
+            $.CheckValidity = function() {
+                var validity = true;
+                $(".friend-input").each( function () {
+                    if(availableTags.indexOf($(this).val()) < 0 && $(this).val() != '') {
+                        var submitbtn = $(".submit_btn");
+                        validity = false;
+                    }
+                });
+                return validity;
+            };
+
+            $(forms).on("blur", ".friend-input", function(e) {
+                var submitbtn = $(".submit_btn");
+                $(submitbtn).prop('disabled', !($.CheckValidity()));
             });
         });
     </script>
