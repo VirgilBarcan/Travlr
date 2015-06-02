@@ -16,6 +16,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.sql.Array;
+import java.sql.PreparedStatement;
+
 import java.util.ArrayList;
 
 /**
