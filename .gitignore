@@ -19,3 +19,4 @@ dist
 bin/
 bin/*
 project/.sbtserver
+conf/application.conf

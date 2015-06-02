@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-import play.api.libs.json.JsArray;
 import play.libs.Json;
 
 import java.text.SimpleDateFormat;
@@ -39,39 +38,87 @@ public class FlightStats {
 		return content.toString();
 	}
 	
-	public static ArrayList<HashMap<String, Object>> getFlights(String from, String to, Date date){
-		String url = "https://api.flightstats.com/flex/schedules/rest/v1/json/from/%s/to/%s/departing/%s?appId=%s&appKey=%s";
-		url = String.format(url, from, to, new SimpleDateFormat("yyyy/MM/dd").format(date), appID, appKey);
-		ArrayList<HashMap<String, Object>> flights = new ArrayList<HashMap<String,Object>>();
-		
-		try {
-			String doc = download(url);
-			JsonNode obj = Json.parse(doc);
-			JsonNode flightsArray = obj.get("scheduledFlights");
-			for (int i=0; i<flightsArray.size(); ++i){
-				HashMap<String, Object> flight = new HashMap<String, Object>();
-				flight.putAll(getInfo(flightsArray.get(i).get("carrierFsCode").asText()));
-				flight.put("departure", flightsArray.get(i).get("departureTime").asText());
-				flight.put("arrival", flightsArray.get(i).get("arrivalTime").asText());
-				flights.add(flight);
+	private static ArrayList<String> getAirports(String place){
+		ArrayList<String> places = new ArrayList<String>();
+
+		if (getAirportInfo(place).size()==0){
+			String query = "select iata_code from airport where upper(airport_city) like '%s%%'";
+			Response resp = DatabaseLayer.query(String.format(query, place.toUpperCase()));
+			if (resp!=null && resp.getData()!=null){
+				for (Object row[] : resp.getData()){
+					places.add(row[0].toString());
+				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		}
+		else{
+			places.add(place);
+		}
+		
+		return places;
+	}
+	
+	public static ArrayList<HashMap<String, Object>> getFlights(String from, String to, Date date){
+		ArrayList<HashMap<String, Object>> flights = new ArrayList<HashMap<String,Object>>();
+		ArrayList<String> froms, tos;
+
+		froms = getAirports(from);
+		tos = getAirports(to);
+		for (int i=0; i<froms.size(); ++i){
+			for (int j=0; j<tos.size(); ++j){
+				String url = "https://api.flightstats.com/flex/schedules/rest/v1/json/from/%s/to/%s/departing/%s?appId=%s&appKey=%s";
+				url = String.format(url, froms.get(i), tos.get(j), new SimpleDateFormat("yyyy/MM/dd").format(date), appID, appKey);
+				
+				try {
+					String doc = download(url);
+					JsonNode obj = Json.parse(doc);
+					JsonNode flightsArray = obj.get("scheduledFlights");
+					for (int k=0; k<flightsArray.size(); ++k){
+						HashMap<String, Object> flight = new HashMap<String, Object>();
+						flight.putAll(getAirlineInfo(flightsArray.get(k).get("carrierFsCode").asText()));
+						flight.put("departure", flightsArray.get(k).get("departureTime").asText());
+						flight.put("arrival", flightsArray.get(k).get("arrivalTime").asText());
+						flights.add(flight);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return flights;
 	}
 	
-	public static HashMap<String, String> getInfo(String code) {
+	public static HashMap<String, String> getAirlineInfo(String code) {
 		String url = "https://api.flightstats.com/flex/airlines/rest/v1/json/fs/%s?appId=%s&appKey=%s";
 		url = String.format(url, code, appID, appKey);
 		HashMap<String, String> info = new HashMap<String, String>();
 
-		info.put("carrier", code);
 		try {
 			String doc = download(url);
-			JsonNode obj = Json.parse(doc);
-			info.put("iata", obj.get("airline").get("iata").asText());
-			info.put("carrier", obj.get("airline").get("name").asText());
+			JsonNode obj = Json.parse(doc).get("airline");
+			if (obj==null)
+				return info;
+			
+			info.put("iata", obj.get("iata").asText());
+			info.put("carrier", obj.get("name").asText());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return info;
+	}
+	
+
+	public static HashMap<String, String> getAirportInfo(String code) {
+		String url = "https://api.flightstats.com/flex/airports/rest/v1/json/fs/%s?appId=%s&appKey=%s";
+		url = String.format(url, code, appID, appKey);
+		HashMap<String, String> info = new HashMap<String, String>();
+		
+		try {
+			String doc = download(url);
+			JsonNode obj = Json.parse(doc).get("airport");
+			if (obj==null)
+				return info;
+			
+			info.put("name", obj.get("name").asText());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

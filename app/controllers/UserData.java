@@ -7,12 +7,15 @@ import play.mvc.*;
 import service.DatabaseLayer;
 import views.html.*;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
  * Created by Virgil Barcan on 29.05.2015.
  */
 public class UserData extends Controller {
+
+    private static ArrayList<Address> recommendationsHometown;
 
     public static Result viewUserData() {
         String visibleEdit = "hidden";
@@ -603,6 +606,37 @@ public class UserData extends Controller {
         //userInfo.setRoutePreferences(userRoutePreferences);
 
         return userInfo;
+    }
+
+    public static Result searchUserHometown() {
+        recommendationsHometown = new ArrayList<Address>();
+
+        recommendationsHometown = DatabaseLayer.getHometownRecommendations();
+
+        return searchUserHometownResults();
+    }
+
+    public static Result searchUserHometownResults() {
+
+        String recommendationsStringHTML = createAddressDatalist(recommendationsHometown);
+
+        System.out.println(recommendationsStringHTML);
+
+        return ok(recommendationsStringHTML);
+    }
+
+    private static String createAddressDatalist(ArrayList<Address> recommendationsHometown) {
+        String result = "[{";
+        int n = recommendationsHometown.size();
+
+        for (int i = 0; i < n - 1; ++i){
+            result += recommendationsHometown.get(i).toJSON() + "}, ";
+        }
+        result += "{" + recommendationsHometown.get(n - 1).toJSON() + "}]";
+
+        System.out.println("result: " + result);
+
+        return result;
     }
 
 }

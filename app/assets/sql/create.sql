@@ -31,7 +31,7 @@ CREATE TABLE AIRPORT
     rating_sum  INTEGER
   ) ;
 ALTER TABLE AIRPORT ADD CONSTRAINT AIRPORT_PK PRIMARY KEY ( airport_id ) ;
-CREATE INDEX airport_name_index on AIRPORT(airport_city);
+CREATE INDEX airport_name_index on AIRPORT(upper(airport_city));
 
 DROP SEQUENCE airport_seq;
 CREATE SEQUENCE airport_seq;

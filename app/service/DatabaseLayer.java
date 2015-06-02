@@ -18,8 +18,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.sql.Array;
 import java.sql.PreparedStatement;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class is used to handle all the database work required by other classes (by the controllers, for example)
@@ -365,6 +365,85 @@ public class DatabaseLayer {
         }
         return result;
     }
+    
+    public static HashMap<Integer, Integer> getAirlinesPerferences(String username) {
+        HashMap<Integer, Integer> result = new HashMap<Integer, Integer>();
+        try {
+            String query = "SELECT airline_id, rating FROM Airline_user a INNER JOIN Users u ON a.user_id = u.user_id WHERE u.username='" + username + "'";
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next())
+                result.put(rs.getInt(1), rs.getInt(2));
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static Integer getAirlineByIATA(String airlineName) {
+        Integer result = 0;
+        try {
+            String query = "SELECT airline_id from Airline where iata_code='" + airlineName + "'";
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next())
+                result = rs.getInt(1);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static ArrayList<Address> getHometownRecommendations() {
+        ArrayList<Address> recommendations = new ArrayList<Address>();
+        Address userHometown = null;
+
+        String country = "";
+        String state = "";
+        String county = "";
+        String locality = "";
+        String streetName = "";
+        String streetNumber = "";
+
+        // idiot search
+        Statement stmt = null;
+        String query = "SELECT CO.name AS COUNTRY, CI.state AS STATE, CI.county AS COUNTY, CI.city_name AS LOCALITY, ST.street_name AS STREET_NAME, ST.street_no AS STREET_NUMBER\n" +
+                "FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A\n" +
+                "WHERE A.country_id = CO.country_id AND\n" +
+                "      A.city_id = CI.city_id AND\n" +
+                "      A.street_id = ST.street_id AND\n" +
+                "      CO.country_id = CI.country_id AND\n" +
+                "      CI.city_id = ST.city_id";
+
+        System.out.println("query: " + query);
+
+        try {
+            Connection connection = DB.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                country = rs.getString("COUNTRY");
+                state = rs.getString("STATE");
+                county = rs.getString("COUNTY");
+                locality = rs.getString("LOCALITY");
+                streetName = rs.getString("STREET_NAME");
+                streetNumber = rs.getString("STREET_NUMBER");
+
+                userHometown = new Address(country, state, county, locality, streetName, streetNumber);
+
+                recommendations.add(userHometown);
+
+                System.out.println("DatabaseLayer> searchHometown> " + userHometown);
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        }
+
+        return recommendations;
+    }
+
 
     /*
     public static boolean addNewVisitedPlaceToDB(Address newVisitedPlace, String userIdentifier) {
@@ -816,7 +895,6 @@ public class DatabaseLayer {
             ResultSet rs = stmt.executeQuery(q);
             ResultSetMetaData rsmd = null;
             ArrayList<Object[]> rows = new ArrayList<Object[]>();
-
             
             rsmd = rs.getMetaData();
             int columns = rsmd.getColumnCount();
