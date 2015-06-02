@@ -1,5 +1,7 @@
 package models;
 
+import service.DatabaseLayer;
+
 /**
  * Created by Virgil Barcan on 27.05.2015.
  * This class will hold the data taken from the Login or Register form
@@ -9,6 +11,8 @@ public class UserRegisterData {
     private String email;
     private String username;
     private String password;
+
+    private int external;
 
     public UserRegisterData(){
         email = "";
@@ -46,6 +50,14 @@ public class UserRegisterData {
         this.password = password;
     }
 
+    public int getExternal() {
+        return external;
+    }
+
+    public void setExternal(int external) {
+        this.external = external;
+    }
+
     /**
      * This function is used to check if the data given by the user is valid:
      * - username/email exists in the DB
@@ -53,22 +65,16 @@ public class UserRegisterData {
      * @return 0 = valid, 1 = invalid username, 2 = invalid email
      */
     public int isValid() {
-        int isValid = 0;
-        /*
-        // Send an request to the DB to find if the user already exists
-        // NOT TESTED!!!
-        String sqlQuery = "{? = call IS_VALID_USER(?, ?, ?)}";
-        CallableStatement statement = connection.prepareCall(sqlQuery);
-        statement.registerOutParameter(1, Types.BOOL);
-        isValid = statement.getBOOL(); // ???? Not sure this is the correct type
-        statement.setString(2, this.username);
-        statement.setString(2, this.email);
-        statement.setString(3, this.password);
-        statement.execute();
+        int isValid = 1;
 
-        // if the user exists, this is an error, and the user will have to reintroduce the data in order to have a valid new user
-        */
-
+        if (this.external == 0) {
+            // check if the user is a valid one (if it exists in the DB)
+            isValid = DatabaseLayer.isValidRegister(this);
+        }
+        else {
+            // check if the user is a valid one (if the email or username exist in the DB)
+            isValid = DatabaseLayer.isValidExternal(this);
+        }
         return isValid;
     }
 

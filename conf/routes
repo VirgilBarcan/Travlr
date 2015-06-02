@@ -24,6 +24,7 @@ GET         /login_retry                         controllers.Login.retryLogin()
 GET         /loginFB                             controllers.Login.loginFB()
 POST        /login                               controllers.Login.login()
 POST        /register                            controllers.Register.register()
+GET         /registerFB                          controllers.Register.registerFB()
 
 # View User Data page
 GET         /view_user_data_page                 controllers.UserData.viewUserData()

@@ -62,6 +62,55 @@ public class Register extends Controller {
         }
     }
 
+    public static Result registerFB() {
+        // Get the data from the form
+        UserRegisterData userRegisterData = new UserRegisterData();
+        String email = "";
+        String username = "";
+        String password = "";
+
+        String gender = "";
+        String first_name = "";
+        String last_name = "";
+
+        Map<String, String[]> parameters = request().queryString();
+
+        // TODO: Add other attributes ( username, password )
+
+        if (parameters.containsKey("first_name")) first_name = parameters.get("first_name")[0];
+        if (parameters.containsKey("last_name")) last_name = parameters.get("last_name")[0];
+        if (parameters.containsKey("gender")) gender = parameters.get("gender")[0];
+        if (parameters.containsKey("email")) email = parameters.get("email")[0];
+
+        if (parameters.containsKey("password")) password = parameters.get("password")[0];
+        if (parameters.containsKey("username")) username = parameters.get("username")[0];
+
+        userRegisterData.setEmail(email);
+        userRegisterData.setUsername(email);
+        userRegisterData.setPassword(password);
+
+        System.out.println(userRegisterData.toString());
+
+        int errorNo = userRegisterData.isValid();
+        if (errorNo == 0) { // valid data
+            // put the data in the session cookie for fast retrieval
+            addToSession(userRegisterData);
+
+            System.out.println("isValid()");
+
+            // put the data in the DB, for persistent storage
+            addUserRegisterDataToDB(userRegisterData);
+
+            // redirect to the page where user info has to be entered
+            // return redirect(controllers.routes.UserData.editUserData());
+            return ok("/edit_user_data_page"); // TODO: Remove hardcoding
+        }
+        else
+        {
+            return retryRegister(errorNo);
+        }
+    }    
+
     // This will implement AJAX, to update the page without reloading it
     public static Result retryRegister(int errorNo) {
         // Clear the session

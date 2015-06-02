@@ -34,10 +34,40 @@
     <body>
         <script>
 
-          function statusChangeCallback(response) 
+          function statusChangeCallbackRegister(response) 
           {
-            console.log('statusChangeCallback');
-            console.log(response);
+          		if (response.status === 'connected') // Register into your app and Facebook.
+          		{
+					FB.api('/me', function(response) {
+		              	// console.log('Successful login for: ' + response.name);
+
+						$.ajax({
+						  method: "GET",
+						  url: "@routes.Register.registerFB()",
+						  data: {'first_name': response.first_name,
+		              		'last_name': response.last_name,
+		              		'email': response.email,
+		              		'gender': response.gender}
+						})
+						  .done(function( msg ) {
+						    // alert( "Data Saved: " + msg );
+						    if(msg == "/edit_user_data_page") { // TODO: Remove hardcoding + Register.java
+						    	// window.location.href = window.location.href + msg;
+						    	window.location.href = msg;
+						    }
+						  });
+		            });   
+          		}
+          		else // No register
+          		{
+
+          		}
+          }
+
+          function statusChangeCallbackLogin(response) 
+          {
+            // console.log('statusChangeCallbackLogin');
+            // console.log(response);
             // The response object is returned with a status field that lets the
             // app know the current login status of the person.
             // Full docs on the response object can be found in the documentation
@@ -45,20 +75,43 @@
 
             if (response.status === 'connected') // Logged into your app and Facebook.
             {              
-	        /*
-				{
-				    status: 'connected',
-				    authResponse: {
-				        accessToken: '...',
-				        expiresIn:'...',
-				        signedRequest:'...',
-				        userID:'...'
-				    }
-				}
-	        */
+				FB.api('/me', function(response) {
+	              	// console.log('Successful login for: ' + response.name);
 
-              testAPI();
+					$.ajax({
+					  method: "GET",
+					  url: "@routes.Login.loginFB()",
+					  data: {'first_name': response.first_name,
+	              		'last_name': response.last_name,
+	              		'email': response.email,
+	              		'gender': response.gender}
+					})
+					  .done(function( msg ) {
+					    // alert( "Data Saved: " + msg );
+					    if(msg == "/home") { // TODO: Remove hardcoding + Login.java
+					    	// window.location.href = window.location.href + msg;
+					    	window.location.href = msg;
+					    }
+					  });
+	            });   
             } 
+            else // Not logged in
+            {
+
+            }
+
+            if(document.getElementById("button-register").disabled || document.getElementById("button-login"))
+            {
+            	document.getElementById("button-register-facebook").disabled = false;
+				document.getElementById("button-register-google").disabled = false;
+				document.getElementById("button-register").disabled = false;
+
+				document.getElementById("button-login-facebook").disabled = false;
+				document.getElementById("button-login-google").disabled = false;
+				document.getElementById("button-login").disabled = false;
+            }
+
+            /*
             else if (response.status === 'not_authorized') // The person is logged into Facebook, but not your app.
             {
               alert('Please log into this app.');
@@ -67,29 +120,16 @@
             { 
               alert('Please log into Facebook.');
             }
+            */
           }
 
-          function testAPI() {
-            console.log('Welcome!  Fetching your information.... ');
-
-            FB.api('/me', function(response) {
-              	console.log('Successful login for: ' + response.name);
-
-          		$.get('@routes.Login.loginFB()', 
-          			{'first_name': response.first_name,
-              		'last_name': response.last_name,
-              		'email': response.email,
-              		'gender': response.gender});
-
-            });            
-          }
 
           // This function is called when someone finishes with the Login
           // Button.  See the onlogin handler attached to it in the sample
           // code below.
           function checkLoginState() {
             FB.getLoginStatus(function(response) {
-              statusChangeCallback(response);
+              statusChangeCallbackLogin(response);
             });
           }
 
@@ -115,7 +155,7 @@
               // These three cases are handled in the callback function.
 
               FB.getLoginStatus(function(response) {
-                statusChangeCallback(response);
+                statusChangeCallbackLogin(response);
               });
 
           };
@@ -125,7 +165,36 @@
           {
             FB.login(function(response) 
             {
-                statusChangeCallback(response);
+            	document.getElementById("button-register-facebook").disabled = true;
+				document.getElementById("button-register-google").disabled = true;
+				document.getElementById("button-register").disabled = true;
+
+				document.getElementById("button-login-facebook").disabled = true;
+				document.getElementById("button-login-google").disabled = true;
+				document.getElementById("button-login").disabled = true;
+
+                statusChangeCallbackLogin(response);
+            }, 
+            {
+        		//scope: "public_profile,email,user_friends",
+        		scope: "public_profile,email,user_friends",
+            	return_scopes: true 
+            });
+          }
+
+          function fb_register() 
+          {
+            FB.login(function(response) 
+            {
+            	document.getElementById("button-register-facebook").disabled = true;
+				document.getElementById("button-register-google").disabled = true;
+				document.getElementById("button-register").disabled = true;
+
+				document.getElementById("button-login-facebook").disabled = true;
+				document.getElementById("button-login-google").disabled = true;
+				document.getElementById("button-login").disabled = true;
+
+                statusChangeCallbackRegister(response);
             }, 
             {
         		//scope: "public_profile,email,user_friends",
@@ -236,7 +305,7 @@
                                 <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" id="button-login-facebook" href="#" onclick="fb_login();">
                                     <i class="fa fa-facebook"></i> Facebook
                                 </a>
-                                <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" id="button-login-google" href="https://plus.google.com">
+                                <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" id="button-login-google" href="#"> <!-- https://plus.google.com -->
                                     <i class="fa fa-google"></i> Google
                                 </a>
                             </div>
@@ -306,10 +375,10 @@
                             -->
                             
                             <!-- Register -->
-                            <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" id="button-register-facebook" href="http://facebook.com">
+                            <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-facebook" id="button-register-facebook" href="#" onclick="fb_register();">
                                 <i class="fa fa-facebook"></i> Facebook
                             </a>
-                            <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" id="button-register-google" href="https://plus.google.com">
+                            <a class="col-xs-6 col-sm-6 col-md-6 col-lg-6 btn btn-social btn-google" id="button-register-google" href="#"> <!-- https://plus.google.com -->
                                 <i class="fa fa-google"></i> Google
                             </a>
                         </div>

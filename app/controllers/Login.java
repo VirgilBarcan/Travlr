@@ -18,7 +18,17 @@ public class Login extends Controller {
      * This method is used to render the login page
      * @return
      */
-    public static Result loginRegister() {
+    public static Result loginRegister() 
+    {
+        // TODO: Redirect to home if the user is logged in
+
+        /*
+        if(session("email") != null || session("username") != null)
+            // return controllers.routes.Home.index();
+            return Home.index();
+        */
+
+
         return ok(login.render(null));
     }
 
@@ -51,8 +61,6 @@ public class Login extends Controller {
             // put the data in the session cookie for fast retrieval
             addToSession(userLoginData);
 
-            System.out.println("path: " + controllers.routes.Home);
-
             // redirect to the homepage
             return redirect(controllers.routes.Home.index());
         }
@@ -83,19 +91,23 @@ public class Login extends Controller {
         //the login is done with our method, not FB or G+
         userLoginData.setExternal(1);
 
-        System.out.println(userLoginData.toString());
+        //return redirect(controllers.routes.Home.path());
 
+        System.out.println(userLoginData.toString());
+                
         if (userLoginData.isValid() == 0) { // valid data
             // put the data in the session cookie for fast retrieval
             addToSession(userLoginData);
 
             // redirect to the homepage
-            return redirect(controllers.routes.Home.index());
+            // return redirect(controllers.routes.Home.index());
+            //return ok("/home"); // TODO: Remove hardcoding
+            return ok("wow");
         }
         else
         {
             return retryLogin();
-        }     
+        } 
 
         //System.out.println(queryParameters.get("first_name") + " " + queryParameters.get("last_name") + " " + queryParameters.get("email"));
         //return ok(String.format("Here's my server-side data using $.get(), and you sent me [%s]", queryParameters.get("first_name"))); // [0]

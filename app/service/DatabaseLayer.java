@@ -696,18 +696,18 @@ public class DatabaseLayer {
     }
 
     public static boolean isTable(String tableName){
-    	try {
-        	String query = "? = Call TRAVLR.ADD_USER(?)";
-        	Connection con = DB.getConnection();
-			CallableStatement stmt = con.prepareCall(query);
-			stmt.registerOutParameter(1, Types.INTEGER);
-			stmt.setString(2, tableName);
-			stmt.execute();
-			return stmt.getInt(1)>=1;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-    	return false;
+        try {
+            String query = "? = Call TRAVLR.ADD_USER(?)";
+            Connection con = DB.getConnection();
+            CallableStatement stmt = con.prepareCall(query);
+            stmt.registerOutParameter(1, Types.INTEGER);
+            stmt.setString(2, tableName);
+            stmt.execute();
+            return stmt.getInt(1)>=1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static boolean importSql(String username, String password, String path) {
@@ -735,46 +735,46 @@ public class DatabaseLayer {
         return false;
     }
     
-	public static Response query(String q){
-		try {
-			Connection con = DB.getConnection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(q);
-			ResultSetMetaData rsmd = null;
-			ArrayList<Object[]> rows = new ArrayList<Object[]>();
+    public static Response query(String q){
+        try {
+            Connection con = DB.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(q);
+            ResultSetMetaData rsmd = null;
+            ArrayList<Object[]> rows = new ArrayList<Object[]>();
 
-			
-			rsmd = rs.getMetaData();
-			int columns = rsmd.getColumnCount();
-			String[] columnNames = new String[columns];
-			
-			for (int c=0; c<columns; ++c){
-				columnNames[c] = rsmd.getColumnName(c+1);
-			}
-			
-			while (rs.next()){
-				Object[] row = new Object[columns];
-				for (int c=1; c<=columns; ++c){
-					Object o = rs.getObject(c);
-					if (o==null)
-						row[c-1] = "NULL";
-					else
-						row[c-1] = o;
-				}
-				rows.add(row);
-			}
-			
-			Object data[][] = null;
-			if (rows.size()>0){
-				data = new Object[rows.size()][];
-				for (int i=0; i<rows.size(); ++i)
-					data[i] = rows.get(i);
-			}
-			return new Response(columnNames, data);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
+            
+            rsmd = rs.getMetaData();
+            int columns = rsmd.getColumnCount();
+            String[] columnNames = new String[columns];
+            
+            for (int c=0; c<columns; ++c){
+                columnNames[c] = rsmd.getColumnName(c+1);
+            }
+            
+            while (rs.next()){
+                Object[] row = new Object[columns];
+                for (int c=1; c<=columns; ++c){
+                    Object o = rs.getObject(c);
+                    if (o==null)
+                        row[c-1] = "NULL";
+                    else
+                        row[c-1] = o;
+                }
+                rows.add(row);
+            }
+            
+            Object data[][] = null;
+            if (rows.size()>0){
+                data = new Object[rows.size()][];
+                for (int i=0; i<rows.size(); ++i)
+                    data[i] = rows.get(i);
+            }
+            return new Response(columnNames, data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
 }
