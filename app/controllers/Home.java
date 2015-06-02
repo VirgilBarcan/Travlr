@@ -67,7 +67,7 @@ public class Home extends Controller{
     			if (from!=null && date!=null && to!=null){
     				Date d = null;
 					try {
-						d = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+						d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
