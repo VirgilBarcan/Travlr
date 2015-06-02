@@ -291,6 +291,54 @@
 
         @navbar()
 
+        <script>
+
+        window.onload = init;
+
+        function init(){
+        var dataList = document.getElementById('results-hometown');
+        var input = document.getElementById('search-hometown');
+
+        //alert(dataList);
+        //alert(input);
+
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function(response) {
+            if (request.readyState === 4) {
+                if (request.status === 200) {
+                    // Parse the JSON
+                    var jsonOptions = JSON.parse(request.responseText);
+
+                    //alert(request.responseText);
+
+                    // Loop over the JSON array.
+                    jsonOptions.forEach(function(item) {
+                        // Create a new <option> element.
+                        var option = document.createElement('option');
+                        // Set the value using the item in the JSON array.
+
+                        var value = item.country + " " + item.state + " " + item.county + " " + item.locality + " " + item.street_name + " " + item.street_number;
+
+                        option.value = value;
+                        // Add the <option> element to the <datalist>.
+                        dataList.appendChild(option);
+                    });
+
+                    // Update the placeholder text.
+                    input.placeholder = "Search Hometown";
+                } else {
+                    // An error occured :(
+                    input.placeholder = "Couldn't load datalist options :(";
+                }
+            }
+        };
+
+        request.open("GET", "search_user_hometown", true);
+        request.send();
+        }
+
+        </script>
+
         <!-- The main content of the page -->
         <div class="container" style="padding-top: 70px">
             <div class="row user-image-name-row">
@@ -411,7 +459,8 @@
                                                                 <div class="form-group" style="display:inline;">
                                                                     <div class="input-group" style="display:table;">
                                                                         <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
-                                                                        <input type="text" class="form-control" name="search-hometown" placeholder="Search location" autocomplete="off" autofocus="autofocus">
+                                                                        <input type="text" class="form-control search-hometown" name="search-hometown" id="search-hometown" placeholder="Search location" autocomplete="off" autofocus="autofocus" list="results-hometown">
+                                                                        <datalist id="results-hometown"></datalist>
                                                                     </div>
                                                                 </div>
                                                             </form>

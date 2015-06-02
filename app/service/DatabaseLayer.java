@@ -396,6 +396,55 @@ public class DatabaseLayer {
         return result;
     }
 
+    public static ArrayList<Address> getHometownRecommendations() {
+        ArrayList<Address> recommendations = new ArrayList<Address>();
+        Address userHometown = null;
+
+        String country = "";
+        String state = "";
+        String county = "";
+        String locality = "";
+        String streetName = "";
+        String streetNumber = "";
+
+        // idiot search
+        Statement stmt = null;
+        String query = "SELECT CO.name AS COUNTRY, CI.state AS STATE, CI.county AS COUNTY, CI.city_name AS LOCALITY, ST.street_name AS STREET_NAME, ST.street_no AS STREET_NUMBER\n" +
+                "FROM COUNTRY CO, CITY CI, STREET ST, ADDRESS A\n" +
+                "WHERE A.country_id = CO.country_id AND\n" +
+                "      A.city_id = CI.city_id AND\n" +
+                "      A.street_id = ST.street_id AND\n" +
+                "      CO.country_id = CI.country_id AND\n" +
+                "      CI.city_id = ST.city_id";
+
+        System.out.println("query: " + query);
+
+        try {
+            Connection connection = DB.getConnection();
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                country = rs.getString("COUNTRY");
+                state = rs.getString("STATE");
+                county = rs.getString("COUNTY");
+                locality = rs.getString("LOCALITY");
+                streetName = rs.getString("STREET_NAME");
+                streetNumber = rs.getString("STREET_NUMBER");
+
+                userHometown = new Address(country, state, county, locality, streetName, streetNumber);
+
+                recommendations.add(userHometown);
+
+                System.out.println("DatabaseLayer> searchHometown> " + userHometown);
+            }
+        } catch (SQLException e ) {
+            e.printStackTrace();
+        }
+
+        return recommendations;
+    }
+
+
     /*
     public static boolean addNewVisitedPlaceToDB(Address newVisitedPlace, String userIdentifier) {
         int result = -1;

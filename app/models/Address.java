@@ -78,6 +78,19 @@ public class Address {
         this.streetNumber = streetNumber;
     }
 
+    public String getStringDatalist(){
+        return country + ", " + state + ", " + county + ", " + locality + ", " + streetName + ", " + streetNumber;
+    }
+
+    public String toJSON() {
+        return "\"country\" : " + "\"" + country + "\", " +
+                "\"state\" : "  + "\""  + state + "\", " +
+                "\"county\" : "  + "\""  + county + "\", " +
+                "\"locality\" : "  + "\""  + locality + "\", " +
+                "\"street_name\" : "  + "\""  + streetName + "\", " +
+                "\"street_number\" : "  + "\""  + streetNumber + "\"";
+    }
+
     @Override
     public String toString() {
         return "Address{" +
