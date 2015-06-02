@@ -20,9 +20,12 @@ public class Register extends Controller {
      * This method is used to render the login page
      * @return
      */
+
+    /*
     public static Result loginRegister() {
         return ok(login.render(null));
     }
+    */
 
     public static Result register() {
         // Get the data from the form

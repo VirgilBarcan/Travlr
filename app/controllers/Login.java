@@ -22,11 +22,9 @@ public class Login extends Controller {
     {
         // TODO: Redirect to home if the user is logged in
 
-        /*
         if(session("email") != null || session("username") != null)
             // return controllers.routes.Home.index();
             return Home.index();
-        */
 
 
         return ok(login.render(null));
@@ -102,7 +100,7 @@ public class Login extends Controller {
             // redirect to the homepage
             // return redirect(controllers.routes.Home.index());
             //return ok("/home"); // TODO: Remove hardcoding
-            return ok("wow");
+            return ok("/home");
         }
         else
         {

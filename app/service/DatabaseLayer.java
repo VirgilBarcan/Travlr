@@ -98,6 +98,38 @@ public class DatabaseLayer {
         return result;
     }
 
+    public static int isValidExternal(UserRegisterData userRegisterData) {
+        int result = 0;
+
+        // We know for sure that if the user inserts into either email of username, any of these is different from ""
+        String email = userRegisterData.getEmail();
+        String username = userRegisterData.getUsername();
+        String password = userRegisterData.getPassword();
+
+        String usernameEmail = (email != "") ? email : username;
+
+        // Send an request to the DB to find if the user exists
+        // If the user is valid, 0 is returned
+        // If the user is invalid, 1 is returned
+        // NOT TESTED!!!
+        String sqlQuery = "{? = call TRAVLR.IS_VALID_USER_EXTERNAL(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, usernameEmail);
+            statement.execute();
+
+            // if the user exists and the password is correct, result will be 0, otherwise 1
+            result = statement.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     /**
      * This function is used to check if the data given by the user is valid:
      * - the email isn't already used in the DB
@@ -590,7 +622,7 @@ public class DatabaseLayer {
     public static FlightPreferences getUserFlightPreferencesFromDB(String userIdentifier) {
         FlightPreferences userFlightPreferences = null;
 
-        System.out.println("getUserAirlinePreferencesFromDB> userIdentifier: " + userIdentifier);
+        System.out.println("getUserFlightPreferencesFromDB> userIdentifier: " + userIdentifier);
 
         // get userInfo from DB
         // Send an request to the DB to find if the user exists
@@ -643,7 +675,7 @@ public class DatabaseLayer {
     public static RoutePreferences getUserRoutePreferencesFromDB(String userIdentifier) {
         RoutePreferences userRoutePreferences = null;
 
-        System.out.println("getUserAirlinePreferencesFromDB> userIdentifier: " + userIdentifier);
+        System.out.println("getUserRoutePreferencesFromDB> userIdentifier: " + userIdentifier);
 
         // get userInfo from DB
         // Send an request to the DB to find if the user exists
