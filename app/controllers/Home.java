@@ -69,7 +69,7 @@ public class Home extends Controller{
 						e.printStackTrace();
 					}
     				if (d!=null)
-    					flights.append(FlightStats.getFlights(from, to, d));
+    					flights.append(FlightStats.getFlights(from, to, d).toString());
     			}
     		}
     		return ok(flights.toString());
