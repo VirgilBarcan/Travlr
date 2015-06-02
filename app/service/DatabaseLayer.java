@@ -816,7 +816,6 @@ public class DatabaseLayer {
             ResultSet rs = stmt.executeQuery(q);
             ResultSetMetaData rsmd = null;
             ArrayList<Object[]> rows = new ArrayList<Object[]>();
-
             
             rsmd = rs.getMetaData();
             int columns = rsmd.getColumnCount();
@@ -827,6 +826,7 @@ public class DatabaseLayer {
             }
             
             while (rs.next()){
+            	System.out.println("row");
                 Object[] row = new Object[columns];
                 for (int c=1; c<=columns; ++c){
                     Object o = rs.getObject(c);

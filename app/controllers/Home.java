@@ -47,9 +47,7 @@ public class Home extends Controller{
     			
     			field = String.format("airport%d", i-1);
     			if (request.containsKey(field)){
-    				String temp = request.get(field)[0];
-    				if (temp.length()>=2 && temp.length()<=3)
-    					from = temp;
+    				from = request.get(field)[0];
     			}
     			field = String.format("date%d", i-1);
     			if (request.containsKey(field)){
@@ -57,9 +55,7 @@ public class Home extends Controller{
     			}
     			field = String.format("airport%d", i);
     			if (request.containsKey(field)){
-    				String temp = request.get(field)[0];
-    				if (temp.length()>=2 && temp.length()<=3)
-    					to = temp;
+    				to = request.get(field)[0];
     			}
     			if (from!=null && date!=null && to!=null){
     				Date d = null;

@@ -44,7 +44,9 @@ public class FlightStats {
 		if (getAirportInfo(place).size()==0){
 			String query = "select iata_code from airport where upper(airport_city) like '%s%%'";
 			Response resp = DatabaseLayer.query(String.format(query, place));
-			if (resp!=null){
+			System.out.println(String.format(query, place.toUpperCase()));
+			System.out.println(resp);
+			if (resp!=null && resp.getData()!=null){
 				for (Object row[] : resp.getData()){
 					places.add(row[0].toString());
 				}
