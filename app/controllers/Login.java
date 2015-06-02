@@ -111,7 +111,46 @@ public class Login extends Controller {
         //return ok(String.format("Here's my server-side data using $.get(), and you sent me [%s]", queryParameters.get("first_name"))); // [0]
     }
 
+    public static Result loginGP()
+    {
+        Map<String, String[]> parameters = request().queryString();
 
+        UserLoginData userLoginData = new UserLoginData();
+        String first_name = "";
+        String last_name = "";
+        String gender = "";
+        String email = "";        
+
+        if (parameters.containsKey("first_name")) first_name = parameters.get("first_name")[0];
+        if (parameters.containsKey("last_name")) last_name = parameters.get("last_name")[0];
+        if (parameters.containsKey("gender")) gender = parameters.get("gender")[0];
+        if (parameters.containsKey("email")) email = parameters.get("email")[0];
+
+        // TODO: Add the first_name, last_name, gender
+
+        userLoginData.setEmail(email);
+
+        //the login is done with our method, not FB or G+
+        userLoginData.setExternal(1);
+
+        //return redirect(controllers.routes.Home.path());
+
+        System.out.println(userLoginData.toString());
+                
+        if (userLoginData.isValid() == 0) { // valid data
+            // put the data in the session cookie for fast retrieval
+            addToSession(userLoginData);
+
+            // redirect to the homepage
+            // return redirect(controllers.routes.Home.index());
+            //return ok("/home"); // TODO: Remove hardcoding
+            return ok("/home");
+        }
+        else
+        {
+            return retryLogin();
+        } 
+    }
 
 
     // This will implement AJAX, to update the page without reloading it

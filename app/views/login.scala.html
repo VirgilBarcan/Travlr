@@ -30,6 +30,147 @@
         <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.css")" rel="stylesheet">
         <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
         <link rel="shortcut icon" href="@routes.Assets.at("images/favicon.ico")">
+
+        <!-- ====================================== Google+ API ============================================= -->
+		<meta name="google-signin-clientid" content="930780774504-ticc07k6r21cejeslf2pcru6etaj4d9n.apps.googleusercontent.com" />
+		<meta name="google-signin-scope" content="https://www.googleapis.com/auth/plus.login email" /> <!-- TODO: Remove "email" -->
+		<meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
+		<meta name="google-signin-cookiepolicy" content="single_host_origin" />
+
+		<script src="https://apis.google.com/js/client:platform.js?onload=renderGooglePlus" async defer></script>
+		<script type="text/javascript">
+		 /* Executed when the APIs finish loading */
+		 function renderGooglePlus() 
+		 {		    
+		    gapi.load('auth2', function() 
+		    {
+		      gapi.client.load('plus', 'v1').then(function() 
+		      {
+
+		       // Additional params including the callback, the rest of the params will
+		       // come from the page-level configuration.
+		       var additionalParams = {
+		         'callback': signinCallback
+		       };
+
+		       // Attach a click listener to a button to trigger the flow.
+		       var signinLoginButton = document.getElementById('button-login-google');
+		       var signinRegisterButton = document.getElementById('button-register-google');
+
+		       var isLogin = true;
+
+		       signinLoginButton.addEventListener('click', function() 
+		       {
+		           isLogin = true;
+		           disable_buttons();
+		           gapi.auth.signIn(additionalParams); // Will use page level configuration
+		       });
+
+		       signinRegisterButton.addEventListener('click', function() 
+		       {
+		           isLogin = false;
+		           disable_buttons();
+		           gapi.auth.signIn(additionalParams); // Will use page level configuration
+		       });
+		        
+		       function signinCallback(authResult) 
+		       {
+		       		enable_buttons();
+
+		          
+		          /*
+		            people: function() {
+		              gapi.client.plus.people.list({
+		                'userId': 'me',
+		                'collection': 'visible'
+		              }).then(function(res) {
+		                var people = res.result;
+		                $('#visiblePeople').empty();
+		                $('#visiblePeople').append('Number of people visible to this app: ' +
+		                    people.totalItems + '<br/>');
+		                for (var personIndex in people.items) {
+		                  person = people.items[personIndex];
+		                  $('#visiblePeople').append('<img src="' + person.image.url + '">');
+		                }
+		              });
+		            },
+
+		          */
+
+		          if (authResult['status']['signed_in'] && authResult['status']['method'] == 'PROMPT')
+		          {		            
+
+					gapi.client.plus.people.get({'userId': 'me'}).then(function(res) 
+					{
+						var first_name, last_name, gender, email;
+					    var profile = res.result;
+
+						// profile.displayName
+
+						first_name = profile.name.familyName;
+						last_name = profile.name.givenName;
+						gender = profile.gender;
+
+						if (profile.emails) 
+							email = profile.emails[0].value;
+
+						if(isLogin) // Login
+			            {
+							$.ajax({
+							  method: "GET",
+							  url: "@routes.Login.loginGP()",
+							  data: {'first_name': first_name,
+			              		'last_name': last_name,
+			              		'email': email,
+			              		'gender': gender}
+							})
+							  .done(function( msg ) {
+							    // alert( "Data Saved: " + msg );
+							    if(msg == "/home") { // TODO: Remove hardcoding + Login.java
+							    	// window.location.href = window.location.href + msg;
+							    	window.location.href = msg;
+							    }
+							  });
+			            }
+			            else // Register
+			            {
+							$.ajax({
+							  method: "GET",
+							  url: "@routes.Register.registerGP()",
+							  data: {'first_name': first_name,
+			              		'last_name': last_name,
+			              		'email': email,
+			              		'gender': gender}
+							})
+							  .done(function( msg ) {
+							    // alert( "Data Saved: " + msg );
+							    if(msg == "/edit_user_data_page") { // TODO: Remove hardcoding + Register.java
+							    	// window.location.href = window.location.href + msg;
+							    	window.location.href = msg;
+							    }
+						  	});
+			            }						
+					});
+
+		            
+		          } 
+		          else 
+		          {
+		            // Update the app to reflect a signed out user
+		            // Possible error values:
+		            //   "user_signed_out" - User is signed-out
+		            //   "access_denied" - User denied access to your app
+		            //   "immediate_failed" - Could not automatically log in the user
+		            // console.log('Sign-in state: ' + authResult['error']);
+		          }
+		       }
+
+		       });
+
+	      	});//Load Google + API
+		 }
+		</script>
+
     </head>
     <body>
         <script>
@@ -62,6 +203,8 @@
           		{
 
           		}
+
+          		enable_buttons();
           }
 
           function statusChangeCallbackLogin(response) 
@@ -100,16 +243,7 @@
 
             }
 
-            if(document.getElementById("button-register").disabled || document.getElementById("button-login"))
-            {
-            	document.getElementById("button-register-facebook").disabled = false;
-				document.getElementById("button-register-google").disabled = false;
-				document.getElementById("button-register").disabled = false;
-
-				document.getElementById("button-login-facebook").disabled = false;
-				document.getElementById("button-login-google").disabled = false;
-				document.getElementById("button-login").disabled = false;
-            }
+            enable_buttons();
 
             /*
             else if (response.status === 'not_authorized') // The person is logged into Facebook, but not your app.
@@ -154,24 +288,44 @@
               //
               // These three cases are handled in the callback function.
 
+              /*
               FB.getLoginStatus(function(response) {
                 statusChangeCallbackLogin(response);
               });
+			  */
 
           };
+
+          	function enable_buttons() 
+          	{
+		      	if(document.getElementById("button-register").disabled || document.getElementById("button-login"))
+		        {
+		        	document.getElementById("button-register-facebook").disabled = false;
+					document.getElementById("button-register-google").disabled = false;
+					document.getElementById("button-register").disabled = false;
+
+					document.getElementById("button-login-facebook").disabled = false;
+					document.getElementById("button-login-google").disabled = false;
+					document.getElementById("button-login").disabled = false;
+		        }
+        	}
           
-          
-          function fb_login() 
-          {
-            FB.login(function(response) 
-            {
-            	document.getElementById("button-register-facebook").disabled = true;
+          	function disable_buttons() 
+          	{
+          		document.getElementById("button-register-facebook").disabled = true;
 				document.getElementById("button-register-google").disabled = true;
 				document.getElementById("button-register").disabled = true;
 
 				document.getElementById("button-login-facebook").disabled = true;
 				document.getElementById("button-login-google").disabled = true;
 				document.getElementById("button-login").disabled = true;
+          	}
+          
+          function fb_login() 
+          {
+            FB.login(function(response) 
+            {
+            	disable_buttons();
 
                 statusChangeCallbackLogin(response);
             }, 
@@ -186,13 +340,7 @@
           {
             FB.login(function(response) 
             {
-            	document.getElementById("button-register-facebook").disabled = true;
-				document.getElementById("button-register-google").disabled = true;
-				document.getElementById("button-register").disabled = true;
-
-				document.getElementById("button-login-facebook").disabled = true;
-				document.getElementById("button-login-google").disabled = true;
-				document.getElementById("button-login").disabled = true;
+            	disable_buttons();
 
                 statusChangeCallbackRegister(response);
             }, 
