@@ -39,7 +39,7 @@ public class FlightStats {
 		return content.toString();
 	}
 	
-	public static String getFlights(String from, String to, Date date){
+	public static ArrayList<HashMap<String, Object>> getFlights(String from, String to, Date date){
 		String url = "https://api.flightstats.com/flex/schedules/rest/v1/json/from/%s/to/%s/departing/%s?appId=%s&appKey=%s";
 		url = String.format(url, from, to, new SimpleDateFormat("yyyy/MM/dd").format(date), appID, appKey);
 		ArrayList<HashMap<String, Object>> flights = new ArrayList<HashMap<String,Object>>();
@@ -58,7 +58,7 @@ public class FlightStats {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return flights.toString();
+		return flights;
 	}
 	
 	public static String getCarrier(String code) {
