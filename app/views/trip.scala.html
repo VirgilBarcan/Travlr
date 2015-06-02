@@ -26,14 +26,14 @@
         @navbar()
         <div class="container columns" style="padding-top: 70px">
             <div id="profile" class="col-md-6">
-                <form>
-                    <input type="hidden" id="cnt" value="2" />
-                    @tripView("Source", "From", "", true)
+                <form action="" method="post">
+                    <input type="hidden" name="cnt" value="2" />
+                    @tripView("Source", "From", 0, true)
                     <hr />
-                    @tripView("Destination", "To", "", false)
+                    @tripView("Destination", "To", 1, false)
                     <!--button>Add waypoints</button-->
                     <br />
-                        <!--iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="/Home/map"></iframe-->
+                    <button class="btn btn-default" name="submit" value="submit">search</button>
                 </form>
             </div>            
             <div id="news" class="col-md-6">

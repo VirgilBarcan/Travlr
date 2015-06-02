@@ -36,7 +36,6 @@ public class Home extends Controller{
     	        return ok(trip.render());
     		if (!request.containsKey("cnt"))
     	        return ok(trip.render());
-    		
     		int airports = new Integer(request.get("cnt")[0]);
     		if (airports<2)
     	        return ok(trip.render());
@@ -54,9 +53,7 @@ public class Home extends Controller{
     			}
     			field = String.format("date%d", i-1);
     			if (request.containsKey(field)){
-    				String temp = request.get(field)[0];
-    				if (temp.length()>=2 && temp.length()<=3)
-    					date = temp;
+    				date = request.get(field)[0];
     			}
     			field = String.format("airport%d", i);
     			if (request.containsKey(field)){
@@ -67,7 +64,7 @@ public class Home extends Controller{
     			if (from!=null && date!=null && to!=null){
     				Date d = null;
 					try {
-						d = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+						d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
