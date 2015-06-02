@@ -18,8 +18,8 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.sql.Array;
 import java.sql.PreparedStatement;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * This class is used to handle all the database work required by other classes (by the controllers, for example)
@@ -856,7 +856,6 @@ public class DatabaseLayer {
             }
             
             while (rs.next()){
-            	System.out.println("row");
                 Object[] row = new Object[columns];
                 for (int c=1; c<=columns; ++c){
                     Object o = rs.getObject(c);
