@@ -9,6 +9,8 @@ public class Response {
 		
 		if (length==0)
 			return false;
+		if (data==null)
+			return false;
 		for (int i=0; i<data.length; ++i)
 			if (data[i].length!=length)
 				return false;
