@@ -323,6 +323,45 @@ public class DatabaseLayer {
 
         return result == 0;
     }
+    
+    public static ArrayList<Integer> getFriends(int userId) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        try {
+            String query = "SELECT * FROM TABLE(TRAVLR.GET_FRIENDS(" + userId + "))";
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                result.add(rs.getInt(1));
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getUsernameFromDb(int userId) {
+        String result = null;
+        try {
+            String query = "SELECT username FROM Users WHERE user_id=" + userId;
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            result = rs.getString(1);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static ArrayList<String> getUsernameListFromDb(ArrayList<Integer> userIds) {
+        ArrayList<String> result = new ArrayList<String>();
+        for(int i = 0; i < userIds.size(); i++) {
+            result.add(getUsernameFromDb(userIds.get(i)));
+        }
+        return result;
+    }
 
     /*
     public static boolean addNewVisitedPlaceToDB(Address newVisitedPlace, String userIdentifier) {
