@@ -1,0 +1,66 @@
+@(friends: ArrayList[String])
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
+        <link href="@routes.Assets.at("stylesheets/bootstrap-social.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    </head>
+    <body>
+
+        @navbar()
+    
+        <div class="group_form container" style="padding-top: 70px">
+            <button class="add_friend btn btn-default">Add friend</button>
+            <form class="form-horizontal" method="POST">
+
+            </form>
+        </div>
+    </body>
+
+    <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
+    <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
+    <script>
+        $(document).ready(function () {
+            var max_friends = 12;
+            var wrapper = $(".group_form");
+            var add_btn = $(".add_friend");
+            var forms = $(".form-horizontal");
+            var x = 0;
+            var cnt = 0;
+            $(add_btn).click(function(e) {
+                e.preventDefault();
+                if(x < 12) {
+                    $(forms).prepend('<div class="form-group"><label for="friend' + cnt + '" class="col-sm-2 control-label">Friend</label><div class="col-sm-6"><input class="friend-input form-control" name="friend' + cnt + '" placeholder="Friend" autocomplete="on"/></div><div class="col-sm-4"><button class="remove btn btn-danger">Remove friend</button></div></div>');
+                    x = x + 1;
+                    if(x == 1) {
+                        $(forms).append("<input type=\"submit\" class=\"submit_btn btn btn-default\" value=\"Compute\">");
+                    }
+                }
+            });
+            $(forms).on("click", ".remove", function(e) {
+                e.preventDefault();
+                $(this).parent("div").parent("div").remove();
+                x = x - 1;
+                if(x == 0) {
+                    var submitbtn = $(".submit_btn");
+                    $(submitbtn).hide();
+                }
+            });
+            $(forms).on("click",".friend-input", function(e) {
+                var availableTags = [
+                  @for(friend <- friends) {
+                    "@friend",
+                  }
+                ];
+                $(this).autocomplete({
+                    source: availableTags
+                });
+            });
+        });
+    </script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+</html>
