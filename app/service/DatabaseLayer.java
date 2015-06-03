@@ -395,6 +395,26 @@ public class DatabaseLayer {
         }
         return result;
     }
+    
+    public static HashMap<String, Object> getAirline(String airlineIATA) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        try {
+            String query = "SELECT * from Airline where iata_code='" + airlineIATA + "'";
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                result.put("name", rs.getString(2));
+                result.put("iata", rs.getString(3));
+                result.put("icao", rs.getString(4));
+                result.put("rating_num", rs.getDouble(5));
+                result.put("rating_sum", rs.getDouble(6));
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public static ArrayList<Address> getAddressesRecommendations() {
         ArrayList<Address> recommendations = new ArrayList<Address>();
