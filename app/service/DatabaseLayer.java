@@ -498,6 +498,22 @@ public class DatabaseLayer {
     public static void addRating(String val) {
         System.out.println("I-am dat rating-ul: "+val);
     }
+    
+    public static HashMap<String, Double> topCompanies(String nr) {
+        HashMap<String, Double> result = new HashMap<String, Double>();
+        try {
+            String query = "SELECT * FROM (SELECT airline_name, rating_sum / rating_num from airline where rating_num > 0 order by rating_sum / rating_num) where rownum <= " + nr;
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()) {
+                result.put(rs.getString(1), rs.getDouble(2));
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 
     /*
