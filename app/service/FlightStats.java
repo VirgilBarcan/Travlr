@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -19,6 +20,50 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class FlightStats {
 	private static String appID = "b9a41a78";
 	private static String appKey = "794cba8436f4bd984ca7c6d9903fa0e0";
+	
+	private class Flight {
+		private HashMap<String, String> fields;
+		private String carrier;
+		private String departureTime, departureAirport;
+		private String arrivalTime, arrivalAirport;
+		
+		public Flight(String carrier, String departureTime, String departureAirport, String arrivalTime, String arrivalAirport) {
+			fields = new HashMap<String, String>();
+			fields.put("carrier", carrier);
+			fields.put("departureAirport", departureAirport);
+			fields.put("departureTime", departureTime);
+			fields.put("arrivalAirport", arrivalAirport);
+			fields.put("arrivalTime", arrivalTime);
+		}
+		
+		public String toJSON(){
+			StringBuilder str = new StringBuilder();
+			return str.toString();
+		}
+
+		public String toXML(){
+			StringBuilder str = new StringBuilder();
+			return str.toString();
+		}
+	}
+	
+	private class Trip {
+		private ArrayList<Flight> flights;
+		
+		public Trip() { flights = new ArrayList<Flight>(); }
+
+		public void add(Flight flight) { flights.add(flight); }
+		
+		public String toJSON(){
+			StringBuilder str = new StringBuilder();
+			return str.toString();
+		}
+
+		public String toXML(){
+			StringBuilder str = new StringBuilder();
+			return str.toString();
+		}
+	}
 	
 	private static String download(String link) throws IOException{
 		System.setProperty("http.agent", "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36");
@@ -123,5 +168,41 @@ public class FlightStats {
 			e.printStackTrace();
 		}
 		return info;
+	}
+	
+	public static ArrayList<Flight> bar(String code){
+		ArrayList<Flight> flights = new ArrayList<Flight>();
+		String url = "https://api.flightstats.com/flex/flightstatus/rest/v2/json/airport/tracks/%s/dep?appId=%s&appKey=%s&includeFlightPlan=false&maxPositions=2";
+		url = String.format(url, code, appID, appKey);
+		
+		try {
+			String doc = download(url);
+			JsonNode obj = Json.parse(doc).get("airport");
+			if (obj==null)
+				return flights;
+			
+			//info.put("name", obj.get("name").asText());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return flights;
+	}
+	
+	public static void foo(String from, String to, Date date){
+		HashSet<String> froms=new HashSet<String>(), tos=new HashSet<String>();
+		final int maxdepth = 4;
+		
+		froms.addAll(getAirports(from));
+		tos.addAll(getAirports(to));
+		
+		HashSet<String> departures = new HashSet<String>();
+		departures.addAll(froms);
+		for (int depth=0; depth<maxdepth; ++depth){
+			HashSet<String> newDepartures = new HashSet<String>();
+			for (String departure : departures){
+				
+			}
+			departures = newDepartures;
+		}
 	}
 }
