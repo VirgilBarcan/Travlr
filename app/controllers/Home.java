@@ -42,10 +42,7 @@ public class Home extends Controller
             String can_post = "";
 
             if((session("email") == "" && session("username") == "") || (session("email") == null && session("username") == null)) // User is not logged in, so he doesn't have a home
-                can_post = "readonly";
-
-            System.out.println("Email: " + session("email"));
-            System.out.println("Username: " + session("username"));
+                can_post = "disabled";
 
             String identifier = DatabaseLayer.getUsernameFromDb(user_id);
             if(identifier == null) identifier = DatabaseLayer.getEmailFromDb(user_id);
@@ -95,7 +92,6 @@ public class Home extends Controller
 
                 return ok(home.render(picture_url, user_full_name, from_name, from_date, from_message, from_picture, from_url, can_post));
             }        
-            else System.out.println(">>>>>>>>>>>>>>>>> PICTURE_ID == -1 for user(" + user_id + ") <<<<<<<<<<<<<<<<<<<<<<<");   
         }
 
         UserInfo userInfo = UserData.getUserInfoFromDB();
