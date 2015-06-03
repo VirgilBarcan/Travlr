@@ -951,104 +951,130 @@ IS
       RETURN v_return;
     END;
 
-  FUNCTION ADD_USER_HOMETOWN (
-    p_country IN VARCHAR2,
-    p_state   IN VARCHAR2,
-    p_county  IN VARCHAR2,
-    p_locality IN VARCHAR2,
-    p_street_name IN VARCHAR2,
-    p_street_no   IN VARCHAR2,
-    p_user_identifier IN VARCHAR2
-  ) RETURN INTEGER
-  IS
-    v_address_id INTEGER;
-    v_user_id INTEGER;
-    v_user_info_id INTEGER;
-    v_returned INTEGER;
-    BEGIN
-      --get the id of the address
-      v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
-      
-      IF v_address_id = -1 THEN --address does not exist
-        --create the address
-        v_address_id := ADD_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
-        
-        --get the id of the newly created address
-        v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
-      END IF;
-      
-      --get the id of the user
-      v_user_id := GET_USER_ID(p_user_identifier);
-      
-      IF v_user_id != -1 THEN --user does exist
-        --get the user info id
-        v_user_info_id := GET_USER_INFO_ID(v_user_id);
-
-        BEGIN
-          COMMIT;
-          --insert the address into the user record
-          UPDATE USER_INFO SET hometown_address = v_address_id WHERE user_info_id = v_user_info_id;
-          v_returned := 0;
-        EXCEPTION
-          WHEN OTHERS THEN
-            ROLLBACK;
-            v_returned := 1;
-        END;
-      ELSE
-        v_returned := 1;
-      END IF;          
-      
-      RETURN v_returned;
-    END;
+  FUNCTION ADD_USER_HOMETOWN ( 
+    p_country IN VARCHAR2, 
+    p_state   IN VARCHAR2, 
+    p_county  IN VARCHAR2, 
+    p_locality IN VARCHAR2, 
+    p_street_name IN VARCHAR2, 
+    p_street_no   IN VARCHAR2, 
+    p_user_identifier IN VARCHAR2 
+  ) RETURN INTEGER 
+  IS 
+    v_address_id INTEGER; 
+    v_user_id INTEGER; 
+    v_user_info_id INTEGER; 
+    v_returned INTEGER; 
+  BEGIN 
+    --get the id of the address 
+    v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no); 
+     
+    IF v_address_id = -1 THEN --address does not exist 
+      --create the address 
+      v_address_id := ADD_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no); 
+       
+      --get the id of the newly created address 
+      v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no); 
+    END IF; 
+     
+    --get the id of the user 
+    v_user_id := GET_USER_ID(p_user_identifier); 
+     
+    IF v_user_id != -1 THEN --user does exist 
+      --get the user info id 
+      v_user_info_id := GET_USER_INFO_ID(v_user_id); 
+       
+      BEGIN 
+      COMMIT; 
+      --insert the address into the user record 
+      UPDATE USER_INFO SET hometown_address = v_address_id WHERE user_info_id = v_user_info_id; 
+      v_returned := 0; 
+      EXCEPTION 
+      WHEN OTHERS THEN 
+      ROLLBACK; 
+      v_returned := 1; 
+      END; 
+    ELSE 
+      v_returned := 1; 
+      --get the id of the user 
+      v_user_id := GET_USER_ID(p_user_identifier); 
+      BEGIN 
+      COMMIT; 
+      --insert the address into the user record 
+      UPDATE USER_INFO SET current_address = v_address_id WHERE user_info_id = v_user_info_id; 
+      v_returned := 0; 
+      EXCEPTION 
+      WHEN OTHERS THEN 
+      ROLLBACK; 
+      v_returned := 1; 
+      END;
+    END IF; 
+     
+    RETURN v_returned; 
+  END;
   
-  FUNCTION ADD_USER_CURRENT_ADDRESS (
-    p_country IN VARCHAR2,
-    p_state   IN VARCHAR2,
-    p_county  IN VARCHAR2,
-    p_locality IN VARCHAR2,
-    p_street_name IN VARCHAR2,
-    p_street_no   IN VARCHAR2,
-    p_user_identifier IN VARCHAR2
-  ) RETURN INTEGER
-  IS
-    v_address_id INTEGER;
-    v_user_id INTEGER;
-    v_user_info_id INTEGER;
-    v_returned INTEGER;
-    BEGIN
-      --get the id of the address
-      v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
+
+  FUNCTION ADD_USER_CURRENT_ADDRESS ( 
+    p_country IN VARCHAR2, 
+    p_state   IN VARCHAR2, 
+    p_county  IN VARCHAR2, 
+    p_locality IN VARCHAR2, 
+    p_street_name IN VARCHAR2, 
+    p_street_no   IN VARCHAR2, 
+    p_user_identifier IN VARCHAR2 
+  ) RETURN INTEGER 
+  IS 
+    v_address_id INTEGER; 
+    v_user_id INTEGER; 
+    v_user_info_id INTEGER; 
+    v_returned INTEGER; 
+  BEGIN 
+    --get the id of the address 
+    v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no); 
+     
+    IF v_address_id = -1 THEN --address does not exist 
+      --create the address 
+      v_address_id := ADD_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no); 
+       
+      --get the id of the newly created address 
+      v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no); 
+    END IF; 
+     
+    --get the id of the user 
+    v_user_id := GET_USER_ID(p_user_identifier); 
+    IF v_user_id != -1 THEN --user does exist 
+      --get the user info id 
+      v_user_info_id := GET_USER_INFO_ID(v_user_id); 
+       
+      BEGIN 
+      COMMIT; 
+      --insert the address into the user record 
+      UPDATE USER_INFO SET current_address = v_address_id WHERE user_info_id = v_user_info_id; 
+      v_returned := 0; 
+      EXCEPTION 
+      WHEN OTHERS THEN 
+      ROLLBACK; 
+      v_returned := 1; 
+      END; 
+    ELSE 
+      v_returned := 1;
       
-      IF v_address_id = -1 THEN --address does not exist
-        --create the address
-        v_address_id := ADD_ADDRESS(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
-        
-        --get the id of the newly created address
-        v_address_id := GET_ADDRESS_ID(p_country, p_state, p_county, p_locality, p_street_name, p_street_no);
-      END IF;
-      
-      --get the id of the user
-      v_user_id := GET_USER_ID(p_user_identifier);
-      IF v_user_id != -1 THEN --user does exist
-        --get the user info id
-        v_user_info_id := GET_USER_INFO_ID(v_user_id);
-        
-        BEGIN
-          COMMIT;
-          --insert the address into the user record
-          UPDATE USER_INFO SET current_address = v_address_id WHERE user_info_id = v_user_info_id;
-          v_returned := 0;
-        EXCEPTION
-          WHEN OTHERS THEN
-            ROLLBACK;
-            v_returned := 1;
-        END;
-      ELSE
-        v_returned := 1;
-      END IF;          
-      
-      RETURN v_returned;
-    END;
+      --get the id of the user 
+      v_user_id := GET_USER_ID(p_user_identifier); 
+      BEGIN 
+      COMMIT; 
+      --insert the address into the user record 
+      UPDATE USER_INFO SET current_address = v_address_id WHERE user_info_id = v_user_info_id; 
+      v_returned := 0; 
+      EXCEPTION 
+      WHEN OTHERS THEN 
+      ROLLBACK; 
+      v_returned := 1; 
+      END;
+    END IF; 
+     
+    RETURN v_returned; 
+  END; 
   
   FUNCTION ADD_USER_AIRLINE (
     p_airline_name  IN VARCHAR2,
