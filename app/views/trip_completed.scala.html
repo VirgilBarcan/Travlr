@@ -23,7 +23,7 @@
             @for(flight <- result) {
                 <tr>
                     <td>@flight.getCompanyIATA()</td>
-                    <td>@flight.getCompanyName()</td>
+                    <td><a href="/companies/@flight.getCompanyIATA()">@flight.getCompanyName()</a></td>
                     <td>@flight.getDeparture()</td>
                     <td>@flight.getArrival()</td>
                 </tr>
