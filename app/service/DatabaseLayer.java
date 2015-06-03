@@ -416,6 +416,30 @@ public class DatabaseLayer {
         return result;
     }
 
+    public static HashMap<String, Object> getAirportById(String strId) {
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        try {
+            String query = "SELECT * from airport where airport_id=" + strId;
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                result.put("name", rs.getString(2));
+                result.put("city", rs.getString(3));
+                result.put("city_code", rs.getString(4));
+                result.put("country", rs.getString(5));
+                result.put("country_code", rs.getString(6));
+                result.put("lat", rs.getDouble(9));
+                result.put("long", rs.getDouble(10));
+                result.put("rating_num", rs.getDouble(11));
+                result.put("rating_sum", rs.getDouble(12));
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public static ArrayList<Address> getAddressesRecommendations() {
         ArrayList<Address> recommendations = new ArrayList<Address>();
         Address userHometown = null;
@@ -462,6 +486,10 @@ public class DatabaseLayer {
         }
 
         return recommendations;
+    }
+
+    public static void addRating(String val) {
+        System.out.println("I-am dat rating-ul: "+val);
     }
 
 

@@ -58,3 +58,6 @@ GET         /search_addresses_results            controllers.UserData.searchAddr
 
 #Company Page
 GET         /companies/:id                       controllers.Company.index(id:String)
+
+#Airport Page
+GET			/airports/:id 						 controllers.Airport.index(id: String)
