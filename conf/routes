@@ -11,8 +11,8 @@ GET         /assets/*file                        controllers.Assets.at(path="/pu
 
 # First page to be shown
 GET         /                                    controllers.Login.loginRegister()
-GET         /rest/            controllers.REST.index(url:String ?= "")
-GET         /rest/*url            controllers.REST.index(url:String)
+GET         /rest/                               controllers.REST.index(url:String ?= "")
+GET         /rest/*url                           controllers.REST.index(url:String)
 
 # Home page
 GET         /home                                controllers.Home.index()
@@ -66,5 +66,8 @@ GET         /companies/:id                       controllers.Company.index(id:St
 GET         /airports/:id                        controllers.Airport.index(id: String)
 
 #Statistics Page
-GET         /statistics                      controllers.Statistics.index(companies: String?="5")
+GET         /statistics                          controllers.Statistics.index(companies: String?="5")
+
+#Calendar
+GET         /calendar                            controllers.Calendar.calendar()
 

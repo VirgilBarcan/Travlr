@@ -1,0 +1,55 @@
+@(userInfo: UserInfo)
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>My Calendar</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='http://fonts.googleapis.com/css?family=Economica' rel='stylesheet' type='text/css'>
+            <!-- Bootstrap -->
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+            <!-- Respomsive slider -->
+        <link href="@routes.Assets.at("plugins/responsive-calendar/0.8/css/responsive-calendar.css")" rel="stylesheet">
+    </head>
+    <body>
+
+        @navbar(userInfo)
+
+        <div class="container">
+                <!-- Responsive calendar - START -->
+            <div class="responsive-calendar">
+                <div class="controls">
+                    <a class="pull-left" data-go="prev"><div class="btn btn-primary">Prev</div></a>
+                    <h4><span data-head-year></span> <span data-head-month></span></h4>
+                    <a class="pull-right" data-go="next"><div class="btn btn-primary">Next</div></a>
+                </div><hr/>
+                <div class="day-headers">
+                    <div class="day header">Mon</div>
+                    <div class="day header">Tue</div>
+                    <div class="day header">Wed</div>
+                    <div class="day header">Thu</div>
+                    <div class="day header">Fri</div>
+                    <div class="day header">Sat</div>
+                    <div class="day header">Sun</div>
+                </div>
+                <div class="days" data-group="days">
+
+        </div>
+            </div>
+                <!-- Responsive calendar - END -->
+        </div>
+        <script src="@routes.Assets.at("plugins/responsive-calendar/0.8/js/jquery.js")"></script>
+        <script src="@routes.Assets.at("plugins/responsive-calendar/0.8/js/bootstrap.min.js")"></script>
+        <script src="@routes.Assets.at("plugins/responsive-calendar/0.8/js/responsive-calendar.js")"></script>
+        <script type="text/javascript">
+        $(document).ready(function () {
+            $(".responsive-calendar").responsiveCalendar({
+                time: '2013-05',
+                events: {
+                    "2013-05-03" : { "number" : 1, "string" : "Prezentare proiect TW" }
+                }
+            });
+        });
+        </script>
+    </body>
+</html>
