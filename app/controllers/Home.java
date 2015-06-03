@@ -24,69 +24,9 @@ import views.html.*;
 
 public class Home extends Controller
 {
-    /*
     public static Result index() 
     {
-        if(session("email") == "" && session("username") == "") // User is not logged in, so he doesn't have a home
-            return ok(login.render(null));
-
-        UserInfo userInfo = UserData.getUserInfoFromDB();
-        String user_full_name = userInfo.getFirstName() + " " + userInfo.getLastName();
-        String identifier = session("email") != "" ? session("email") : session("username");
-        int user_id = DatabaseLayer.getUserID(identifier);
-
-        return Home.user(user_id);
-
-        
-        int picture_id = DatabaseLayer.getPictureID(user_id);
-        String picture_url = "";
-
-        if (picture_id != -1) // The picture_id exists
-        {
-            picture_url = String.format("/assets/images/profile-images/%d.png", picture_id);
-
-            ArrayList<String> from_name = new ArrayList<String>();
-            ArrayList<String> from_date = new ArrayList<String>();
-            ArrayList<String> from_message = new ArrayList<String>();
-            ArrayList<String> from_picture = new ArrayList<String>();
-            ArrayList<String> from_url = new ArrayList<String>();
-
-            Integer totalPosts = DatabaseLayer.getPosts(user_id);
-
-            for(int i = 1; i <= totalPosts; ++i)
-            {
-                Post post = DatabaseLayer.getPost(user_id, i);
-                
-                Integer transmitter = post.getTransmitter();
-
-                String transmitter_identifier = DatabaseLayer.getUsernameFromDb(transmitter);
-                if(transmitter_identifier == null) transmitter_identifier = DatabaseLayer.getEmailFromDb(transmitter);
-                if(transmitter_identifier == null) System.out.println("BIG ERROR AT Home.index()");
-
-                UserInfo info = DatabaseLayer.getUserInfoFromDB(transmitter_identifier);
-
-                int transmitter_picture_id = DatabaseLayer.getPictureID(transmitter);
-                String transmitter_picture_url = String.format("/assets/images/profile-images/%d.png", transmitter_picture_id);
-
-                String transmitter_url = "/home/" + transmitter;
-
-                from_name.add(info.getFirstName() + " " + info.getLastName());
-                from_date.add(post.getAtDate());
-                from_message.add(post.getMessage());                
-                from_picture.add(transmitter_picture_url);
-                from_url.add(transmitter_url);
-            }
-
-            return ok(home.render(picture_url, user_full_name, from_name, from_date, from_message, from_picture, from_url));
-        }
-
-        return ok(page_not_found.render(userInfo));        
-    }
-    */
-
-    public static Result index() 
-    {
-        if(session("email") == "" && session("username") == "") // User is not logged in, so he doesn't have a home
+        if((session("email") == "" && session("username") == "") || (session("email") == null && session("username") == null)) // User is not logged in, so he doesn't have a home
             return ok(login.render(null));
 
         String identifier = session("email") != "" ? session("email") : session("username");
@@ -101,8 +41,11 @@ public class Home extends Controller
         {
             String can_post = "";
 
-            if(session("email") == "" && session("username") == "") // User that requests the page is not logged in, so he can't post
+            if((session("email") == "" && session("username") == "") || (session("email") == null && session("username") == null)) // User is not logged in, so he doesn't have a home
                 can_post = "readonly";
+
+            System.out.println("Email: " + session("email"));
+            System.out.println("Username: " + session("username"));
 
             String identifier = DatabaseLayer.getUsernameFromDb(user_id);
             if(identifier == null) identifier = DatabaseLayer.getEmailFromDb(user_id);
@@ -151,7 +94,8 @@ public class Home extends Controller
                 }
 
                 return ok(home.render(picture_url, user_full_name, from_name, from_date, from_message, from_picture, from_url, can_post));
-            }           
+            }        
+            else System.out.println(">>>>>>>>>>>>>>>>> PICTURE_ID == -1 for user(" + user_id + ") <<<<<<<<<<<<<<<<<<<<<<<");   
         }
 
         UserInfo userInfo = UserData.getUserInfoFromDB();
