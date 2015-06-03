@@ -109,6 +109,8 @@ public class UserData extends Controller {
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
 
+        System.out.println("request in hometown: " + request);
+
         if (request.containsKey("input-hometown-country"))
             country = request.get("input-hometown-country")[0];
         if (request.containsKey("input-hometown-state"))
@@ -167,18 +169,20 @@ public class UserData extends Controller {
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
 
-        if (request.containsKey("input-hometown-country"))
-            country = request.get("input-hometown-country")[0];
-        if (request.containsKey("input-hometown-state"))
-            state = request.get("input-hometown-state")[0];
-        if (request.containsKey("input-hometown-county"))
-            county = request.get("input-hometown-county")[0];
-        if (request.containsKey("input-hometown-locality"))
-            locality = request.get("input-hometown-locality")[0];
-        if (request.containsKey("input-hometown-street-name"))
-            streetName = request.get("input-hometown-street-name")[0];
-        if (request.containsKey("input-hometown-street-number"))
-            streetNumber = request.get("input-hometown-street-number")[0];
+        System.out.println("request in current: " + request);
+
+        if (request.containsKey("input-current-country"))
+            country = request.get("input-current-country")[0];
+        if (request.containsKey("input-current-state"))
+            state = request.get("input-current-state")[0];
+        if (request.containsKey("input-current-county"))
+            county = request.get("input-current-county")[0];
+        if (request.containsKey("input-current-locality"))
+            locality = request.get("input-current-locality")[0];
+        if (request.containsKey("input-current-street-name"))
+            streetName = request.get("input-current-street-name")[0];
+        if (request.containsKey("input-current-street-number"))
+            streetNumber = request.get("input-current-street-number")[0];
 
         currentAddress.setCountry(country);
         currentAddress.setState(state);
@@ -200,7 +204,7 @@ public class UserData extends Controller {
             String visibleEdit = "visible";
             String visibleView = "hidden";
 
-            return retryEditUserData();
+            return editUserData();
         }
         else{
             // the update of the DB did end up with success

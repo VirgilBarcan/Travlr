@@ -51,9 +51,9 @@ BEGIN
   --v_returned := TRAVLR.ADD_USER_HOMETOWN('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16', 'virgil.barcan');
   --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_HOMETOWN:' || v_returned);
   
-  --v_returned := TRAVLR.ADD_USER_CURRENT_ADDRESS('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '16', 'virgil.barcan');
-  --DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_CURRENT_ADDRESS:' || v_returned);
-  
+  v_returned := TRAVLR.ADD_USER_CURRENT_ADDRESS('Romania', 'Romania', 'Iasi', 'Iasi', 'Soseaua Pacurari', '26', 'virgil.barcan');
+  DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_CURRENT_ADDRESS:' || v_returned);
+END;  
   --v_user_info := TRAVLR.GET_USER_INFO('virgil.barcan');
   --DBMS_OUTPUT.PUT_LINE('UserInfo: ' || v_user_info.first_name || ' ' || v_user_info.last_name || ' ' || v_user_info.birthdate || ' ' || v_user_info.gender);
   
@@ -78,7 +78,7 @@ BEGIN
                        v_user_current_address.state || ' ' || v_user_current_address.county || ' ' || 
                        v_user_current_address.locality || ' ' || v_user_current_address.street_name || ' ' ||
                        v_user_current_address.street_no);                     
-*/                       
+                      
   
   v_returned := TRAVLR.ADD_USER_FLIGHT_PREFERENCES('yes', 'yes', 'virgil.barcan');
   DBMS_OUTPUT.PUT_LINE('Returned by ADD_USER_FLIGHT_PREFERENCES: ' || v_returned);

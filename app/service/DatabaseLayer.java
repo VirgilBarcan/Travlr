@@ -249,6 +249,7 @@ public class DatabaseLayer {
         return result == 0;
     }
 
+
     public static boolean addUserHometownToDB(Address userHometown, String userIdentifier) {
         int result = -1;
 
@@ -281,6 +282,9 @@ public class DatabaseLayer {
             statement.execute();
 
             result = statement.getInt(1);
+
+            System.out.println("result in ADD_USER_HOMETOWN: " + result);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -320,13 +324,16 @@ public class DatabaseLayer {
             statement.execute();
 
             result = statement.getInt(1);
+
+            System.out.println("result in ADD_USER_CURRENT_ADDRESS: " + result);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return result == 0;
     }
-    
+
     public static ArrayList<Integer> getFriends(int userId) {
         ArrayList<Integer> result = new ArrayList<Integer>();
         try {
