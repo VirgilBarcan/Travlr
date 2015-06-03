@@ -300,62 +300,91 @@
         window.onload = init;
 
         function init(){
-        var dataListHometown = document.getElementById('results-hometown');
-        var inputHometown = document.getElementById('search-hometown');
+            var dataListHometown = document.getElementById('results-hometown');
+            var inputHometown = document.getElementById('search-hometown');
 
-        var dataListCurrent = document.getElementById('results-current-location');
-        var inputCurrent = document.getElementById('search-current-location');
+            var dataListCurrent = document.getElementById('results-current-location');
+            var inputCurrent = document.getElementById('search-current-location');
 
-        var dataListNew = document.getElementById('results-new-location');
-        var inputNew = document.getElementById('search-new-location');
-        //alert(dataList);
-        //alert(input);
+            var dataListNew = document.getElementById('results-new-location');
+            var inputNew = document.getElementById('search-new-location');
+            //alert(dataList);
+            //alert(input);
 
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function(response) {
-            if (request.readyState === 4) {
-                if (request.status === 200) {
-                    // Parse the JSON
-                    var jsonOptions = JSON.parse(request.responseText);
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function(response) {
+                if (request.readyState === 4) {
+                    if (request.status === 200) {
+                        // Parse the JSON
+                        var jsonOptions = JSON.parse(request.responseText);
 
-                    //alert(request.responseText);
+                        //alert(request.responseText);
 
-                    // Loop over the JSON array.
-                    jsonOptions.forEach(function(item) {
-                        // Create a new <option> element.
-                        var optionHometown = document.createElement('option');
-                        var optionCurrent = document.createElement('option');
-                        var optionNew = document.createElement('option');
+                        // Loop over the JSON array.
+                        jsonOptions.forEach(function(item) {
+                            // Create a new <option> element.
+                            var optionHometown = document.createElement('option');
+                            var optionCurrent = document.createElement('option');
+                            var optionNew = document.createElement('option');
 
-                        // Set the value using the item in the JSON array.
+                            // Set the value using the item in the JSON array.
 
-                        var value = item.country + " " + item.state + " " + item.county + " " + item.locality + " " + item.street_name + " " + item.street_number;
+                            var value = item.country + "_" + item.state + "_" + item.county + "_" + item.locality + "_" + item.street_name + "_" + item.street_number;
 
-                        optionHometown.value = value;
-                        optionCurrent.value = value;
-                        optionNew.value = value;
+                            optionHometown.value = value;
+                            optionCurrent.value = value;
+                            optionNew.value = value;
 
-                        // Add the <option> element to the <datalist>.
-                        dataListHometown.appendChild(optionHometown);
-                        dataListCurrent.appendChild(optionCurrent);
-                        dataListNew.appendChild(optionNew);
-                    });
+                            // Add the <option> element to the <datalist>.
+                            dataListHometown.appendChild(optionHometown);
+                            dataListCurrent.appendChild(optionCurrent);
+                            dataListNew.appendChild(optionNew);
+                        });
 
-                    // Update the placeholder text.
-                    inputHometown.placeholder = "Search Hometown";
-                    inputCurrent.placeholder = "Search Current Location";
-                    inputNew.placeholder = "Search and Add New Location"
-                } else {
-                    // An error occured :(
-                    inputHometown.placeholder = "Couldn't load datalist options :(";
-                    inputCurrent.placeholder = "Couldn't load datalist options :(";
-                    inputNew.placeholder = "Couldn't load datalist options :(";
+                        // Update the placeholder text.
+                        inputHometown.placeholder = "Search Hometown";
+                        inputCurrent.placeholder = "Search Current Location";
+                        inputNew.placeholder = "Search and Add New Location"
+                    } else {
+                        // An error occured :(
+                        inputHometown.placeholder = "Couldn't load datalist options :(";
+                        inputCurrent.placeholder = "Couldn't load datalist options :(";
+                        inputNew.placeholder = "Couldn't load datalist options :(";
+                    }
                 }
-            }
-        };
+            };
 
-        request.open("GET", "search_addresses", true);
-        request.send();
+            request.open("GET", "search_addresses", true);
+            request.send();
+        }
+
+        function searchHometown(){
+            var search = document.getElementById('search-hometown' ).value;
+
+            if (search.length > 0) {
+                var splited = search.split("_");
+
+                document.getElementById('input-hometown-country' ).value = splited[0];
+                document.getElementById('input-hometown-state' ).value = splited[1];
+                document.getElementById('input-hometown-county' ).value = splited[2];
+                document.getElementById('input-hometown-locality' ).value = splited[3];
+                document.getElementById('input-hometown-street-name' ).value = splited[4];
+                document.getElementById('input-hometown-street-number' ).value = splited[5];
+            }
+        }
+
+        function searchCurrent(){
+            var search = document.getElementById('search-current-location' ).value;
+
+            if (search.length > 0) {
+                var splited = search.split("_");
+                document.getElementById('input-current-country' ).value = splited[0];
+                document.getElementById('input-current-state' ).value = splited[1];
+                document.getElementById('input-current-county' ).value = splited[2];
+                document.getElementById('input-current-locality' ).value = splited[3];
+                document.getElementById('input-current-street-name' ).value = splited[4];
+                document.getElementById('input-current-street-number' ).value = splited[5];
+            }
         }
 
         </script>
@@ -490,7 +519,7 @@
                                                                 <div class="form-group" style="display:inline;">
                                                                     <div class="input-group" style="display:table;">
                                                                         <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
-                                                                        <input type="text" class="form-control search-hometown" name="search-hometown" id="search-hometown" placeholder="Search location" autocomplete="off" autofocus="autofocus" list="results-hometown">
+                                                                        <input type="text" class="form-control search-hometown" name="search-hometown" id="search-hometown" placeholder="Search location" autocomplete="off" autofocus="autofocus" list="results-hometown" oninput="searchHometown()">
                                                                         <datalist id="results-hometown"></datalist>
                                                                     </div>
                                                                 </div>
@@ -559,7 +588,7 @@
                                                                 <div class="form-group" style="display:inline;">
                                                                     <div class="input-group" style="display:table;">
                                                                         <span class="input-group-addon" style="width:1%;"><span class="glyphicon glyphicon-search"></span></span>
-                                                                        <input type="text" class="form-control search-current-location" name="search-current-location" id="search-current-location" placeholder="Search current location" autocomplete="off" autofocus="autofocus" list="results-current-location">
+                                                                        <input type="text" class="form-control search-current-location" name="search-current-location" id="search-current-location" placeholder="Search current location" autocomplete="off" autofocus="autofocus" list="results-current-location" oninput="searchCurrent()">
                                                                         <datalist id="results-current-location"></datalist>
                                                                     </div>
                                                                 </div>
@@ -570,37 +599,37 @@
                                                                     <div class="form-group">
                                                                         <label for="input-current-country" class="col-sm-2 col-md-2 col-lg-2 control-label">Country</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-country" placeholder="Country" @valueCurrentAddressCountry>
+                                                                            <input type="text" class="form-control" id="input-current-country" name="input-current-country" placeholder="Country" @valueCurrentAddressCountry>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-state" class="col-sm-2 control-label">State</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-state" placeholder="State" @valueCurrentAddressState>
+                                                                            <input type="text" class="form-control" id="input-current-state" name="input-current-state" placeholder="State" @valueCurrentAddressState>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-county" class="col-sm-2 control-label">County</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-county" placeholder="County" @valueCurrentAddressCounty>
+                                                                            <input type="text" class="form-control" id="input-current-county" name="input-current-county" placeholder="County" @valueCurrentAddressCounty>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-locality" class="col-sm-2 control-label">Locality</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-locality" placeholder="Locality" @valueCurrentAddressLocality>
+                                                                            <input type="text" class="form-control" id="input-current-locality" name="input-current-locality" placeholder="Locality" @valueCurrentAddressLocality>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-street-name" class="col-sm-2 control-label">Street Name</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-street-name" placeholder="Street Name" @valueCurrentAddressStreetName>
+                                                                            <input type="text" class="form-control" id="input-current-street-name" name="input-current-street-name" placeholder="Street Name" @valueCurrentAddressStreetName>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">
                                                                         <label for="input-current-street-number" class="col-sm-2 control-label">Street No</label>
                                                                         <div class="col-sm-10">
-                                                                            <input type="text" class="form-control" id="input-current-street-number" placeholder="Street No" @valueCurrentAddressStreetNo>
+                                                                            <input type="text" class="form-control" id="input-current-street-number" name="input-current-street-number" placeholder="Street No" @valueCurrentAddressStreetNo>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group">

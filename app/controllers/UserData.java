@@ -353,7 +353,7 @@ public class UserData extends Controller {
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
-        UserInfo userInfo = getUserInfoFromSession();
+        UserInfo userInfo = getUserInfoFromDB();
         userInfo.setHometown(userHometown);
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
@@ -364,7 +364,7 @@ public class UserData extends Controller {
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
-        UserInfo userInfo = getUserInfoFromSession();
+        UserInfo userInfo = getUserInfoFromDB();
         userInfo.setCurrentAddress(currentAddress);
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
@@ -374,7 +374,7 @@ public class UserData extends Controller {
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
-        UserInfo userInfo = getUserInfoFromSession();
+        UserInfo userInfo = getUserInfoFromDB();
         // TODO userInfo.setFlightPreferences(flightPreferences);
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
@@ -384,7 +384,7 @@ public class UserData extends Controller {
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
-        UserInfo userInfo = getUserInfoFromSession();
+        UserInfo userInfo = getUserInfoFromDB();
         // TODO userInfo.setRoutePreferences(route0Preferences);
 
         return ok(userData.render(visibleEdit, visibleView, userInfo));
