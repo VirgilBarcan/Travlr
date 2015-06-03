@@ -304,7 +304,7 @@ public class DatabaseLayer {
 
         // Send an request to the DB to find if the user exists
         // NOT TESTED!!!
-        String sqlQuery = "{? = call TRAVLR.ADD_USER_CURREENT_ADDRESS(?, ?, ?, ?, ?, ?, ?)}";
+        String sqlQuery = "{? = call TRAVLR.ADD_USER_CURRENT_ADDRESS(?, ?, ?, ?, ?, ?, ?)}";
         Connection connection = DB.getConnection();
         CallableStatement statement = null;
         try {
@@ -437,7 +437,7 @@ public class DatabaseLayer {
                 "      CO.country_id = CI.country_id AND\n" +
                 "      CI.city_id = ST.city_id";
 
-        System.out.println("query: " + query);
+        //System.out.println("query: " + query);
 
         try {
             Connection connection = DB.getConnection();

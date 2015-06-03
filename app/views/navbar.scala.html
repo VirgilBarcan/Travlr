@@ -15,32 +15,32 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="@routes.Home.index()">
                 <div class="col-sm-2 col-md-2 col-lg-2">Travlr</div>
             </a>
         </div>
         <div class="navbar-collapse collapse" id="searchbar">
 
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Trip</a></li>
+                <li><a href="@routes.Home.trip()">Trip</a></li>
                 <li id="userPage">
                     <a href="#">Friends</a>
                 </li>
-                <li><a href="#" data-prevent="">Visualise</a></li>
+                <li><a href="@routes.Home.map()" data-prevent="">Visualise</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">@FirstName @LastName<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="@routes.Help.index()">Help</a></li>
+                        <li><a href="@routes.Contact.index()">Contact</a></li>
                         <li class="divider"></li>
                         <li><a href="#">Settings</a></li>
                         <li class="divider"></li>
-                        <li><a href="#">Logout</a></li>
+                        <li><a href="@routes.Logout.logout()">Logout</a></li>
                     </ul>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" title="Home Page | Travlr">Home</a></li>
+                <li><a href="@routes.Home.index()" title="Home Page | Travlr">Home</a></li>
             </ul>
 
             <form class="navbar-form">

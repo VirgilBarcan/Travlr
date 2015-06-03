@@ -624,14 +624,25 @@ public class UserData extends Controller {
     }
 
     private static String createAddressDatalist(ArrayList<Address> addresses) {
-        String result = "[{";
+        String result = "";
         int n = addresses.size();
 
-        for (int i = 0; i < n - 1; ++i){
-            result += addresses.get(i).toJSON() + "}, ";
-        }
-        result += "{" + addresses.get(n - 1).toJSON() + "}]";
+        if (n > 1) {
+            result = "[{";
 
+            for (int i = 0; i < n - 1; ++i) {
+                result += addresses.get(i).toJSON() + "}, ";
+            }
+            result += "{" + addresses.get(n - 1).toJSON() + "}]";
+        }
+        else {
+            if (n == 1) {
+                result = "[{" + addresses.get(0).toJSON() + "}]";
+            }
+            else {
+                result = "[{" + new Address().toJSON() + "}]";
+            }
+        }
         System.out.println("result: " + result);
 
         return result;

@@ -29,6 +29,9 @@ POST        /register                            controllers.Register.register()
 GET         /registerFB                          controllers.Register.registerFB()
 GET         /registerGP                          controllers.Register.registerGP()
 
+# Logout
+GET         /logout                              controllers.Logout.logout()
+
 # View User Data page
 GET         /view_user_data_page                 controllers.UserData.viewUserData()
 GET         /edit_user_data_page                 controllers.UserData.editUserData()
@@ -51,7 +54,7 @@ POST        /group_trip                          controllers.GroupTrip.postIndex
 
 #SearchHometown
 GET         /search_addresses                    controllers.UserData.searchAddresses()
-GET         /search_addresses_results        controllers.UserData.searchAddressesResults()
+GET         /search_addresses_results            controllers.UserData.searchAddressesResults()
 
 #Company Page
-GET 		    /companies/:id				               controllers.Company.index(id:String)
+GET         /companies/:id                       controllers.Company.index(id:String)
