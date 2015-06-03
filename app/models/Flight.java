@@ -1,5 +1,7 @@
 package models;
 
+import com.google.gson.Gson;
+
 public class Flight implements Comparable<Flight>  {
 	private String companyIATA;
 	private Integer companyId;
@@ -52,5 +54,34 @@ public class Flight implements Comparable<Flight>  {
 	public String getCompanyName() {
 		return companyName;
 	}
+	
+	public String toJson() {
+		return new Gson().toJson(this);
+    }
 
+    public String toXml() {
+    	StringBuilder xml = new StringBuilder();
+    	
+    	xml.append("<flight>");
+    	xml.append("<companyIATA>");
+    	xml.append(companyIATA);
+    	xml.append("</companyIATA>");
+    	xml.append("<companyId>");
+    	xml.append(companyId);
+    	xml.append("</companyId>");
+    	xml.append("<departure>");
+    	xml.append(departure);
+    	xml.append("</departure>");
+    	xml.append("<companyName>");
+    	xml.append(companyName);
+    	xml.append("</companyName>");
+    	xml.append("<arrival>");
+    	xml.append(arrival);
+    	xml.append("</arrival>");
+    	xml.append("<score>");
+    	xml.append(score);
+    	xml.append("</score>");
+    	xml.append("</flight>");
+    	return xml.toString();
+    }
 }

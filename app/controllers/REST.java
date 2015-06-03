@@ -49,6 +49,8 @@ public class REST extends Controller {
 	public static Result flights(String format, String from, String to, String date){
 		
 		ArrayList<HashMap<String, Object>> flights = null;
+		Flights flightss = new Flights();
+		
 		try {
 			flights = FlightStats.getFlights(from, to, new SimpleDateFormat("yyyy-MM-dd").parse(date));
 		} catch (ParseException e) {
@@ -56,26 +58,15 @@ public class REST extends Controller {
 			return ok("");
 		}
 		
+		for (HashMap<String, Object> flight : flights){
+        	flightss.add(new Flight(flight.get("iata").toString(), 0, flight.get("carrier").toString(), flight.get("departure").toString(), flight.get("arrival").toString()));
+        }
+		
 		if (format.equals("json")){
-			return ok(new Gson().toJson(flights));
+			return ok(flightss.toJson());
 		}
 		if (format.equals("xml")){
-			StringWriter str = new StringWriter();
-			JAXBContext jaxbContext;
-			try {
-				Flights flightss = new Flights();
-				jaxbContext = JAXBContext.newInstance(Flights.class);
-				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-				
-                for (HashMap<String, Object> flight : flights){
-                	flightss.add(new Flight(flight.get("iata").toString(), 0, flight.get("carrier").toString(), flight.get("departure").toString(), flight.get("arrival").toString()));
-                }
-                jaxbMarshaller.marshal(flights, str);
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
-			return ok(str.toString());
+			return ok(flightss.toXml());
 		}
 		
 		return ok("");
