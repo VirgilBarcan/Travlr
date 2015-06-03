@@ -52,3 +52,6 @@ POST        /group_trip                          controllers.GroupTrip.postIndex
 #SearchHometown
 GET         /search_addresses                    controllers.UserData.searchAddresses()
 GET         /search_addresses_results        controllers.UserData.searchAddressesResults()
+
+#Company Page
+GET 		    /companies/:id				               controllers.Company.index(id:String)
