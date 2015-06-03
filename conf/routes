@@ -11,6 +11,8 @@ GET         /assets/*file                        controllers.Assets.at(path="/pu
 
 # First page to be shown
 GET         /                                    controllers.Login.loginRegister()
+GET         /rest/            controllers.REST.index(url:String ?= "")
+GET         /rest/*url            controllers.REST.index(url:String)
 
 # Home page
 GET         /home                                controllers.Home.index()

@@ -33,11 +33,24 @@ public class REST extends Controller {
 		return "";
 	}
 	
+    public static Result index(String url){
+        if (url.equals("")){
+            return ok("rest/{format}/{service}/...");
+        }
+        else{
+            String tokens[] = url.split("/");
+            if (tokens[0].equals("flights"))
+                return flights(tokens[1], tokens[2], tokens[3], tokens[4]);
+        }
+        
+        return ok("rest/{format}/{service}/...");
+    }
+    
 	public static Result flights(String format, String from, String to, String date){
 		
 		ArrayList<HashMap<String, Object>> flights = null;
 		try {
-			flights = FlightStats.getFlights(from, to, new SimpleDateFormat("yyyy/MM/dd").parse(date));
+			flights = FlightStats.getFlights(from, to, new SimpleDateFormat("yyyy-MM-dd").parse(date));
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return ok("");
