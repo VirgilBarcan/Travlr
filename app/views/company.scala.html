@@ -33,7 +33,7 @@
                     <dt>Company IATA Code:</dt>
                     <dd>@iata</dd>
                     <dt>Company Rating:</dt>
-                    <dd>@rating / 5.00</dd>
+                    <dd><span  id="given-stars" name="given-stars"> @rating / 5.00</span></dd>
                 </dl>
                 <div class="col-sm-2 col-md-2 col-lg-2"></div>
                 <div class="col-sm-2 col-md-2 col-lg-2">
@@ -49,8 +49,9 @@
     <script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
     <script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
     <script>
-        $("input:radio[name=rating]").onClick(function() {
-            alert($(this).val());
+        $("input:radio[name=rating]").click(function() {
+            var stars = $(this).val();
+            $('#given-stars' ).html(stars + ".00 / 5.00" );
         });
     </script>
 </html>
