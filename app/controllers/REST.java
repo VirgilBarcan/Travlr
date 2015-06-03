@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.Flight;
+import models.Flights;
 import models.UserInfo;
 import play.*;
 import play.db.*;
@@ -49,17 +50,19 @@ public class REST extends Controller {
 			StringWriter str = new StringWriter();
 			JAXBContext jaxbContext;
 			try {
-				jaxbContext = JAXBContext.newInstance(Flight.class);
+				Flights flightss = new Flights();
+				jaxbContext = JAXBContext.newInstance(Flights.class);
 				Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 				
                 for (HashMap<String, Object> flight : flights){
-                	jaxbMarshaller.marshal(new Flight(flight.get("iata").toString(), 0, flight.get("carrier").toString(), flight.get("departure").toString(), flight.get("arrival").toString()), str);
+                	flightss.add(new Flight(flight.get("iata").toString(), 0, flight.get("carrier").toString(), flight.get("departure").toString(), flight.get("arrival").toString()));
                 }
+                jaxbMarshaller.marshal(flights, str);
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}
-			return ok("");
+			return ok(str.toString());
 		}
 		
 		return ok("");
