@@ -63,3 +63,7 @@ GET         /companies/:id                       controllers.Company.index(id:St
 
 #Airport Page
 GET			/airports/:id 						 controllers.Airport.index(id: String)
+
+#Statistics Page
+GET			/statistics						 controllers.Statistics.index(companies: String?="5")
+

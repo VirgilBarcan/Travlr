@@ -1,4 +1,4 @@
-@(harta: HashMap[String, Double],userInfo: UserInfo)
+@(harta: HashMap[String, Double], message: String, al: String,userInfo: UserInfo)
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,7 +19,15 @@
         @navbar(userInfo)
         
         <div class="container" style="padding-top: 70px">
-            <div id="chart_div"><div>
+            <form class="form-inline" method="GET">
+              # of Companies:
+              <input type="number" name="companies" min="0" max="15" step="1" value="1" />
+              <input type="submit" class="btn btn-success" value="Compute Top" />
+            </form>
+            <hr />
+            <div id="chart_div"></div>
+            <hr />
+            <div class="alert @al text-center">@message</div>
         </div>
     </body>
 
