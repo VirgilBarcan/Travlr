@@ -8,6 +8,7 @@ import views.html.*;
 
 public class Help extends Controller {
 	public static Result index() {
+
         UserInfo userInfo = UserData.getUserInfoFromDB();
 
         return ok(help.render(userInfo));

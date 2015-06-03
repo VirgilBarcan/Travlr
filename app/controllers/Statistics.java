@@ -10,6 +10,10 @@ import java.util.HashMap;
 
 public class Statistics extends Controller{
 	public static Result index(String nr) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         UserInfo userInfo = UserData.getUserInfoFromDB();
         HashMap<String, Double> harta = DatabaseLayer.topCompanies(nr);
         String message, al;

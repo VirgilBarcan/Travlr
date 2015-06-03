@@ -1,4 +1,5 @@
 @(userInfo: UserInfo)
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,8 +17,12 @@
     </head>
     <body>
 
-        @navbar(userInfo)
-        
+        @if(userInfo != null){
+            @navbar(userInfo)
+        } else{
+            @navbarLogin()
+        }
+
         <div class="container" style="padding-top: 70px">
             <div class="col-sm-2 col-md-2 col-lg-2" name="left-div-for-padding"></div>
             <div class="col-sm-8 col-md-8 col-lg-8" name="center-div">

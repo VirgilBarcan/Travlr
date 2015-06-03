@@ -24,6 +24,8 @@ import service.Response;
 public class GroupTrip extends Controller{
 	
 	public static Result index() {
+
+
 		int userId = 1; //TO DO: get logon user
 		ArrayList<String> friends = DatabaseLayer.getUsernameListFromDb(DatabaseLayer.getFriends(userId));
 

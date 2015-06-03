@@ -19,9 +19,14 @@
     </head>
     <body>
 
-        @navbar(userInfo)
-        
-        <div class="container" style="padding-top: 70px">
+        @if(userInfo != null){
+            @navbar(userInfo)
+        } else{
+            @navbarLogin()
+        }
+
+
+    <div class="container" style="padding-top: 70px">
         <div class="row">
             <article class="content">
                 <header style="text-align: center">

@@ -10,6 +10,10 @@ import java.util.HashMap;
 
 public class Company extends Controller{
 	public static Result index(String id) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
 		HashMap<String, Object> map = DatabaseLayer.getAirline(id);
 
         UserInfo userInfo = UserData.getUserInfoFromDB();

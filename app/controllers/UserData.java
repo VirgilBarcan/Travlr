@@ -16,6 +16,10 @@ public class UserData extends Controller {
     private static ArrayList<Address> addresses;
 
     public static Result viewUserData() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "hidden";
         String visibleView = "visible";
 
@@ -28,6 +32,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserData() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -40,6 +48,10 @@ public class UserData extends Controller {
     }
 
     public static Result retryEditUserData() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -49,6 +61,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserInfo() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         UserInfo userInfo = new UserInfo();
         String firstName = "";
         String lastName = "";
@@ -99,6 +115,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserHometown() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         Address userHometown = new Address();
         String country = "";
         String state = "";
@@ -159,6 +179,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserCurrentAddress() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         Address currentAddress = new Address();
         String country = "";
         String state = "";
@@ -219,6 +243,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserAirlinePreferences() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         AirlinePreferences userAirlinePreferences= new AirlinePreferences();
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
@@ -249,6 +277,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserFlightPreferences() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         FlightPreferences userFlightPreferences  = new FlightPreferences();
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
@@ -291,6 +323,10 @@ public class UserData extends Controller {
     }
 
     public static Result editUserRoutePreferences() {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         RoutePreferences userRoutePreferences = new RoutePreferences();
 
         Map<String, String[]> request = request().body().asFormUrlEncoded();
@@ -338,6 +374,10 @@ public class UserData extends Controller {
 
 
     private static Result showWithUserInfo(UserInfo userInfo) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -350,6 +390,10 @@ public class UserData extends Controller {
      * @return
      */
     private static Result showWithHometown(Address userHometown) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -361,6 +405,10 @@ public class UserData extends Controller {
 
 
     private static Result showWithCurrentAddress(Address currentAddress) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -371,6 +419,10 @@ public class UserData extends Controller {
     }
 
     public static Result showWithFlightPreferences(FlightPreferences flightPreferences) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -381,6 +433,10 @@ public class UserData extends Controller {
     }
 
     public static Result showWithRoutePreferences(RoutePreferences routePreferences) {
+
+        if(session("email") == null && session("username") == null) // User is not logged in, so he doesn't have a home
+            return ok(login.render(null));
+
         String visibleEdit = "visible";
         String visibleView = "hidden";
 
@@ -489,11 +545,14 @@ public class UserData extends Controller {
         String username = session("username");
         String password = session("password");
 
-        String userIdentifier = email;
-        if (email.equals("")) userIdentifier = username;
+        if (email != null && username != null) {
 
-        //get user info from the DB
-        userInfo = DatabaseLayer.getUserInfoFromDB(userIdentifier);
+            String userIdentifier = email;
+            if (email.equals("")) userIdentifier = username;
+
+            //get user info from the DB
+            userInfo = DatabaseLayer.getUserInfoFromDB(userIdentifier);
+        }
 
         return userInfo;
     }
