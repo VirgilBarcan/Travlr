@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import models.Flight;
+import models.UserInfo;
 import play.*;
 import play.db.*;
 import play.mvc.*;
@@ -23,21 +24,27 @@ import views.html.*;
 public class Home extends Controller{
 
     public static Result index() {
+
+        UserInfo userInfo = UserData.getUserInfoFromDB();
+
         return ok(home.render());
     }
 
     public static Result trip() {
         Map<String, String[]> request = request().body().asFormUrlEncoded();
+
+        UserInfo userInfo = UserData.getUserInfoFromDB();
+
         if (request != null){
             ArrayList<Flight> flights = new ArrayList<Flight>();
-            
+
             if (!request.containsKey("submit"))
-                return ok(trip.render());
+                return ok(trip.render(userInfo));
             if (!request.containsKey("cnt"))
-                return ok(trip.render());
+                return ok(trip.render(userInfo));
             int airports = new Integer(request.get("cnt")[0]);
             if (airports<2)
-                return ok(trip.render());
+                return ok(trip.render(userInfo));
             for (int i=1; i<airports; ++i){
                 String from = null;
                 String to = null;
@@ -71,10 +78,10 @@ public class Home extends Controller{
                     }
                 }
             }
-            return ok(trip_completed.render(flights));
+            return ok(trip_completed.render(flights, userInfo));
         }
 
-        return ok(trip.render());
+        return ok(trip.render(userInfo));
     }
 
     public static Result map() { return ok(map.render()); }

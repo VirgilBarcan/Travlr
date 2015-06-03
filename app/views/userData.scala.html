@@ -293,7 +293,7 @@
 
     <body>
 
-        @navbar()
+        @navbar(userInfo)
 
         <script>
 
@@ -318,7 +318,7 @@
                     // Parse the JSON
                     var jsonOptions = JSON.parse(request.responseText);
 
-                    alert(request.responseText);
+                    //alert(request.responseText);
 
                     // Loop over the JSON array.
                     jsonOptions.forEach(function(item) {

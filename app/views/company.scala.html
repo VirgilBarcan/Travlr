@@ -1,4 +1,4 @@
-@(name: String, iata: String, icao: String, rating: Double)
+@(name: String, iata: String, icao: String, rating: Double)(userInfo: UserInfo)
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,7 +19,7 @@
     </head>
     <body>
 
-        @navbar()
+        @navbar(userInfo)
     
         <div class="container" style="padding-top: 100px">
             <div class="col-sm-4 col-md-4 col-lg-4" name="company-image">

@@ -406,7 +406,7 @@ public class UserData extends Controller {
         session("userHometownStreetNumber", userHometown.getStreetNumber());
     }
 
-    private static UserInfo getUserInfoFromSession() {
+    public static UserInfo getUserInfoFromSession() {
         String firstName = session("userFirstName");
         String lastName = session("userLastName");
         String birthdate = session("userBirthdate");
@@ -478,7 +478,7 @@ public class UserData extends Controller {
         return result;
     }
 
-    private static UserInfo getUserInfoFromDB() {
+    public static UserInfo getUserInfoFromDB() {
         UserInfo userInfo = null;
 
         String email = session("email");
@@ -635,6 +635,18 @@ public class UserData extends Controller {
         System.out.println("result: " + result);
 
         return result;
+    }
+
+    public static UserLoginData getUserCredentialsFromSession() {
+        String email = session("email");
+        String username = session("username");
+        String password = session("password");
+
+        UserLoginData userCredentials = new UserLoginData(email,username,password);
+
+        System.out.println("getUserCredentialsFromSession> " + userCredentials);
+
+        return userCredentials;
     }
 
 }

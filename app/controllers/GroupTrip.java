@@ -26,7 +26,10 @@ public class GroupTrip extends Controller{
 	public static Result index() {
 		int userId = 1; //TO DO: get logon user
 		ArrayList<String> friends = DatabaseLayer.getUsernameListFromDb(DatabaseLayer.getFriends(userId));
-        return ok(group_trip.render(friends));
+
+        UserInfo userInfo = UserData.getUserInfoFromDB();
+
+        return ok(group_trip.render(friends, userInfo));
 	}
 
 	public static Result postIndex() {
@@ -34,6 +37,9 @@ public class GroupTrip extends Controller{
 		ArrayList<String> friends = new ArrayList<String>();
 		friends.add(DatabaseLayer.getUsernameFromDb(userId));
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
+
+        UserInfo userInfo = UserData.getUserInfoFromDB();
+
 		for(Map.Entry<String, String> entry: dynamicForm.data().entrySet()) {
 			if(entry.getKey().contains("friend") == true)
 				friends.add(entry.getValue());
@@ -48,7 +54,8 @@ public class GroupTrip extends Controller{
 		}
 		ArrayList<Flight> result = computePreferences(friends, FlightStats.getFlights(from, to, d));
 		Collections.sort(result);
-        return ok(trip_completed.render(result));
+
+        return ok(trip_completed.render(result, userInfo));
 	}
 
 	private static ArrayList<Flight> computePreferences(ArrayList<String> friends, ArrayList<HashMap<String, Object> > flights) {

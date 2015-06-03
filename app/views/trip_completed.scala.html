@@ -1,4 +1,4 @@
-@(result: ArrayList[Flight])
+@(result: ArrayList[Flight])(userInfo: UserInfo)
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,7 +10,7 @@
     </head>
     <body>
 
-        @navbar()
+        @navbar(userInfo)
     
         <div class="container" style="padding-top: 70px">
             <table class="table table-striped">
