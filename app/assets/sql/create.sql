@@ -24,7 +24,7 @@ CREATE TABLE POST
     receiver      INTEGER NOT NULL,
     availability INTEGER DEFAULT 0, -- 0 - public, 1 - friends, 2 - only me
     message VARCHAR2(1024) NOT NULL,  
-    at VARCHAR(32) -- Can't use timestamp or date name ( are taken by data types )
+    at_date VARCHAR(32) -- Can't use timestamp or date name ( are taken by data types )
 );
 
 ALTER TABLE POST ADD CONSTRAINT POST_PK PRIMARY KEY (post_id);
@@ -43,7 +43,7 @@ FOR EACH ROW
     INTO :new.post_id
     FROM DUAL;
 
-    :new.at := TO_CHAR(SYSDATE, 'DD-MM-YYYY HH24:MI:SS');
+    :new.at_date := TO_CHAR(SYSDATE, 'DD-MM-YYYY HH24:MI:SS');
   END;
  /
 
@@ -320,6 +320,9 @@ FOR EACH ROW
     SELECT users_seq.NEXTVAL
     INTO :new.user_id
     FROM DUAL;
+
+    INSERT INTO PROFILE_PICTURE VALUES(:new.user_id, 0); -- 0 is the default picture
+    UPDATE PROFILE_PICTURE SET picture_id = 0 WHERE user_id = :new.user_id; -- We need this because we use a trigger for incrementing the picture_id
   END;
  /
 

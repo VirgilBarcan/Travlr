@@ -23,9 +23,7 @@ public class Login extends Controller {
         // TODO: Redirect to home if the user is logged in
 
         if(session("email") != null || session("username") != null)
-            // return controllers.routes.Home.index();
             return Home.index();
-
 
         return ok(login.render(null));
     }

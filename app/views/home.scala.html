@@ -1,9 +1,6 @@
-<!--
-	TODO: add date to spanDate
--->
+@(profile_picture: String)(user_full_name: String)(from_name: ArrayList[String])(from_date: ArrayList[String])(from_message: ArrayList[String])(from_picture: ArrayList[String])(from_url: ArrayList[String])(can_post: String)
 
 <!DOCTYPE html>
-
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -16,6 +13,7 @@
 
         <title>Travlr</title>
 
+
         <!-- Bootstrap core CSS -->
         <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
         <!--<link href="offcanvas.css" rel="stylesheet">-->
@@ -27,15 +25,13 @@
         <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
         <script src="@routes.Assets.at("javascripts/ie-emulation-modes-warning.js")"></script>
 
+		<script src="@routes.Assets.at("javascripts/jquery-1.11.3.min.js")"></script>
+    	<script src="@routes.Assets.at("javascripts/jquery-ui.min.js")"></script>
+
         <!-- JQuery UI -->
-        <!-- <link rel="stylesheet" type="text/css" href="./js/timeline/jquery.timeline.css" />  -->
+        <!-- <link rel="stylesheet" type="text/css" href="./js/timeline/jquery.timeline.css" /> -->
 
-        <script src="@routes.Assets.at("javascripts/jquery.min.js")"></script>
-
-        <!--
-        <script src="./js/jquery-ui-1.11.4/jquery-ui.min.js"></script>  
-        <script src="./js/timeline/jquery.timeline.js"></script>
-        -->
+        
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
@@ -111,9 +107,11 @@
                                     <div class="list-group text-center">
                                         <!-- TODO: Div it & Add hrefs-->
                                         
-                                        <img class="profile-picture" src="@routes.Assets.at("images/profile-images/profile-picture.png")" /></br></br> <!-- TODO: Add profile picture -->
+                                        <!--<img class="profile-picture" src="@routes.Assets.at("images/profile-images/profile-picture.png")" />-->
+                                        <img class="profile-picture" src="@profile_picture" />
+                                        </br></br>
 
-                                        <a class="list-group-item readonly">Username</a>
+                                        <a class="list-group-item readonly">@user_full_name</a>
 
                                         <!--
                                         <a href="#" class="list-group-item" data-toggle="collapse" data-target="#preferencesCollapse" aria-expanded="false" aria-controls="preferencesCollapse">
@@ -191,56 +189,24 @@
                     <h4>Post something</h4>
                     <form  role="form">
                         <div class="form-group">
-                            <textarea name="submit-message" class="form-control" rows="3"></textarea>
+                            <textarea name="submit-message" class="form-control" rows="3" @can_post></textarea>
                         </div>
 
                         <div class="btn-container-right">
-                            <button type="submit" class="btn btn-primary">Post</button>
+                            <button type="submit" class="btn btn-primary" @can_post>Post</button>
                         </div>
                     </form>                
 
                 </div><!--/.col-xs-12.col-sm-9-->
                 
             </div>
+
+            <div id="posts" class="col-md-8">
+            	
+            </div>
                 
 
-            <div class="col-md-8">
-                <div class="well">
-                    <form role="form">
-                        <div class="media">
-                            <span class="media-left media-middle">
-                                <img class="profile-message-picture" src="@routes.Assets.at("images/profile-images/user1.png")" alt="User Message">
-                            </span>
-
-                            <div class="media-body">
-                                <h3 class="media-heading">Virgil Barcan</h3>
-                                <span class="spanDate"></span>
-                            </div>
-
-                            <br>
-                            <textarea name="submit-message" class="form-control" rows="3" readonly>Hi man, check this out!!</textarea>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="well">
-                    <form role="form">
-                        <div class="media">
-                            <span class="media-left media-middle">
-                                <img class="profile-message-picture" src="@routes.Assets.at("images/profile-images/user2.png")" alt="User Message">
-                            </span>
-
-                            <div class="media-body">
-                                <h3 class="media-heading">Morosanu Dan</h3>
-                                <span class="spanDate"></span>
-                            </div>
-
-                            <br>
-                            <textarea name="submit-message" class="form-control" rows="3" readonly>Hey Virgil, thanks, u the best!</textarea>
-                        </div>  
-                    </form>
-                </div>
-            </div>
+            <!-- Insert here comments -->
 
             <!-- ===== Timeline =====
 
@@ -305,7 +271,74 @@
 
         <!-- Personal JavaScripts -->
         <!--<script src="./js/snippets.js"></script>-->
-        <script src="@routes.Assets.at("javascripts/profile-style.js")"></script>
+        <!-- <script src="@routes.Assets.at("javascripts/profile-style.js")"></script> -->
+
+        <script>
+    	$(document).ready(function() {
+    		console.log("DONE!!!");
+
+    		var names = [
+              @for(_name <- from_name) {
+               	"@_name",
+              }
+            ];
+
+            var dates = [
+            	@for(_date <- from_date) {
+            		"@_date",
+            	}
+            ];
+
+            var messages = [
+            	@for(_message <- from_message) {
+            		"@_message",
+            	}
+            ];
+
+            var pictures = [
+            	@for(_picture <- from_picture) {
+            		"@_picture",
+            	}
+            ];
+
+            var urls = [
+            	@for(_url <- from_url) {
+            		"@_url",
+            	}
+            ];
+
+            if (names.length == dates.length &&
+               messages.length == pictures.length &&
+           	   pictures.length == names.length) 
+            {
+        		var posts = document.getElementById("posts");
+        		var posts_elements = posts.getElementsByTagName("div");
+
+        		
+        		for(var i = 0; i < names.length; ++i)
+        		{
+        			var newdiv = document.createElement('div');
+        			newdiv.setAttribute("class", "well");
+        			newdiv.innerHTML = '<form role="form"><div class="media"><span class="media-left media-middle"><a href="' + urls[i] + '"><img class="profile-message-picture" src="' + pictures[i] + '" alt="User Message"></a></span><div class="media-body"><h3 class="media-heading">' + names[i] + '</h3><span class="spanDate">' + dates[i] + '</span></div><br><textarea name="submit-message" class="form-control" rows="3" readonly>' + messages[i] + '</textarea></div></form>';
+
+        			$(newdiv).appendTo(posts).show('slow');
+        		}
+
+        		
+
+        		
+
+        		
+            }
+    	});
+    	</script>
+
+	</body>
+
     
-    </body>
+
 </html>
+
+<!--
+	TODO: add date to spanDate
+-->

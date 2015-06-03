@@ -29,8 +29,38 @@
 CREATE OR REPLACE TYPE FRIENDS_ID IS TABLE OF INTEGER;
 /
 
+DROP TYPE POST_TYPE FORCE;
+CREATE OR REPLACE TYPE POST_TYPE AS OBJECT (
+    post_id INTEGER,
+    transmitter INTEGER,
+    receiver INTEGER,
+    availability INTEGER, -- 0 - public, 1 - friends, 2 - only me
+    message VARCHAR2(1024),
+    at_date VARCHAR(32),
+
+    CONSTRUCTOR FUNCTION POST_TYPE RETURN SELF AS RESULT
+ );
+/
+
+CREATE OR REPLACE TYPE BODY POST_TYPE AS
+  CONSTRUCTOR FUNCTION POST_TYPE
+      RETURN SELF AS RESULT
+    AS
+    BEGIN
+      RETURN;
+    END;
+  END;
+ /
+
+-- CREATE OR REPLACE TYPE POSTS_ID IS TABLE OF POST_TYPE;
+
 CREATE OR REPLACE PACKAGE TRAVLR
 IS
+  FUNCTION GET_POST (
+      p_user_id IN INTEGER,
+      p_post_id IN INTEGER
+   ) RETURN POST_TYPE;
+
   /**
   This function is used to add a new user to the DB
   */
@@ -40,6 +70,10 @@ IS
     p_password IN VARCHAR2)
   RETURN INTEGER;
   
+FUNCTION GET_PROFILE_PICTURE (
+    p_userid IN INTEGER
+  ) RETURN INTEGER;
+
   /**
   This function is used to check if an user given by his username/email and password is valid
   */
@@ -253,6 +287,42 @@ END TRAVLR;
 
 CREATE OR REPLACE PACKAGE BODY TRAVLR
 IS
+
+  FUNCTION GET_POST (
+        p_user_id IN INTEGER,
+        p_post_id IN INTEGER
+   ) RETURN POST_TYPE
+   IS
+      -- v_result POSTS_ID := POSTS_ID();
+      v_obj POST_TYPE := POST_TYPE;
+
+      BEGIN
+        BEGIN
+          FOR line IN (SELECT * FROM (SELECT post_id, transmitter, receiver, availability, message, at_date, ROWNUM AS R FROM POST WHERE receiver = p_user_id) WHERE R = p_post_id) 
+          LOOP
+              v_obj.post_id := line.post_id;
+              v_obj.transmitter := line.transmitter;
+              v_obj.receiver := line.receiver;
+              v_obj.availability := line.availability;
+              v_obj.message := line.message;
+              v_obj.at_date := line.at_date;
+
+              RETURN v_obj;
+
+              -- v_result.EXTEND;
+              -- v_result(v_result.COUNT) := V_OBJ;
+          END LOOP;
+          --RETURN v_result;
+          
+          RETURN NULL;
+
+          EXCEPTION
+            WHEN OTHERS THEN
+              RETURN NULL;
+
+        END;
+      END;
+
  FUNCTION ADD_USER (
     p_email IN VARCHAR2,
     p_username IN VARCHAR2,
@@ -414,6 +484,27 @@ IS
       END;
       RETURN v_user_id;
     END;
+
+    FUNCTION GET_PROFILE_PICTURE (
+    p_userid IN INTEGER
+  ) RETURN INTEGER
+  IS
+    v_picture_id INTEGER;
+
+    BEGIN
+      BEGIN
+        SELECT picture_id
+        INTO v_picture_id
+        FROM PROFILE_PICTURE
+        WHERE user_id = p_userid;
+
+        RETURN v_picture_id;
+      END;
+
+      EXCEPTION
+        WHEN OTHERS THEN
+          RETURN -1;
+    END;
   
   FUNCTION GET_USER_INFO_ID (
     p_user_id IN INTEGER
@@ -421,12 +512,18 @@ IS
   IS
     v_user_info_id INTEGER;
     BEGIN
-      SELECT user_info
-      INTO v_user_info_id
-      FROM USERS
-      WHERE user_id = p_user_id;
-      
-      RETURN v_user_info_id;
+      BEGIN
+        SELECT user_info
+        INTO v_user_info_id
+        FROM USERS
+        WHERE user_id = p_user_id;
+        
+        RETURN v_user_info_id;
+
+        EXCEPTION
+            WHEN OTHERS THEN
+              RETURN -1;
+        END;
     END;
   
    

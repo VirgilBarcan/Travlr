@@ -16,6 +16,7 @@ GET         /rest/*url            controllers.REST.index(url:String)
 
 # Home page
 GET         /home                                controllers.Home.index()
+GET         /home/:user_id                       controllers.Home.user(user_id: Integer)
 GET         /Home/map                            controllers.Home.map()
 GET         /Home/trip                           controllers.Home.trip()
 POST        /Home/trip                           controllers.Home.trip()
@@ -62,8 +63,8 @@ GET         /search_addresses_results            controllers.UserData.searchAddr
 GET         /companies/:id                       controllers.Company.index(id:String)
 
 #Airport Page
-GET			/airports/:id 						 controllers.Airport.index(id: String)
+GET         /airports/:id                        controllers.Airport.index(id: String)
 
 #Statistics Page
-GET			/statistics						 controllers.Statistics.index(companies: String?="5")
+GET         /statistics                      controllers.Statistics.index(companies: String?="5")
 

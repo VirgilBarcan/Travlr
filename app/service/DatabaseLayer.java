@@ -8,6 +8,8 @@ import models.*;
 import oracle.sql.STRUCT;
 import play.db.DB;
 
+import java.math.BigDecimal;
+
 import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -25,6 +27,85 @@ import java.util.HashMap;
  * This class is used to handle all the database work required by other classes (by the controllers, for example)
  */
 public class DatabaseLayer {
+
+    public static int getUserID(String identifier)
+    {
+        Integer result = -1;
+
+        String sqlQuery = "{? = call TRAVLR.GET_USER_ID(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, identifier);
+            statement.execute();
+
+            // if the user exists, return it's id
+            result = statement.getInt(1);
+
+            System.out.println("getUserID(" + identifier + ") result: " + result);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return result;        
+    }
+
+    public static int isValidUser(Integer user_id) 
+    {
+        Integer result = -1;
+
+        String sqlQuery = "{? = call TRAVLR.GET_USER_INFO_ID(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setInt(2, user_id);
+            statement.execute();
+
+            // if the user exists, return it's id
+            result = statement.getInt(1);
+
+            System.out.println("isValidUser result: " + result);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public static int getPictureID(Integer user_id) 
+    {
+        Integer result = -1;
+
+        String sqlQuery = "{? = call TRAVLR.GET_PROFILE_PICTURE(?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+        try 
+        {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setInt(2, user_id);
+            statement.execute();
+
+            // if the user exists, return it's id
+            result = statement.getInt(1);
+
+            System.out.println("getPictureID result: " + result);
+        } 
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 
     /**
      * This function is used to check if the data given by the user is valid:
@@ -350,10 +431,166 @@ public class DatabaseLayer {
         return result;
     }
 
+    public static Integer getPosts(int user_id) {
+        Integer result = -1;
+
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try 
+        {
+            String query = "SELECT COUNT(1) FROM POST WHERE receiver = " + user_id;
+            Connection conn = DB.getConnection();
+            stmt = conn.prepareStatement(query);
+            rs = stmt.executeQuery();
+
+            if(rs.next())
+                result = rs.getInt(1);
+        }
+
+        catch(SQLException e) 
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try 
+            {
+                if(stmt != null)
+                    stmt.close();
+
+                if(rs != null)
+                    rs.close();
+            }
+            catch(Exception e) { }
+        }
+
+        return result;
+
+    }
+
+    public static Post getPost(int user_id, int post_id) {
+        Post userPost = null;
+
+        System.out.println("getPost> user_id: " + user_id + " ; post_id = " + post_id);
+
+
+        String sqlQuery = "{? = call TRAVLR.GET_POST(?, ?)}";
+        Connection connection = DB.getConnection();
+        CallableStatement statement = null;
+
+        try 
+        {
+            statement = connection.prepareCall(sqlQuery);
+            statement.registerOutParameter(1, Types.STRUCT, "POST_TYPE");
+            statement.setInt(2, user_id);
+            statement.setInt(3, post_id);
+            statement.execute();
+
+            STRUCT result = (STRUCT) statement.getObject(1);
+
+            if (result != null) 
+            {
+                userPost = new Post();
+                System.out.println("Received STRUCT: " + result);                
+            }
+            else
+            {
+                System.out.println("STRUCT null");
+                return null;
+            }
+
+            Object[] attributes;
+            attributes = result.getAttributes();
+
+            if (attributes != null) {
+                System.out.println("attributes: " + attributes);
+            }
+            else{
+                System.out.println("attributes null");
+            }
+
+            // attributes[0] is post_id ( we already have it as parameter )
+            /*
+            BigDecimal b_transmitter  = (BigDecimal) attributes[1];
+            BigDecimal b_receiver = (BigDecimal) attributes[2];
+            BigDecimal b_availability = (BigDecimal) attributes[3];
+
+            Integer transmitter = BigDecimal.valueOf(b_transmitter);
+            Integer receiver = BigDecimal.valueOf(b_receiver);
+            Integer availability = BigDecimal.valueOf(b_availability);
+            
+
+            
+            */
+
+            for(Object attr : attributes)
+                if(attr == null)
+                    return null;
+
+            Integer transmitter = ((java.math.BigDecimal) attributes[1]).intValue();
+            Integer receiver = ((java.math.BigDecimal) attributes[2]).intValue();
+            Integer availability = ((java.math.BigDecimal) attributes[3]).intValue();
+
+            String message = attributes[4].toString();
+            String at_date = attributes[5].toString();
+
+            /*
+            System.out.println("transmitter = " + transmitter);
+            System.out.println("receiver = " + receiver);
+            System.out.println("availability = " + availability);
+            System.out.println("message = " + message);
+            System.out.println("at_date = " + at_date);
+            */
+
+            System.out.println("getPost: " + post_id + " " + transmitter + " " + receiver + " " + availability + " " + message + " " + at_date);
+            
+            userPost.setPostId(post_id);
+            userPost.setTransmitter(transmitter);
+            userPost.setReceiver(receiver);
+            userPost.setAvailability(availability);
+            userPost.setMessage(message);
+            userPost.setAtDate(at_date);
+
+        } 
+
+        catch (SQLException e) 
+        {
+            e.printStackTrace();
+        }
+
+        finally 
+        {
+            try 
+            {
+                if(statement != null)
+                    statement.close();
+            }
+            catch(Exception e) { }
+        }
+
+        return userPost;
+    }
+
     public static String getUsernameFromDb(int userId) {
         String result = null;
         try {
             String query = "SELECT username FROM Users WHERE user_id=" + userId;
+            Connection con = DB.getConnection();
+            PreparedStatement stmt = con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            result = rs.getString(1);
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String getEmailFromDb(int userId)  {
+        String result = null;
+        try {
+            String query = "SELECT email FROM Users WHERE user_id=" + userId;
             Connection con = DB.getConnection();
             PreparedStatement stmt = con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
