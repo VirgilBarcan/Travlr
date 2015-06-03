@@ -1,0 +1,44 @@
+@(name: String, iata: String, icao: String, rating: Double)
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="@routes.Assets.at("stylesheets/bootstrap.css")" rel="stylesheet" type="text/css"/>
+        <link href="@routes.Assets.at("stylesheets/bootstrap-social.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/bootstrap.min.css")" rel="stylesheet">
+        <link href="@routes.Assets.at("stylesheets/font-awesome-4.3.0/css/font-awesome.min.css")" rel="stylesheet">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <style>
+            dt, dd{
+                padding-top: 20px;
+            }
+            .border-left-light {
+                border-left-color:#ccc;
+                border-left-width:1px;
+            }
+        </style>
+    </head>
+    <body>
+
+        @navbar()
+    
+        <div class="container" style="padding-top: 100px">
+            <div class="col-sm-4 col-md-4 col-lg-4" name="company-image">
+                <img src="http://4.bp.blogspot.com/_afCL5RVE_mo/TBjTTz4GnPI/AAAAAAAAAOk/X192sGibWZo/s400/plane.png" alt="Airline Logo" />
+                <dl class="dl-horizontal">
+                    <dt>Company Name:</dt>
+                    <dd>@name</dd>
+                    <dt>Company ICAO Code:</dt>
+                    <dd>@icao</dd>
+                    <dt>Company IATA Code:</dt>
+                    <dd>@iata</dd>
+                    <dt>Company Rating:</dt>
+                    <dd>@rating / 5.00</dd>
+                </dl>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 border-left-light" name="rating">
+                <p>Ceva</p>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2" name="right-div-for-padding"></div>
+        </div>
+    </body>
+</html>
